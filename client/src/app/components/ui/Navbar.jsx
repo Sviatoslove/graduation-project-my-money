@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { selectIsLoggedIn } from '../../store/user';
 import NavProfile from './NavProfile';
 import LOGO from '../../img/money.png';
 import Menu from './Menu';
+import TitleNavbar from './TitleNavbar';
 
 // navbar-expand-lg
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const history = useLocation()
   const [show, setShow] = useState('hiding');
 
   const isLoggedIn = useSelector(selectIsLoggedIn());
@@ -35,6 +37,7 @@ const Navbar = () => {
             <img src={LOGO} style={{ height: '45px' }} />
             <span className="navbar-toggler-icon"></span>
           </button>
+          <TitleNavbar path={history.pathname}/>
           {isLoggedIn ? (
             <NavProfile />
           ) : (
