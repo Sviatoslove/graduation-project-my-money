@@ -7,7 +7,48 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+li{
+  width: fit-content;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.signUp_button{
+  position: relative;
+  color:purple;
+  text-decoration: none;
+  margin:0 0 0 5px;
+}
+
+.signUp_button:hover{
+  color:rgb(2, 53, 0);
+  transition: color 0.3s ease-out 0s;
+}
+
+.signUp_button::before, .signUp_button::after{
+  position: absolute;
+  content: '';
+  height: 20px;
+  width:0;
+  border-radius: 5px;
+  background: rgba(236, 102, 236, 0.192);
+  transition: width 0.3s ease-in-out 0s;
+}
+
+.signUp_button::after{
+  bottom: -2px;
+  left: 0;
+}
+
+.signUp_button::before{
+  top: 2px;
+  right: 0;
+}
+
+.signUp_button:hover::before, .signUp_button:hover::after{
+  width: 100%;
+}
+
