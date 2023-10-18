@@ -1,5 +1,3 @@
 import getInputClasses from "./getInputClasses";
 
-export {
-  getInputClasses,
-}
+export { getInputClasses };

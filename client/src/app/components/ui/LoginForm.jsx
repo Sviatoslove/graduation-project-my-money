@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import TextField from '../common/form/TextField';
-import CheckboxField from '../common/form/CheckboxField';
-import { useDispatch } from 'react-redux';
-import { logIn } from '../../store/user';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import TextField from "../common/form/TextField";
+import CheckboxField from "../common/form/CheckboxField";
+import { useDispatch } from "react-redux";
+import { logIn } from "../../store/usersSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [data, setData] = useState({ email: '', password: '', stayOn: false });
+  const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
   const [enterError, setEnterError] = useState(null);
 
@@ -21,16 +21,14 @@ const LoginForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('handleSubmit');
+    console.log("handleSubmit");
 
     // const isVal = validate()
     // if (isVal) return
 
     const path = {
       navigate,
-      redirect: location.state
-        ? location.state.from.pathname
-        : '/',
+      redirect: location.state ? location.state.from.pathname : "/",
     };
     dispatch(logIn({ payload: data, path }));
   };

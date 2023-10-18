@@ -1,4 +1,6 @@
 {
- "port": 8080,
- "mongoUrl":
+  "port": 8080,
+  "mongoUrl": "mongodb+srv://svyatpopov86:Voua2i7xnY5PVRUC@cluster0.7caajsi.mongodb.net/app?retryWrites=true&w=majority",
+  "accessSecret": "super secret from backend",
+  "refreshSecret": "super refresh key"
 }

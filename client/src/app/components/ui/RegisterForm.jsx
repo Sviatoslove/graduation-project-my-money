@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import TextField from '../common/form/TextField';
-import RadioField from '../common/form/RadioField';
-import CheckboxField from '../common/form/CheckboxField';
-import { selectAuthError, selectUser, signUp } from '../../store/user';
-import { useNavigate } from 'react-router-dom';
+import TextField from "../common/form/TextField";
+import RadioField from "../common/form/RadioField";
+import CheckboxField from "../common/form/CheckboxField";
+import { selectAuthError, selectUser, signUp } from "../../store/usersSlice";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = useState({
-    email: '',
-    name: '',
-    password: '',
-    sex: 'male',
+    email: "",
+    name: "",
+    password: "",
+    sex: "male",
     license: false,
   });
-  const [errors, setErrors] = useState({})
-  const errorRegister = useSelector(selectAuthError())
-  const user = useSelector(selectUser())
+  const [errors, setErrors] = useState({});
+  const errorRegister = useSelector(selectAuthError());
+  const user = useSelector(selectUser());
 
   // useEffect(() => {
   //   setErrors(errorRegister)
@@ -32,11 +32,11 @@ const RegisterForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('handleSubmit');
+    console.log("handleSubmit");
     // const isVal = validate()
     // if (isVal) return
     dispatch(signUp(data));
-    navigate('/')
+    navigate("/");
   };
 
   return (
@@ -65,8 +65,8 @@ const RegisterForm = () => {
       />
       <RadioField
         options={[
-          { label: 'Male', value: 'male' },
-          { label: 'Female', value: 'female' },
+          { label: "Male", value: "male" },
+          { label: "Female", value: "female" },
         ]}
         name="sex"
         value={data.sex}

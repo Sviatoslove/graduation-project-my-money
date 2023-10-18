@@ -1,54 +1,68 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-li{
+li {
   width: fit-content;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-.signUp_button{
+.signUp_button {
   position: relative;
-  color:purple;
+  color: purple;
   text-decoration: none;
-  margin:0 0 0 5px;
+  margin: 0 0 0 5px;
 }
 
-.signUp_button:hover{
-  color:rgb(2, 53, 0);
+.signUp_button:hover {
+  color: rgb(2, 53, 0);
   transition: color 0.3s ease-out 0s;
 }
 
-.signUp_button::before, .signUp_button::after{
+.signUp_button::before,
+.signUp_button::after {
   position: absolute;
-  content: '';
+  content: "";
   height: 20px;
-  width:0;
+  width: 0;
   border-radius: 5px;
   background: rgba(236, 102, 236, 0.192);
   transition: width 0.3s ease-in-out 0s;
 }
 
-.signUp_button::after{
+.signUp_button::after {
   bottom: -2px;
   left: 0;
 }
 
-.signUp_button::before{
+.signUp_button::before {
   top: 2px;
   right: 0;
 }
 
-.signUp_button:hover::before, .signUp_button:hover::after{
+.signUp_button:hover::before,
+.signUp_button:hover::after {
   width: 100%;
 }
 
+.user-edit{
+  position: absolute;
+  top: 0;
+  transition: top 0.3s ease-in-out 0s;
+}
+
+.user-edit.show{
+  top: 40vh;
+  transition: top 0.3s ease-in-out 0s;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+
+}

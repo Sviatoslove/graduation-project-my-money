@@ -1,0 +1,39 @@
+[
+  {
+    "url": "https://api.dicebear.com/7.x/key/svg?seed=name",
+    "keys": [
+      "adventurer",
+      "lorelei",
+      "avataaars",
+      "big-smile",
+      "croodles",
+      "micah",
+      "miniavs",
+      "notionists",
+      "open-peep",
+      "thumbs"
+    ],
+    "names": [
+      "Bubba",
+      "Gizmo",
+      "Gracie",
+      "Boo",
+      "Cali",
+      "Abby",
+      "Maggie",
+      "Charlie",
+      "Chester",
+      "Coco",
+      "Cleo",
+      "Buddy",
+      "Chloe",
+      "Cuddles",
+      "Boots",
+      "Max",
+      "Cookie",
+      "Lola",
+      "Felix",
+      "Jasmine"
+    ]
+  }
+]

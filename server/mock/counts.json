@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Текущий",
+    "color": "primary",
+    "textColor": "text-warning"
+  },
+  {
+    "name": "Расчётный",
+    "color": "secondary",
+    "textColor": "text-light"
+  },
+  {
+    "name": "Кредитный",
+    "color": "success",
+    "textColor": "text-danger"
+  },
+  {
+    "name": "Депозитный",
+    "color": "danger",
+    "textColor": "text-primary-emphasis"
+  },
+  {
+    "name": "Сберегательный",
+    "color": "info",
+    "textColor": "text-danger-emphasis"
+  },
+  {
+    "name": "Бюджетный",
+    "color": "dark",
+    "textColor": "text-light-emphasis"
+  },
+  {
+    "name": "Корреспондентский",
+    "color": "warning",
+    "textColor": "text-primary"
+  },
+  {
+    "name": "Специальный",
+    "color": "light",
+    "textColor": "text-dark"
+  }
+]

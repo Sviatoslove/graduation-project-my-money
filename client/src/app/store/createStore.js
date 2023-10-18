@@ -1,8 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userReducer from './user';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import usersReducer from "./usersSlice";
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  users: usersReducer,
 });
 
 export default function createStore() {

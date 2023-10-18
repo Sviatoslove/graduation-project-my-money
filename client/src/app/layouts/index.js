@@ -1,5 +1,5 @@
-import Login from './Login';
-import Logout from './Logout';
-import Main from './Main';
+import AuthLayout from './AutLayout';
+import CountsLayout from './CountsLayout';
+import UserLayout from './UserLayout';
 
-export { Login, Logout, Main };
+export { AuthLayout, CountsLayout, UserLayout };
