@@ -1,12 +1,10 @@
 const AvatarsData = require('../models/AvatarsData');
 const CountsData = require('../models/CountsData');
-const CurrencyData = require('../models/CurrencyData');
 const IconsForCategoriesData = require('../models/IconsForCategoriesData');
 
 const avatarsMock = require('../mock/avatars.json')
 const countsMock = require('../mock/counts.json')
-const currencyMock = require('../mock/currency.json')
-const iconsforcategoriesMock = require('../mock/iconsForCategories.json')
+const iconsforcategoriesMock = require('../mock/iconsForCategories.json');
 
 module.exports = async () => {
   const avatars = await AvatarsData.find();
@@ -17,11 +15,6 @@ module.exports = async () => {
   const counts = await CountsData.find();
   if (counts.length !== countsMock.length) {
     await createInitialEntity(CountsData, countsMock);
-  }
-
-  const currency = await CurrencyData.find();
-  if (currency.length !== currencyMock.length) {
-    await createInitialEntity(CurrencyData, currencyMock);
   }
 
   const icons = await IconsForCategoriesData.find();

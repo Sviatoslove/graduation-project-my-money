@@ -1,10 +1,10 @@
 import { httpService } from "./http.service";
 
-const countsEndpoint = "counts/";
+const countsDataEndpoint = "countsdata/";
 
-const countsService = {
+const countsDataService = {
   get: async () => {
-    const { data } = await httpService.get(countsEndpoint);
+    const { data } = await httpService.get(countsDataEndpoint);
     return data;
   },
   // update: async (user) => {
@@ -13,4 +13,4 @@ const countsService = {
   // },
 };
 
-export default countsService;
+export default countsDataService;

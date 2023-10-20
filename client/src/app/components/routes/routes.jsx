@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import {
   CategoriesPage,
   ChartsPage,
@@ -12,11 +12,14 @@ import {
   OperationsHistoryPage,
   RegularPaymentsPage,
   UserPage,
-  UserPageEdit
 } from '../../pages';
 import { AuthLayout, CountsLayout, UserLayout } from '../../layouts';
+import localStorageService from '../../services/localStorage.service';
 
-const routes = (isLoggedIn, location) => [
+const routes = (isLoggedIn, location) =>{
+  const currentUserId = localStorageService.getUserId()
+  const userId = location.pathname.split('/')[2]
+return [
   {
     name: 'Главная страница',
     icon: 'bi bi-coin',
@@ -117,7 +120,6 @@ const routes = (isLoggedIn, location) => [
     element: <OperationsHistoryPage />,
   },
   {
-    name: 'Мой профиль',
     path: 'user',
     element: isLoggedIn ? (
       <UserLayout />
@@ -126,19 +128,10 @@ const routes = (isLoggedIn, location) => [
     ),
     children: [
       {
-        path: '*',
-        element: <Navigate to="/user" />,
-      },
-      {
-        path: '',
-        element: <UserPage />,
-      },
-      {
-        name: 'Внесение изменений в профиль',
-        path: 'edit',
-        pathname: '/user/edit',
-
-        element: <UserPageEdit />,
+        name: 'Мой профиль',
+        path: ':userId',
+        pathname: `/user/${currentUserId}`,
+        element: userId !== currentUserId ?  <Navigate to='/' /> : <UserPage />,
       },
     ],
   },
@@ -150,6 +143,6 @@ const routes = (isLoggedIn, location) => [
     path: '*',
     element: <Navigate to={isLoggedIn ? '/' : '/auth'} />,
   },
-];
+]};
 
 export default routes;

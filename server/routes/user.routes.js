@@ -28,8 +28,8 @@ router.patch('/:userId', auth, async (req, res) => {
 
 router.get('/', auth, async (req, res) => {
   try {
-
-    const list = await User.find(); // нашли всех юзеров в БД
+    const userId = req.user._id
+    const list = await User.findOne({_id: userId}); // нашли всех юзеров в БД
     res.send(list); // отправили их на клиента с статус кодом 200(он указывается по умолчанию, если необходимо отправить данные с другим кодом, то необходимо его указать, например, res.status(400).send())
   } catch (e) {
     res

@@ -13,7 +13,7 @@ function getUrlAvatar() {
 
 function generateUserData() {
   return {
-    image: getUrlAvatar()
+    avatar: getUrlAvatar()
   };
 }
 

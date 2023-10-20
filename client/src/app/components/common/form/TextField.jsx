@@ -9,6 +9,12 @@ const TextField = ({ label, value, name, type, onChange, error }) => {
     setShowPassword((state) => !state);
   };
 
+  const getAvatars = () => {
+
+  }
+
+
+
   return (
     <div className="mb-4">
       <label htmlFor={name}>{label}</label>

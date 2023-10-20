@@ -21,11 +21,11 @@ const NavProfile = () => {
     <div className="dropdown" onClick={toggleMenu}>
       <div className="btn dropdown-toggle d-flex align-items-center text-light ">
         <div className="me-2">{currentUser.name}</div>
-        <UserAvatar image={currentUser.image} height="45" />
+        <UserAvatar image={currentUser.avatar} height="45" />
         <img src="" alt="" className="img-responsive rounded-circle" />
       </div>
       <div className={"shadow-lg border-none rounded-3 bg-secondary w-100 dropdown-menu p-0" + (isOpen ? " show" : "")}>
-        <Link to='/user' className="dropdown-item rounded-3">
+        <Link to={`/user/${currentUser._id}`} className="dropdown-item rounded-3">
         <i className="bi bi-person-square" style={{ marginRight: "10px" }}></i>
           Профиль
         </Link>

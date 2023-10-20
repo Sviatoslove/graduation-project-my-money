@@ -134,17 +134,8 @@ export const updateUser = (payload) => async (dispatch) => {
   }
 }
 
-export const selectUsersList = () => (state) => state.users.entities
-export const selectCurrentUserData = () => (state) => {
-  return state.users.entities
-    ? state.users.entities.find((u) => u._id === state.users.auth.userId)
-    : null
-}
-export const selectUser = () => (state) => {
-  if (state.users.entities) {
-    return state.users.entities.find((u) => u._id === state.users.auth.userId)
-  }
-}
+export const selectUser = () => (state) => state.users.entities
+
 
 export const selectIsLoggedIn = () => (state) => state.users.isLoggedIn
 export const selectDataStatus = () => (state) => state.users.dataLoaded
