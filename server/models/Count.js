@@ -3,10 +3,10 @@ const { Schema, model } = require('mongoose');
 const schema = new Schema(
   {
     name: String ,
-    currency: String,
-    type: String,
-    icon: String,
     content: String,
+    type: String,
+    currency: String,
+    icon: String,
     balance: Number,
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
