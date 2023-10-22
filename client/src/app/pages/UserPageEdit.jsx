@@ -8,12 +8,10 @@ import {
   selectAvatarsDataStatus,
 } from '../store/avatarsSlice';
 import { updateUser } from '../store/usersSlice';
-import UserAvatar from '../components/common/UserAvatar';
 
-const UserPageEdit = ({ user }) => {
+const UserPageEdit = ({ user, onShow }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(user);
-  const [activeAvatar, setactiveAvatar] = useState(data.avatar);
   const [errors, setErrors] = useState({});
   const avatarsDataStatus = useSelector(selectAvatarsDataStatus());
   const avatars = useSelector(selectAvatars());
@@ -33,27 +31,15 @@ const UserPageEdit = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { nativeEvent } = e;
-    if (nativeEvent.submitter.src){
-      handleChange({
-        target: {
-          name: nativeEvent.submitter.name,
-          value: nativeEvent.submitter.src,
-        },
-      })
-      setactiveAvatar(nativeEvent.submitter.src)
-      return 
-    }
-
     // const isValid = validate()
     // if (!isValid) return
     dispatch(updateUser(data));
+    onShow('')
   };
   
   if (avatarsDataStatus) {
     return (
       <div className='d-flex align-items-center just justify-content-around'>
-      {activeAvatar !== user.avatar ? <UserAvatar image={activeAvatar} height="300" />:null}
         <form onSubmit={handleSubmit} style={{width:'520px'}}>
           <div className='d-flex justify-content-between'>
           <TextField
@@ -99,12 +85,11 @@ const UserPageEdit = ({ user }) => {
       </div>
     );
   }
-
-  return 'Loading';
 };
 
 UserPageEdit.propTypes = {
   user: PropTypes.object,
+  onShow: PropTypes.func
 };
 
 export default UserPageEdit;

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UserAvatar from '../UserAvatar';
 // import { formatDataForFields, getInputClasses } from '../../../utils'
 
 const SelectedField = ({
@@ -14,10 +13,8 @@ const SelectedField = ({
 }) => {
   const optionsArray = options?.map((optionName) => ({
     name: optionName.name,
-    value: optionName.name,
+    value: optionName.icon,
   }));
-
-  console.log('optionsArray:', optionsArray);
 
   return (
     <div className="mb-4">
@@ -36,7 +33,7 @@ const SelectedField = ({
           {defaultOption}
         </option>
         {optionsArray?.map((option) => (
-          <option value={option.value} key={option.value}>
+          <option value={option.value} key={option.name}>
             {option.name}
           </option>
         ))}

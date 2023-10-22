@@ -14,13 +14,13 @@ const Menu = ({ onShow, menu }) => {
           className="btn-close"
           data-bs-dismiss="offcanvas"
           aria-label="Close"
-          onClick={(e) => onShow(e)}
+          onClick={onShow}
         ></button>
       </div>
       <div className="offcanvas-body">
         <ul
           className="navbar-nav justify-content-end flex-grow-1 pe-3"
-          onClick={(e) => onShow(e)}
+          onClick={onShow}
         >
           {menu.map((item, idx) => {
             if (item.display)

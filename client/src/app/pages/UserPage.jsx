@@ -36,7 +36,7 @@ const UserPage = () => {
             style={{ width: 'fit-content' }}
           >
             <UserAvatar image={user.avatar} height="300" />
-            <h4 className="text-center">{user.name}</h4>
+            <h4 className="text-center mt-5">{user.name}</h4>
           </div>
           <div className="text-center flex-grow-1">
             <ul className="list-group list-group-flush">
@@ -57,7 +57,7 @@ const UserPage = () => {
       >
         <button
           className="position-absolute top-0 end-0 btn btn-light btn-sm"
-          onClick={(e) => handleToEdit(e)}
+          onClick={handleToEdit}
           style={{ zIndex: 1 }}
         >
           <i
@@ -65,7 +65,7 @@ const UserPage = () => {
             style={{ fontSize: '32px' }}
           ></i>
         </button>
-        <UserPageEdit user={user} />
+        <UserPageEdit user={user} onShow={setShow} />
       </div>
     </div>
   );

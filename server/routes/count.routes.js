@@ -22,6 +22,7 @@ router
         // ждём пока создадим комментарий
         ...req.body, // здесь у нас прилетают все необходимые данные
         userId: req.user._id, // добавляем здесь id, т.к. у нас в модели коммента есть userId
+        like: false
       });
 
       const listAll = await Count.find();
@@ -32,7 +33,21 @@ router
         .status(500)
         .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
     }
-  });
+  })
+  .patch(auth, async (req, res) => {
+  try {
+      const updatedCount = await Count.findByIdAndUpdate(req.body._id, req.body, {
+        new: true, // этот флаг означает, что мы получаем обновлённые данные только после того, как они обновятся в БД, чтобы в этой константе на клиента не ушли старые данные
+      });
+      console.log('updatedCount:', updatedCount)
+
+      res.send(updatedCount);
+  } catch (e) {
+    res
+      .status(500)
+      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+  }
+});
 
 router.delete('/:countId', auth, async (req, res) => {
   try {

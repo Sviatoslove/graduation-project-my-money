@@ -50,7 +50,7 @@ const Navbar = () => {
             data-bs-target="#offcanvasNavbar"
             aria-controls="offcanvasNavbar"
             aria-label="Toggle navigation"
-            onClick={(e) => handleShowMenu(e)}
+            onClick={handleShowMenu}
           >
             <img src={LOGO} style={{ height: '45px' }} alt='Logo'/>
             <span className="navbar-toggler-icon"></span>
@@ -71,7 +71,7 @@ const Navbar = () => {
           </div>
           {show === 'show' && (
             <div
-              onClick={(e) => handleShowMenu(e)}
+              onClick={handleShowMenu}
               className="offcanvas-backdrop fade show"
             ></div>
           )}

@@ -71,12 +71,134 @@ code {
 }
 
 .avatar:hover {
-  transform: scale(2.0);
-  transition: transform 0.5s ease-in-out 0s ;
+  transform: scale(2);
+  transition: transform 0.5s ease-in-out 0s;
 }
 
 .avatar.active {
   transform: scale(1.5);
-  transition: transform 0.5s ease-in-out 0s ;
-  box-shadow: 0px 0px 10px 2px rgba(255, 153, 0, 0.308), 0px 0px 10px 2px rgba(0, 174, 255, 0.308)inset;
+  transition: transform 0.5s ease-in-out 0s;
+  box-shadow: 0px 0px 10px 2px rgba(255, 153, 0, 0.8),
+    0px 0px 10px 2px rgba(0, 174, 255, 0.8) inset;
+  background-color: rgb(122, 119, 119);
 }
+
+.pagination-counts {
+  position: absolute;
+  bottom: 8%;
+  left: 6%;
+}
+
+.item-count {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.125);
+  /* height: 342px; */
+}
+
+.item-count:before {
+  position: absolute;
+  border-radius: 4px;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 342px;
+  background: rgba(109, 103, 103, 0.15);
+  transition: width 0.5s ease 0s;
+}
+
+.item-count:hover::before {
+  width: 100%;
+  transition: width 0.5s ease 0s;
+}
+
+.item-count:hover {
+  box-shadow: 0px 0px 10px 2px rgba(0, 204, 255, 0.24),
+    0px 0px 10px 2px rgba(208, 255, 0, 0.4) inset;
+  border-radius: 4px;
+}
+
+.btn-group {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out 0s;
+}
+
+.item-count:hover > .btn-group {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out 0s;
+}
+
+.card-text {
+  margin: 5px;
+}
+
+.counts-page {
+  margin: 0 auto;
+  width: 98%;
+}
+
+.counts-list {
+  transition: transform 2s ease-in-out 0s;
+}
+
+.counts-add-page {
+  background-color: aliceblue;
+}
+
+.counts-add-page.active {
+  margin: 0;
+}
+
+.wrapper-counts-add-page {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: 2s ease-in-out 0s movingUp;
+  animation-fill-mode: both;
+  z-index: 1;
+}
+
+.wrapper-counts-add-page.down{
+  animation: 2s ease-in-out 0s movingDown;
+  animation-fill-mode: both;
+}
+
+@keyframes movingUp {
+ from {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  to {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes movingDown {
+  from {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     display: none;
+     opacity: 0;
+     transform: translate(-50%, -50%) scale(0);
+   }
+ 
+ }

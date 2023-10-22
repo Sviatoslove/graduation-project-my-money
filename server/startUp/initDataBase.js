@@ -5,6 +5,7 @@ const IconsForCategoriesData = require('../models/IconsForCategoriesData');
 const avatarsMock = require('../mock/avatars.json')
 const countsMock = require('../mock/counts.json')
 const iconsforcategoriesMock = require('../mock/iconsForCategories.json');
+const Count = require('../models/Count');
 
 module.exports = async () => {
   const avatars = await AvatarsData.find();
@@ -12,10 +13,18 @@ module.exports = async () => {
     await createInitialEntity(AvatarsData, avatarsMock);
   }
 
-  const counts = await CountsData.find();
-  if (counts.length !== countsMock.length) {
+  const countsData = await CountsData.find();
+  if (countsData.length !== countsMock.length) {
     await createInitialEntity(CountsData, countsMock);
   }
+
+  // const counts = await Count.find();
+  // const countsNew = counts.map(count => {
+  //   if(!count['like']) count['like'] = false
+  //   return count
+  // })
+  
+  // await createInitialEntity(Count, countsNew);
 
   const icons = await IconsForCategoriesData.find();
   if (icons.length !== iconsforcategoriesMock.length) {

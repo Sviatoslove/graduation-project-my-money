@@ -31,6 +31,20 @@ const countsSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
+    countsUpdatedReceived: (state, action) => {
+      const index = state.entities.findIndex(
+        (count) => count._id === action.payload._id
+      );
+      state.entities[index] = {
+        ...state.entities[index],
+        ...action.payload,
+      };
+    },
+    countsRemovedReceived: (state, action) => {
+      state.entities = state.entities.filter(
+        (count) => count._id !== action.payload.countId
+      );
+    },
     countsDataRequested: (state) => {
       state.isLoading = true;
     },
@@ -76,6 +90,8 @@ const {
   countsRequested,
   countsReceived,
   countsRequestedFailed,
+  countsUpdatedReceived,
+  countsRemovedReceived,
   countsDataRequested,
   countsDataReceived,
   countsDataRequestedFailed,
@@ -86,6 +102,46 @@ const {
   currencyDataReceived,
   currencyDataRequestedFailed,
 } = actions;
+
+export const countCreate = (payload) => async (dispatch) => {
+  dispatch(countsRequested());
+  try {
+    const { content } = await countsService.create(payload);
+    dispatch(countsReceived(content));
+  } catch (error) {
+    dispatch(countsRequestedFailed(error.message));
+  }
+};
+
+export const countsLoad = () => async (dispatch) => {
+  dispatch(countsRequested());
+  try {
+    const { content } = await countsService.get();
+    dispatch(countsReceived(content));
+  } catch (error) {
+    dispatch(countsRequestedFailed(error.message));
+  }
+};
+
+export const countUpdate = (payload) => async (dispatch) => {
+  dispatch(countsRequested());
+  try {
+    const { content } = await countsService.update(payload);
+    dispatch(countsUpdatedReceived(content));
+  } catch (error) {
+    dispatch(countsRequestedFailed(error.message));
+  }
+};
+
+export const countRemove = (payload) => async (dispatch) => {
+  dispatch(countsRequested());
+  try {
+    await countsService.remove(payload.countId);
+    dispatch(countsRemovedReceived(payload));
+  } catch (error) {
+    dispatch(countsRequestedFailed(error.message));
+  }
+};
 
 export const loadCountsData = () => async (dispatch) => {
   dispatch(countsDataRequested());
@@ -128,10 +184,9 @@ export const selectCountsLoadingStatus = () => (state) =>
 export const selectCountsStatus = () => (state) => state.counts.dataLoaded;
 export const selectCountsDataStatus = () => (state) =>
   state.counts.countsDataLoaded;
-  export const selectCurrencyDataStatus = () => (state) =>
+export const selectCurrencyDataStatus = () => (state) =>
   state.counts.currencyDataLoaded;
 export const selectCountsIconsDataStatus = () => (state) =>
   state.counts.countsIconsDataLoaded;
-  
 
 export default countsReducer;

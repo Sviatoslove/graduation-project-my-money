@@ -7,6 +7,7 @@ const schema = new Schema(
     type: String,
     currency: String,
     icon: String,
+    like: Boolean,
     balance: Number,
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
