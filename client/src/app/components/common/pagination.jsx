@@ -8,7 +8,7 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
 
   if (pagesCount === 1) return null
   return (
-    <nav className='pagination-counts'>
+    <nav className='pagination-counts align-self-end ms-5'>
       <ul className='pagination'>
         {pages.map((page) => (
           <li

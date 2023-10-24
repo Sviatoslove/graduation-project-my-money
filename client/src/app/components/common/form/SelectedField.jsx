@@ -10,10 +10,13 @@ const SelectedField = ({
   error,
   name,
   onChange,
+  type,
+  valueTwo,
 }) => {
+
   const optionsArray = options?.map((optionName) => ({
     name: optionName.name,
-    value: optionName.icon,
+    value: !type ? optionName.icon : optionName._id,
   }));
 
   return (
@@ -32,11 +35,23 @@ const SelectedField = ({
         <option disabled value="">
           {defaultOption}
         </option>
-        {optionsArray?.map((option) => (
-          <option value={option.value} key={option.name}>
-            {option.name}
-          </option>
-        ))}
+        {optionsArray?.map((option) => {
+          if(valueTwo) {
+            if (option.value !== valueTwo) {
+              return (
+                <option value={option.value} key={option.name}>
+                  {option.name}
+                </option>
+              );
+            }
+          } else {
+            return (
+              <option value={option.value} key={option.name}>
+                {option.name}
+              </option>
+            );
+          }
+        })}
       </select>
       {error && <div className="invalid-feedback">{error}</div>}
     </div>
@@ -45,6 +60,7 @@ const SelectedField = ({
 
 SelectedField.defaultProps = {
   defaultOption: 'Choose...',
+  type: '',
 };
 
 SelectedField.propTypes = {
@@ -52,7 +68,10 @@ SelectedField.propTypes = {
     PropTypes.string.isRequired,
     PropTypes.object.isRequired,
   ]),
+  type: PropTypes.string,
   value: PropTypes.string,
+  valueTwo: PropTypes.string,
+
   defaultOption: PropTypes.string,
   error: PropTypes.string,
   name: PropTypes.string.isRequired,

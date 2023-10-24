@@ -6,6 +6,7 @@ const avatarsMock = require('../mock/avatars.json')
 const countsMock = require('../mock/counts.json')
 const iconsforcategoriesMock = require('../mock/iconsForCategories.json');
 const Count = require('../models/Count');
+const User = require('../models/User');
 
 module.exports = async () => {
   const avatars = await AvatarsData.find();
@@ -25,6 +26,15 @@ module.exports = async () => {
   // })
   
   // await createInitialEntity(Count, countsNew);
+
+  //   const users = await User.find();
+  //   console.log('users:', users)
+  //   const usersNew = users.map(user => {
+  //   if(!user['balance']) user['balance'] = 0
+  //   return user
+  // })
+  
+  // await createInitialEntity(User, usersNew);
 
   const icons = await IconsForCategoriesData.find();
   if (icons.length !== iconsforcategoriesMock.length) {

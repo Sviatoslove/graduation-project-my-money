@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const RegularPaymentsPage = () => {
-  return null;
-};
+  return null
+}
 
-export default RegularPaymentsPage;
+export default RegularPaymentsPage

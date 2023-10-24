@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Container = ({ children, classContainer, classRow, classCol }) => {
   return (
@@ -8,14 +8,14 @@ const Container = ({ children, classContainer, classRow, classCol }) => {
         <div className={classCol}>{children}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 Container.defaultProps = {
-  classContainer: "container mt-5",
-  classRow: "row",
-  classCol: "col-md-6 offset-md-3 shadow-custom p-4 br-10 bc-white",
-};
+  classContainer: 'container mt-5',
+  classRow: 'row',
+  classCol: 'col-md-6 offset-md-3 shadow-custom p-4 br-10 bc-white'
+}
 
 Container.propTypes = {
   classContainer: PropTypes.string,
@@ -23,8 +23,8 @@ Container.propTypes = {
   classCol: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-};
+    PropTypes.node
+  ])
+}
 
-export default Container;
+export default Container

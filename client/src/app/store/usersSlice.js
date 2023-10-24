@@ -78,9 +78,8 @@ const userUpdateRequested = createAction('users/userUpdateRequested')
 export const logIn =
   ({ payload, path }) =>
   async (dispatch) => {
-
     const { email, password } = payload
-    const { navigate, redirect} =path
+    const { navigate, redirect } = path
     dispatch(authRequested())
     try {
       const data = await authService.logIn({ email, password })
@@ -90,11 +89,11 @@ export const logIn =
     } catch (error) {
       const { code, message } = error.response.data.error
       if (code === 400) {
-      console.log('code:', code)
-      //   const errorMessage = generetaAuthError(message)
-      //   dispatch(authRequestFailed(errorMessage))
-      // } else {
-      //   dispatch(authRequestFailed(error.message))
+        console.log('code:', code)
+        //   const errorMessage = generetaAuthError(message)
+        //   dispatch(authRequestFailed(errorMessage))
+        // } else {
+        //   dispatch(authRequestFailed(error.message))
       }
     }
   }
@@ -135,7 +134,6 @@ export const updateUser = (payload) => async (dispatch) => {
 }
 
 export const selectUser = () => (state) => state.users.entities
-
 
 export const selectIsLoggedIn = () => (state) => state.users.isLoggedIn
 export const selectDataStatus = () => (state) => state.users.dataLoaded

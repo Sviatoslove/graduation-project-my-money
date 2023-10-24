@@ -65,7 +65,7 @@ code {
 }
 
 .user-edit.show {
-  top: 560px;
+  top: 584px;
   transition: top 0.3s ease-in-out 0s;
   box-shadow: 0px 0px 10px 2px rgba(255, 153, 0, 0.308);
 }
@@ -78,15 +78,13 @@ code {
 .avatar.active {
   transform: scale(1.5);
   transition: transform 0.5s ease-in-out 0s;
-  box-shadow: 0px 0px 10px 2px rgba(255, 153, 0, 0.8),
+  box-shadow:
+    0px 0px 10px 2px rgba(255, 153, 0, 0.8),
     0px 0px 10px 2px rgba(0, 174, 255, 0.8) inset;
   background-color: rgb(122, 119, 119);
 }
 
 .pagination-counts {
-  position: absolute;
-  bottom: 8%;
-  left: 6%;
 }
 
 .item-count {
@@ -101,7 +99,7 @@ code {
   top: 0;
   left: 0;
   width: 0;
-  height: 342px;
+  height: inherit;
   background: rgba(109, 103, 103, 0.15);
   transition: width 0.5s ease 0s;
 }
@@ -112,17 +110,18 @@ code {
 }
 
 .item-count:hover {
-  box-shadow: 0px 0px 10px 2px rgba(0, 204, 255, 0.24),
+  box-shadow:
+    0px 0px 10px 2px rgba(0, 204, 255, 0.24),
     0px 0px 10px 2px rgba(208, 255, 0, 0.4) inset;
   border-radius: 4px;
 }
 
-.btn-group {
+.btn-group-settings {
   opacity: 0;
   transition: opacity 0.5s ease-in-out 0s;
 }
 
-.item-count:hover > .btn-group {
+.item-count:hover > .btn-group-settings {
   opacity: 1;
   transition: opacity 0.5s ease-in-out 0s;
 }
@@ -132,12 +131,12 @@ code {
 }
 
 .counts-page {
-  margin: 0 auto;
   width: 98%;
+  min-height: 94vh;
 }
 
 .counts-list {
-  transition: transform 2s ease-in-out 0s;
+  transition: transform 0.5s ease-in-out 0s;
 }
 
 .counts-add-page {
@@ -148,23 +147,23 @@ code {
   margin: 0;
 }
 
-.wrapper-counts-add-page {
+.wrapper-counts-form {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: 2s ease-in-out 0s movingUp;
+  animation: 0.5s ease-in-out 0s movingUp;
   animation-fill-mode: both;
   z-index: 1;
 }
 
-.wrapper-counts-add-page.down{
-  animation: 2s ease-in-out 0s movingDown;
+.wrapper-counts-form.down {
+  animation: 0.5s ease-in-out 0s movingDown;
   animation-fill-mode: both;
 }
 
 @keyframes movingUp {
- from {
+  from {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -193,12 +192,47 @@ code {
     transform: translate(-50%, -50%) scale(1);
   }
   to {
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     display: none;
-     opacity: 0;
-     transform: translate(-50%, -50%) scale(0);
-   }
- 
- }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+.like.appearance {
+  animation: appearanceLike 0.5s ease-in-out 0s;
+  animation-fill-mode: both;
+}
+
+.like {
+  animation: disappearanceLike 0.5s ease-in-out 0s;
+  animation-fill-mode: both;
+}
+
+@keyframes appearanceLike {
+  from {
+    display: none;
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes disappearanceLike {
+  from {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    display: none;
+    opacity: 0;
+    transform: scale(0);
+  }
+}

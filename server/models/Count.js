@@ -10,6 +10,7 @@ const schema = new Schema(
     like: Boolean,
     balance: Number,
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    totalBalance: String,
   },
   {
     timestamps: true,
