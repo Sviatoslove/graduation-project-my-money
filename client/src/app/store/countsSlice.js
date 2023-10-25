@@ -32,18 +32,13 @@ const countsSlice = createSlice({
       state.isLoading = false
     },
     countsUpdatedReceived: (state, action) => {
-      const index = state.entities.findIndex(
-        (count) => count._id === action.payload._id
-      )
-      state.entities[index] = {
-        ...state.entities[index],
+      state.entities[action.payload._id] = {
+        ...state.entities[action.payload._id],
         ...action.payload
       }
     },
     countsRemovedReceived: (state, action) => {
-      state.entities = state.entities.filter(
-        (count) => count._id !== action.payload.countId
-      )
+      delete  state.entities[action.payload.countId]
     },
     countsDataRequested: (state) => {
       state.isLoading = true

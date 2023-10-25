@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { getInputClasses } from '../../../utils'
 
-const TextField = ({ label, value, name, type, onChange, error }) => {
-
+const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const toggleShowPassword = () => {
@@ -22,6 +21,15 @@ const TextField = ({ label, value, name, type, onChange, error }) => {
           value={value}
           className={getInputClasses('form-control', error)}
         />
+        {dataType && <input
+          type={type}
+          id={name}
+          name={name}
+          onChange={onChange}
+          value={value}
+          className={getInputClasses('form-control', error)}
+        />}
+             
         {type === 'password' && (
           <button
             className='btn btn-outline-secondary'
@@ -39,10 +47,12 @@ const TextField = ({ label, value, name, type, onChange, error }) => {
 }
 
 TextField.defaultProps = {
-  type: 'text'
+  type: 'text',
+  dataType:''
 }
 
 TextField.propTypes = {
+  dataType:PropTypes.string,
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   name: PropTypes.string.isRequired,

@@ -12,7 +12,6 @@ import {
 } from '../../store/countsSlice';
 import { paginate } from '../../utils';
 import Pagination from '../../components/common/pagination';
-import CountsForm from './AddAndUpdateCountForm';
 import getCountLike from '../../utils/getCountLike';
 import Translations from './Translations';
 import CountCard from './CountCard';
@@ -71,7 +70,7 @@ const CountsPage = () => {
   const handleToEdit = ({ target }) => {
     const btnType = target.closest('button').dataset.type;
     const countId = target.closest('button').id;
-    const currentCount = counts.find((count) => count._id === countId);
+    const currentCount = counts[countId]
     switch (btnType) {
       case 'add':
         setCurrentCount('')
@@ -99,12 +98,13 @@ const CountsPage = () => {
   };
 
   if (countsDataLoaded) {
-    const count = counts.length;
+    const count = Object.keys(counts).length;
+    const arrCounts = Object.values(counts);
     let countsLikes;
-    if (likesPage) countsLikes = counts.filter((count) => count.like);
+    if (likesPage) countsLikes = arrCounts.filter((count) => count.like);
 
     const countsCrop = paginate(
-      likesPage ? countsLikes : counts,
+      likesPage ? countsLikes : arrCounts,
       currentPage,
       pageSize
     );
@@ -121,7 +121,7 @@ const CountsPage = () => {
             />
           </div>
         )}
-        {!counts.length && (
+        {!count && (
           <h1 className="position-absolute top-50 start-50 translate-middle">
             Добавьте свой первый счёт
           </h1>
@@ -131,7 +131,7 @@ const CountsPage = () => {
           className="counts-list flex-grow-1"
           style={{ transform: transform }}
         >
-          {counts.length ? <Translations onChange={handleToEdit} /> : null}
+          {count ? <Translations onChange={handleToEdit} /> : null}
 
           <div className="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
             {countsCrop.map((count) => (
@@ -143,16 +143,16 @@ const CountsPage = () => {
             ))}
           </div>
         </div>
-
+        
         <div
           className={
-            'align-items-end mt-auto footer-group d-flex justify-content-between ' +
-            (!counts.length
+            'mt-auto footer-group d-flex mb-4' + ((count > pageSize) ? ' justify-content-between ' : ' justify-content-end ') + (!count || (countsLikes && countsLikes.length < pageSize)
               ? 'position-absolute bottom-0 end-0 translate-middle'
               : '')
           }
         >
           <Pagination
+            countsLikes={countsLikes}
             itemsCount={count}
             pageSize={pageSize}
             currentPage={currentPage}

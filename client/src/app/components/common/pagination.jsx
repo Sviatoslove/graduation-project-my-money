@@ -1,25 +1,32 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import _ from 'lodash'
+import React from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 
-const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
-  const pagesCount = Math.ceil(itemsCount / pageSize)
-  const pages = _.range(1, pagesCount + 1)
+const Pagination = ({
+  itemsCount,
+  pageSize,
+  onPageChange,
+  currentPage,
+  countsLikes,
+}) => {
+  const pagesCount = Math.ceil(itemsCount / pageSize);
+  const pages = _.range(1, pagesCount + 1);
 
-  if (pagesCount === 1) return null
+  if (pagesCount === 1 || (countsLikes && countsLikes.length < pageSize))
+    return null;
   return (
-    <nav className='pagination-counts align-self-end ms-5'>
-      <ul className='pagination'>
+    <nav className="pagination-counts align-self-end ms-5">
+      <ul className="pagination">
         {pages.map((page) => (
           <li
-            role='button'
+            role="button"
             key={page}
             className={'page-item ' + (page === currentPage ? 'active' : '')}
           >
             <a
-              className='page-link'
+              className="page-link"
               onClick={() => {
-                onPageChange(page)
+                onPageChange(page);
               }}
             >
               {page}
@@ -28,13 +35,14 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
         ))}
       </ul>
     </nav>
-  )
-}
+  );
+};
 Pagination.propTypes = {
+  countsLikes: PropTypes.array,
   itemsCount: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired
-}
+  onPageChange: PropTypes.func.isRequired,
+};
 
-export default Pagination
+export default Pagination;

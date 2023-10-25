@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { selectUser } from '../store/usersSlice'
 import { useSelector } from 'react-redux'
 import UserAvatar from '../components/common/UserAvatar'
-import { useNavigate } from 'react-router-dom'
 import displayDate from '../utils/displayDate'
 import UserPageEdit from './UserPageEdit'
 

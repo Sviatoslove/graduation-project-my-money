@@ -21,7 +21,6 @@ const LoginForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log('handleSubmit')
 
     // const isVal = validate()
     // if (isVal) return

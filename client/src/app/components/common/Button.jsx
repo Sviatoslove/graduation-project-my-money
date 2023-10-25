@@ -15,6 +15,7 @@ const Button = ({
   disabled,
   link,
   iconFontSize,
+  imgFontSize,
   onClick,
   children,
 }) => {
@@ -31,7 +32,7 @@ const Button = ({
           id={id}
           disabled={disabled}
         >
-          {imgSrc && <img src={imgSrc} alt="image" />}
+          {imgSrc && <img src={imgSrc} alt="image" style={{ width: imgFontSize }}/>}
           {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
           {children}
         </button>
@@ -65,6 +66,7 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
+  imgFontSize: PropTypes.string,
   imgSrc: PropTypes.string,
   icon: PropTypes.string,
   dataType: PropTypes.string,

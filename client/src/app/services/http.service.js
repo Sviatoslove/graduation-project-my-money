@@ -60,19 +60,13 @@ http.interceptors.request.use(
 
 function transformData(data) {
   return data && !data._id
-    ? Object.keys(data).map((key) => ({
-        ...data[key]
-      }))
+    ? Object.keys(data).reduce((acc, key) => acc={...acc, [data[key]._id]:data[key]},{})
     : data
 }
 
 http.interceptors.response.use(
   (res) => {
-    if (configFile.isFireBase) {
       res.data = { content: transformData(res.data) }
-    } else {
-      res.data = { content: res.data }
-    }
     return res
   },
   function (error) {

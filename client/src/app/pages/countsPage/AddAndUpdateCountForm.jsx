@@ -13,7 +13,6 @@ import {
 import AvatarsField from '../../components/common/form/AvatarsField';
 import currency from '../../mock/currency';
 import countsIconsMock from '../../mock/countsIcons';
-import formatDataCountsIcons from '../../utils/formatDataCountsIcons';
 import { RadioField } from '../../components/common/form';
 import Button from '../../components/common/Button';
 
@@ -26,8 +25,8 @@ const CountsForm = ({ currentCount, closeForm }) => {
     : {
         name: '',
         content: '',
-        type: '',
-        currency: '',
+        type: '652e4f70498ed451c3f23b9b',
+        currency: '67rdca3eeb7f6fgeed471198',
         icon: '',
         totalBalance: 'true',
       };
@@ -54,7 +53,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
     closeForm();
   };
 
-  const countsIcons = [formatDataCountsIcons(countsIconsMock)];
+  const countsIcons = [countsIconsMock.map(item=>`https://img.icons8.com/${item.name}`)];
 
   return (
     <>

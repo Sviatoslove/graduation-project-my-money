@@ -10,13 +10,12 @@ const SelectedField = ({
   error,
   name,
   onChange,
-  type,
   valueTwo,
 }) => {
 
-  const optionsArray = options?.map((optionName) => ({
+  const optionsArray = Object.values(options)?.map((optionName) => ({
     name: optionName.name,
-    value: !type ? optionName.icon : optionName._id,
+    value: optionName._id,
   }));
 
   return (
@@ -60,7 +59,6 @@ const SelectedField = ({
 
 SelectedField.defaultProps = {
   defaultOption: 'Choose...',
-  type: '',
 };
 
 SelectedField.propTypes = {
@@ -68,7 +66,6 @@ SelectedField.propTypes = {
     PropTypes.string.isRequired,
     PropTypes.object.isRequired,
   ]),
-  type: PropTypes.string,
   value: PropTypes.string,
   valueTwo: PropTypes.string,
 
