@@ -11,6 +11,7 @@ const schema = new Schema(
     balance: Number,
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     totalBalance: String,
+    masterCount: String,
   },
   {
     timestamps: true,

@@ -4,7 +4,12 @@ import { displayDate } from '../../utils';
 import Button from '../../components/common/Button';
 import currency from '../../mock/currency';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadCountsData, selectCountsData, selectCountsDataStatus } from '../../store/countsSlice';
+import {
+  loadCountsData,
+  selectCountsData,
+  selectCountsDataStatus,
+} from '../../store/countsSlice';
+import Badge from '../../components/common/Badge';
 
 const CountCard = ({ count, onChange }) => {
   const dispatch = useDispatch();
@@ -25,31 +30,48 @@ const CountCard = ({ count, onChange }) => {
             alt="icon"
             style={{ width: '100px' }}
           />
-          <h5 className="card-title">{count.name}</h5>
+          <h5 className="card-title ff-roboto ls-1">{count.name}</h5>
           <hr />
         </div>
         <div className="card-body d-flex flex-column p-0 text-center">
           <div className="card-body-content p-2 flex-grow-1">
-            {countsDataLoaded ? <p className="card-text">Тип счёта: {countsData[count.type].name}</p> : 'Loadinf...'}
-            
-            <p className="card-text">Описание: {count.content}</p>
+            {countsDataLoaded ? (
+              <div className="card-text">
+                Тип счёта: <Badge {...countsData[count.type]} />
+              </div>
+            ) : (
+              'Loading...'
+            )}
+
+            <div className="card-text">
+              <p className="h6">Описание:</p> <p className='ff-BS'>{count.content}</p>
+            </div>
             <p className="card-text">Создан: {displayDate(count.createdAt)}</p>
             <p className="card-text">
               Обновлён: {displayDate(count.updatedAt)}
             </p>
           </div>
-          <div className="card-footer position-relative">
-            <small className="text-body-secondary">
-              Баланс: {count.balance}{' '}
-              <img src={currency[count.currency].icon} alt="img" style={{ width: '24px' }} />
+          <div className="card-footer">
+            <small className="text-body-secondary d-flex align-items-center">
+              <p className="fw-bold ls-2 fs-5">Баланс:</p>
+              <div className="flex-grow-1 justify-content-center d-flex">
+                <p className="fw-bold ls-1 fs-4 align-items-center d-flex">
+                  {count.balance}{' '}
+                  <img
+                    src={currency[count.currency].icon}
+                    alt="img"
+                    style={{ width: '40px' }}
+                  />
+                </p>
+              </div>
             </small>
 
-            <i
+            {/* <i
               className={
                 'fs-24 position-absolute top-50 end-0 translate-middle-y bi bi-eye' +
                 (count.totalBalance === 'true' ? '' : '-slash')
               }
-            ></i>
+            ></i> */}
           </div>
         </div>
         <div

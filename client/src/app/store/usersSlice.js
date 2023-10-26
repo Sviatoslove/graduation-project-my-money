@@ -123,6 +123,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch(usersRequestFailed(error.message))
   }
 }
+
 export const updateUser = (payload) => async (dispatch) => {
   dispatch(userUpdateRequested())
   try {
@@ -131,6 +132,11 @@ export const updateUser = (payload) => async (dispatch) => {
   } catch (error) {
     dispatch(userUpdateFailed(error.message))
   }
+}
+
+export const updateUserByCount = (payload) => async (dispatch) => {
+    console.log('payload:', payload)
+    // dispatch(userUpdateSuccessed(payload))
 }
 
 export const selectUser = () => (state) => state.users.entities

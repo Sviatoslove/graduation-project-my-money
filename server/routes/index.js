@@ -6,5 +6,6 @@ router.use('/count', require('./count.routes'));
 router.use('/user', require('./user.routes'));
 router.use('/avatars', require('./avatars.routes'));
 router.use('/countsData', require('./countsData.routes'));
+router.use('/translation', require('./translation.routes'));
 
 module.exports = router;

@@ -124,6 +124,14 @@ $utilities: map-merge(
       values: (
         nw: nowrap,
       )
+    ),
+    'letter-spacing': (
+      property: letter-spacing,
+      class: ls,
+      values: (
+        1: 1px,
+        2: 2px,
+      )
     )
   )
 );

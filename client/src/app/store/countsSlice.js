@@ -79,6 +79,15 @@ const countsSlice = createSlice({
     countsDataRemoved  : (state) => {
       state.entities = null
       state.dataLoaded = false
+    },
+    countsUpdatedByTranslation: (state, action) => {
+      const {fromCount, toCount, balanceFrom, balanceTo} = action.payload
+    if(fromCount !== '0') {
+      const countFrom = state.entities[fromCount]
+      countFrom.balance = Number(countFrom.balance) - Number(balanceFrom)
+    }
+    const countTo = state.entities[toCount]
+    countTo.balance = Number(countTo.balance) + Number(balanceTo)
     }
   }
 })
@@ -100,7 +109,8 @@ const {
   currencyDataRequested,
   currencyDataReceived,
   currencyDataRequestedFailed,
-  countsDataRemoved
+  countsDataRemoved,
+  countsUpdatedByTranslation
 } = actions
 
 export const countCreate = (payload) => async (dispatch) => {
@@ -131,6 +141,10 @@ export const countUpdate = (payload) => async (dispatch) => {
   } catch (error) {
     dispatch(countsRequestedFailed(error.message))
   }
+}
+
+export const countsUpdateAfterTranslation = (payload) => async (dispatch) => {
+    dispatch(countsUpdatedByTranslation(payload))
 }
 
 export const countRemove = (payload) => async (dispatch) => {

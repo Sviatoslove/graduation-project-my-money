@@ -143,7 +143,7 @@ const CountsPage = () => {
             ))}
           </div>
         </div>
-        
+        {!scale &&
         <div
           className={
             'mt-auto footer-group d-flex mb-4' + ((count > pageSize) ? ' justify-content-between ' : ' justify-content-end ') + (!count || (countsLikes && countsLikes.length < pageSize)
@@ -186,7 +186,7 @@ const CountsPage = () => {
               imgSrc={addIcon}
             />
           </div>
-        </div>
+        </div>}
       </div>
     );
   }

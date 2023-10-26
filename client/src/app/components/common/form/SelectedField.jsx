@@ -38,14 +38,14 @@ const SelectedField = ({
           if(valueTwo) {
             if (option.value !== valueTwo) {
               return (
-                <option value={option.value} key={option.name}>
+                <option value={option.value} key={option.value}>
                   {option.name}
                 </option>
               );
             }
           } else {
             return (
-              <option value={option.value} key={option.name}>
+              <option value={option.value} key={option.value}>
                 {option.name}
               </option>
             );

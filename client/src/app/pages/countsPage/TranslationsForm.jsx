@@ -1,64 +1,68 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CurrencyField,
   SelectedField,
   TextField,
 } from '../../components/common/form';
 import Button from '../../components/common/Button';
-import { selectCounts } from '../../store/countsSlice';
+import {
+  countsUpdateAfterTranslation,
+  selectCounts,
+} from '../../store/countsSlice';
 import getDate from '../../utils/getDate';
 import currency from '../../mock/currency';
 import getExchangeRates from '../../utils/getExchangeRates';
+import { translationCreate } from '../../store/translationsSlice';
+import LoadingBtn from '../../components/common/LoadingBtn';
 
 const TranslationsForm = ({ closeForm }) => {
+  const dispatch = useDispatch();
+  const inputBalanceTo = useRef();
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
-  console.log('pending:', pending);
   const [valueConverted, setValueConverted] = useState();
-  console.log('valueConverted:', valueConverted);
   const [data, setData] = useState({
     fromCount: '0',
     toCount: '',
     content: '',
     date: getDate(),
-    balanceFromCount: 0,
-    balanceToCount: 0,
+    balanceFrom: 0,
+    balanceTo: 0,
   });
 
   const counts = {
-    '0': {
+    0: {
       name: 'Пополнение счёта',
       _id: '0',
-      currency: '67rdca3eeb7f6fgeed471198',
     },
     ...useSelector(selectCounts()),
   };
-  
-  const fromCurrency = currency[counts[data.fromCount].currency];
-  console.log('fromCurrency:', fromCurrency)
-  const toCurrency = currency[counts[data?.toCount]?.currency];
-  console.log('toCurrency:', toCurrency)
+
+  const currencyIdFrom = counts[data.fromCount].currency;
+  const fromCurrency = currency[currencyIdFrom];
+  const currencyIdTo = counts[data?.toCount]?.currency;
+  const toCurrency = currency[currencyIdTo];
 
   useEffect(() => {
+    if (data.fromCount === '0') setConvertCurrency(false);
     if (data.toCount) {
-      const countFrom = counts.find((count) => data.fromCount === count._id);
-      const countTo = counts.find((count) => data.toCount === count._id);
+      const countFrom = counts[data.fromCount];
+      const countTo = counts[data.toCount];
       if (countFrom.currency !== countTo.currency) setConvertCurrency(true);
       else setConvertCurrency(false);
     }
-    data.balanceFromCount = 0;
+    if (data.fromCount === '0') setConvertCurrency(false);
+    data.balanceFrom = 0;
     setValueConverted('');
   }, [data.fromCount, data.toCount]);
 
   useEffect(() => {
     if (valueConverted > 0) setValueConverted('');
-  }, [data.balanceFromCount]);
+  }, [data.balanceFrom]);
 
   const handleChange = ({ target }) => {
-    // console.log('target:', target)
-
     setData((state) => ({
       ...state,
       [target.name]: target.value,
@@ -66,27 +70,30 @@ const TranslationsForm = ({ closeForm }) => {
     // setErrors(null)
   };
 
-  // console.log('data:', data);
-
   const handleConverter = async () => {
     setPending(true);
     const { result } = await getExchangeRates(
       fromCurrency,
       toCurrency,
-      data.balanceFromCount,
+      data.balanceFrom,
       data.date
     );
     setValueConverted(Math.floor(result));
     setPending(false);
+    // handleChange({target:{name: 'balanceTo', value: inputBalanceTo.current.value}})
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newData = { ...data, currency: '' };
+    let balanceTo = `${valueConverted}`;
+    if (data.fromCount === '0' || fromCurrency === toCurrency)
+      balanceTo = data.balanceFrom;
+    const newData = { ...data, balanceTo: balanceTo };
 
-    console.log('data:', data);
-
-    // closeForm();
+    console.log('newData:', newData);
+    dispatch(translationCreate(newData));
+    dispatch(countsUpdateAfterTranslation(newData));
+    closeForm();
   };
 
   return (
@@ -120,32 +127,34 @@ const TranslationsForm = ({ closeForm }) => {
           onChange={handleChange}
           // error={errors.content}
         />
-        <div className='d-flex'>
+        <div className="d-flex">
           <CurrencyField
-            name="balanceFromCount"
+            name="balanceFrom"
             type="number"
             label="Сумма для перевода"
-            value={data.balanceFromCount}
-            icon={fromCurrency?.icon}
+            value={
+              data.fromCount !== '0' &&
+              counts[data.fromCount].balance < data.balanceFrom
+                ? counts[data.fromCount].balance
+                : data.balanceFrom
+            }
+            icon={
+              data.fromCount === '0' ? toCurrency?.icon : fromCurrency?.icon
+            }
             onChange={handleChange}
             // error={errors.date}
           />
           {convertCurrency && (
             <CurrencyField
-              name="balanceToCount"
+              name="balanceTo"
               type="text"
               label="Значение по курсу"
-              value={
-                !valueConverted
-                  ? pending
-                    ? 'Loading...'
-                    : '0'
-                  : valueConverted
-              }
+              value={!valueConverted ? '0' : valueConverted}
               icon={toCurrency?.icon}
               convert={convertCurrency}
               onChange={handleChange}
               handleClick={handleConverter}
+              inputBalanceTo={inputBalanceTo}
               // error={errors.date}
             />
           )}
@@ -155,10 +164,10 @@ const TranslationsForm = ({ closeForm }) => {
             outline={true}
             color="success"
             classes={'mb-3 br-5 w-100'}
-            disabled={!data.balanceFromCount > 0}
+            disabled={!data.balanceFrom > 0}
             onClick={handleConverter}
           >
-            Конвертировать
+            {pending ? <LoadingBtn label='Секундочку, уже скоро пересчитаю...'/> : 'Конвертировать'}
           </Button>
         )}
         <TextField

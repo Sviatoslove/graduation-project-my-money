@@ -12,7 +12,8 @@ const CurrencyField = ({
   error,
   convert,
   icon,
-  handleClick
+  handleClick,
+  inputBalanceToCount
 }) => {
 
   const cleanInput = (e) => {
@@ -27,6 +28,7 @@ const CurrencyField = ({
       <div className="input-group flex-column">
         <div className="d-flex">
           <input
+          ref={inputBalanceToCount}
             type={type}
             id={name}
             name={name}
@@ -56,6 +58,7 @@ CurrencyField.defaultProps = {
 };
 
 CurrencyField.propTypes = {
+  inputBalanceToCount:PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   icon: PropTypes.string,
   convert: PropTypes.bool,
   label: PropTypes.string.isRequired,

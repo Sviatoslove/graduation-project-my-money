@@ -13,7 +13,6 @@ import {
 import AvatarsField from '../../components/common/form/AvatarsField';
 import currency from '../../mock/currency';
 import countsIconsMock from '../../mock/countsIcons';
-import { RadioField } from '../../components/common/form';
 import Button from '../../components/common/Button';
 
 const CountsForm = ({ currentCount, closeForm }) => {
@@ -28,7 +27,6 @@ const CountsForm = ({ currentCount, closeForm }) => {
         type: '652e4f70498ed451c3f23b9b',
         currency: '67rdca3eeb7f6fgeed471198',
         icon: '',
-        totalBalance: 'true',
       };
 
   const [data, setData] = useState(initialState);
@@ -105,17 +103,6 @@ const CountsForm = ({ currentCount, closeForm }) => {
               onChange={handleChange}
               options={countsIcons}
             />
-            <RadioField
-              options={[
-                { label: 'Учитывать', value: 'true' },
-                { label: 'Не учитывать', value: 'false' },
-              ]}
-              value={data.totalBalance}
-              name="totalBalance"
-              onChange={handleChange}
-              label="Учитывать счёт в общем балансе"
-            />
-
             {/* {enterError && <p className="text-danger">{enterError}</p>} */}
             <Button
               type="submit"
