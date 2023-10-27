@@ -8,8 +8,8 @@ router
   .route('/')
   .get(auth, async (req, res) => {
     try {
-      const listAll = await Count.find();
-      const list = listAll.filter((count) => String(count.userId) === req.user._id);; //получаем список всех комментариев
+      const listAll = await Translation.find();
+      const list = listAll.filter((translation) => String(translation.userId) === req.user._id);; //получаем список всех комментариев
       res.send(list); // отправили их на клиента с статус кодом 200
     } catch (e) {
       res

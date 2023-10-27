@@ -7,6 +7,7 @@ import {
   selectUserLoadingStatus
 } from '../../../store/usersSlice'
 import localStorageService from '../../../services/localStorage.service'
+import LoadingSpinners from '../../common/LoadingSpinners'
 
 const AppLoader = ({ children }) => {
   const dispatch = useDispatch()
@@ -20,7 +21,7 @@ const AppLoader = ({ children }) => {
     if (isLoggedIn) dispatch(loadUser())
   }, [])
 
-  if (usersLoadingStatus) return <h2>Loading...</h2>
+  if (usersLoadingStatus) return <LoadingSpinners style={{width: '96px', height: '96px'}} classesSpinner='' number={5}/>
   return children
 }
 

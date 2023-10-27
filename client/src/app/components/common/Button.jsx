@@ -39,7 +39,7 @@ const Button = ({
       ) : (
         <Link 
          to={link}
-         className={classes}
+         className={`text-center ${classes} btn btn-${outline ? 'outline-' : ''}${color}`}
          >
           {imgSrc && <img src={imgSrc} alt="image" />}
           {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}

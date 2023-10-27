@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LoadingBtn = (label) => {
+const LoadingBtn = ({label}) => {
   return (
     <>
       <span className="spinner-grow spinner-grow-sm" aria-hidden="true"></span>

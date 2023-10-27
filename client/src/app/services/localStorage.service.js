@@ -4,6 +4,7 @@ const localStorageService = {
   EXPIRES_KEY: 'jwt-expires',
   USER_ID: 'user-id',
   STAY_ON: 'stay-on',
+  MASTER_COUNT: 'master-count',
 
   setTokens({
     expiresIn = 3600,
@@ -37,6 +38,16 @@ const localStorageService = {
 
   removeAuthData() {
     Object.keys(this).forEach((key) => localStorage.removeItem(this[key]))
+  },
+
+  getMasterCount() {
+    return localStorage.getItem(this.MASTER_COUNT)
+  },
+  setMasterCount(data) {
+    localStorage.setItem(this.MASTER_COUNT, data)
+  },
+  removeMasterCount() {
+    localStorage.removeItem(this.MASTER_COUNT)
   }
 }
 

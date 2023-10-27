@@ -6,7 +6,7 @@ import TranslationsForm from './TranslationsForm';
 const FormForCount = ({ currentCount, closeForm, type }) => {
   return (
     <>
-      {type === 'translations' ? (
+      {type === 'translationsAdd' ? (
         <TranslationsForm 
         closeForm={closeForm}
 

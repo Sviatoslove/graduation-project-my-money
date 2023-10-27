@@ -14,7 +14,7 @@ import {
 import { AuthLayout, CountsLayout, UserLayout } from '../../layouts';
 import localStorageService from '../../services/localStorage.service';
 import CountsLikes from '../../pages/countsPage/CountsLikes';
-import CountsTranslations from '../../pages/countsPage/CountsTranslations';
+import CountsTranslations from '../../pages/countsPage/HistoryTranslations';
 
 const routes = (isLoggedIn, location) => {
   const currentUserId = localStorageService.getUserId();
@@ -58,7 +58,7 @@ const routes = (isLoggedIn, location) => {
       ),
       children: [
         {
-          name: 'Счета sdfsd',
+          name: 'Счета',
           path: '',
           pathname: `/counts`,
           element: <CountsPage />,
@@ -70,7 +70,7 @@ const routes = (isLoggedIn, location) => {
           element: <CountsLikes />,
         },
         {
-          name: 'Переводы между счетами',
+          name: 'История переводов',
           path: 'translations',
           pathname: `/counts/translations`,
           element: <CountsTranslations />,

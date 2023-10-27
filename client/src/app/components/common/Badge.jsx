@@ -1,15 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Badge = ({ name, textColor, color }) => {
+const Badge = ({
+  name,
+  textColor,
+  color,
+  text,
+  classes,
+  balance,
+  imgSrc,
+  iconSize,
+}) => {
   return (
-    <h3>
-      <span className={`badge bg-${color} ${textColor}`}>{name}</span>
-    </h3>
+    <>
+      {balance || balance === 0 ? (
+        <p className={`justify-content-center badge bg-${color} ${textColor} ${classes}`}>
+          {balance}
+          <img src={imgSrc} alt="img" style={{ width: iconSize }} />
+        </p>
+      ) : (
+        <h3 className="m-0">
+          <span className={`badge bg-${color} ${textColor} ${classes}`}>
+            {text ? text : name}
+          </span>
+        </h3>
+      )}
+    </>
   );
 };
 
 Badge.propTypes = {
+  classes: PropTypes.string,
+  balance: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
+  imgSrc: PropTypes.string,
+  iconSize: PropTypes.string,
+  text: PropTypes.string,
   name: PropTypes.string,
   textColor: PropTypes.string,
   color: PropTypes.string,

@@ -5,7 +5,7 @@ const translationsSlice = createSlice({
   name: 'translations',
   initialState: {
     entities: null,
-    isLoading: false,
+    isLoading: true,
     error: null,
     dataLoaded: null,
   },
@@ -48,7 +48,7 @@ export const translationCreate = (payload) => async (dispatch) => {
   }
 }
 
-export const translationsLoad = () => async (dispatch) => {
+export const loadTranslations= () => async (dispatch) => {
   dispatch(translationsRequested())
   try {
     const { content } = await translationsService.get()
@@ -67,6 +67,11 @@ export const translationRemove = (payload) => async (dispatch) => {
     dispatch(translationsRequestedFailed(error.message))
   }
 }
+
+export const selectTranslations = () => (state) => state.translations.entities
+export const selectTranslationsDataLoaded  = () => (state) => state.translations.dataLoaded
+export const selectTranslationsLoadedStatus  = () => (state) => state.translations.isLoading
+
 
 
 export default translationsReducer

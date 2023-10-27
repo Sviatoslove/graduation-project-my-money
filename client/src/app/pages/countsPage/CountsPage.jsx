@@ -17,6 +17,8 @@ import Translations from './Translations';
 import CountCard from './CountCard';
 import Button from '../../components/common/Button';
 import FormForCount from './FormForCount';
+import Container from '../../components/common/Containers/Container';
+import LoadingSpinners from '../../components/common/LoadingSpinners';
 
 const CountsPage = () => {
   const dispatch = useDispatch();
@@ -89,10 +91,9 @@ const CountsPage = () => {
       case 'remove':
         dispatch(countRemove({ countId }));
         break;
-        case 'translations':
+        case 'translationsAdd':
           setTypeForm(btnType);
           appearanceCountsForm();
-
         break;
     }
   };
@@ -111,7 +112,7 @@ const CountsPage = () => {
     const transform = scale ? 'scale(0)' : '';
 
     return (
-      <div className="counts-page mx-auto mt-4 d-flex flex-column">
+      <Container>
         {countAdd && (
           <div className={'wrapper-counts-form ' + (down ? 'down' : '')}>
             <FormForCount
@@ -131,7 +132,7 @@ const CountsPage = () => {
           className="counts-list flex-grow-1"
           style={{ transform: transform }}
         >
-          {count ? <Translations onChange={handleToEdit} /> : null}
+          {count ? <Translations onChange={handleToEdit} counts={counts} /> : null}
 
           <div className="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
             {countsCrop.map((count) => (
@@ -187,10 +188,10 @@ const CountsPage = () => {
             />
           </div>
         </div>}
-      </div>
+      </Container>
     );
   }
-  return 'Loading...';
+  return <LoadingSpinners style={{width: '56px', height: '56px'}} classesSpinner='' number={6}/>;
 };
 
 export default CountsPage;

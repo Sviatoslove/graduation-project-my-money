@@ -61,7 +61,9 @@ export default function displayDate(timeStep) {
         date.getMinutes()
       )}`
     }
-    return `${addZero(date.getDate())} ${monthDate[date.getMonth()]}`
+    return `${addZero(date.getDate())} ${monthDate[date.getMonth()]} в ${addZero(date.getHours())}:${addZero(
+      date.getMinutes()
+    )}`
   }
   return getDateFormat(date, ' ')
 }

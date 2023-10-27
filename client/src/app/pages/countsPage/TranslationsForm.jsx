@@ -89,8 +89,6 @@ const TranslationsForm = ({ closeForm }) => {
     if (data.fromCount === '0' || fromCurrency === toCurrency)
       balanceTo = data.balanceFrom;
     const newData = { ...data, balanceTo: balanceTo };
-
-    console.log('newData:', newData);
     dispatch(translationCreate(newData));
     dispatch(countsUpdateAfterTranslation(newData));
     closeForm();
@@ -106,7 +104,7 @@ const TranslationsForm = ({ closeForm }) => {
           label="Название счёта с которого хотите перевести"
           value={data.fromCount}
           valueTwo={data.toCount}
-          options={counts}
+          options={Object.values(counts)}
           onChange={handleChange}
           // error={errors.fromCount}
         />

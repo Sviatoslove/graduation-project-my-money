@@ -7,7 +7,6 @@ const schema = new Schema(
     password: { type: String },
     avatar: String,
     sex: { type: String, enum: ['male', 'female'] },
-    balance: Number,
     masterCount:String, 
   },
   {
