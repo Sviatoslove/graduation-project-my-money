@@ -1,24 +1,28 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react";
+import PropTypes from "prop-types";
 
-const Container = ({ children, classes }) => {
+const Container = ({ children, classes, newClasses }) => {
   return (
-    <div className={classes}>
-        {children}
+    <div
+      className={
+        !newClasses
+          ? "container w-98 mh-86vh d-flex mx-auto mt-4 d-flex flex-column " +
+            classes
+          : newClasses
+      }
+    >
+      {children}
     </div>
-  )
-}
-
-Container.defaultProps = {
-  classes: 'container w-98 mh-94vh d-flex mx-auto mt-4 d-flex flex-column',
-}
+  );
+};
 
 Container.propTypes = {
+  newClasses: PropTypes.string,
   classes: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ])
-}
+    PropTypes.node,
+  ]),
+};
 
-export default Container
+export default Container;

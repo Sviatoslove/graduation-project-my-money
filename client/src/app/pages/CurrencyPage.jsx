@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const CurrencyPage = () => {
-  return null
-}
+  return null;
+};
 
-export default CurrencyPage
+export default CurrencyPage;

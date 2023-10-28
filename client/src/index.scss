@@ -1,13 +1,14 @@
-@import '../node_modules/bootstrap/scss/bootstrap';
+@import "../node_modules/bootstrap/scss/bootstrap";
 
 // Functions first
-@import '../node_modules/bootstrap/scss/functions';
+@import "../node_modules/bootstrap/scss/functions";
 
 // Variable overrides second
 $primary: #900;
 $enable-shadows: true;
-$prefix: 'mo-';
+$prefix: "mo-";
 $pMargin: 0;
+
 
 // Required Bootstrap imports
 // @import '../node_modules/bootstrap/scss/variables';
@@ -17,15 +18,15 @@ $pMargin: 0;
 // @import "../node_modules/bootstrap/scss/root";
 
 // Optional components
-@import '../node_modules/bootstrap/scss/utilities';
+@import "../node_modules/bootstrap/scss/utilities";
 // @import "../node_modules/bootstrap/scss/reboot";
 // @import "../node_modules/bootstrap/scss/containers";
 // @import "../node_modules/bootstrap/scss/grid";
 // @import "../node_modules/bootstrap/scss/helpers";
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@1,700&display=swap");
 
 p {
   margin: $pMargin;
@@ -34,7 +35,7 @@ p {
 $utilities: map-merge(
   $utilities,
   (
-    'width': (
+    "width": (
       property: width,
       class: w,
       values: (
@@ -50,18 +51,18 @@ $utilities: map-merge(
         150px: 150px,
         130px: 130px,
         300px: 300px,
-
+        500px: 500px,
       ),
     ),
-    'max-width': (
+    "max-width": (
       property: max-width,
       class: mw,
       values: (
         none: none,
-        1200: 1200px
+        1200: 1200px,
       ),
     ),
-    'height': (
+    "height": (
       property: height,
       class: h,
       values: (
@@ -75,37 +76,47 @@ $utilities: map-merge(
         80: 80%,
       ),
     ),
-    'min-height': (
+    "min-height": (
       property: min-height,
       class: mh,
       values: (
         96vh: 96vh,
         94vh: 94vh,
+        86vh: 86vh,
       ),
     ),
-    'margin': (
+    "margin": (
       property: margin,
       class: m,
       values: (
         20-auto: 20px auto,
       ),
     ),
-    'color': (
+    "margin-top": (
+      property: margin-top,
+      class: mt,
+      values: (
+        6: 3.5rem,
+        7: 4rem,
+        8: 4.5rem,
+      ),
+    ),
+    "color": (
       property: color,
       class: c,
       values: (
         jack: #043399,
       ),
     ),
-    'font-family': (
+    "font-family": (
       property: font-family,
       class: ff,
       values: (
-        roboto: 'Roboto Slab',
-        BS: 'Balsamiq Sans',
+        roboto: "Roboto Slab",
+        BS: "Balsamiq Sans",
       ),
     ),
-    'font-weight': (
+    "font-weight": (
       property: font-weight,
       class: fw,
       values: (
@@ -113,15 +124,15 @@ $utilities: map-merge(
         400: 400,
       ),
     ),
-    'shadow': (
+    "shadow": (
       property: box-shadow,
       class: shadow,
       values: (
         custom: 4px 4px 10px 1px rgba(0, 0, 0, 0.3),
-        appShadow: 0px 0px 10px 2px rgba(0, 211, 255, 0.2)
+        appShadow: 0px 0px 10px 2px rgba(0, 211, 255, 0.2),
       ),
     ),
-    'border-radius': (
+    "border-radius": (
       property: border-radius,
       class: br,
       values: (
@@ -129,7 +140,7 @@ $utilities: map-merge(
         10: 10px,
       ),
     ),
-    'background-color': (
+    "background-color": (
       property: background-color,
       class: bc,
       values: (
@@ -138,22 +149,36 @@ $utilities: map-merge(
         white: rgb(191, 234, 226),
       ),
     ),
-    'white-space': (
+    "white-space": (
       property: white-space,
       class: ws,
       values: (
         nw: nowrap,
-      )
+      ),
     ),
-    'letter-spacing': (
+    "letter-spacing": (
       property: letter-spacing,
       class: ls,
       values: (
         1: 1px,
         2: 2px,
-      )
-    )
+      ),
+    ),
+    "top": (
+      property: top,
+      class: top,
+      values: (
+        110px: 110px,
+      ),
+    ),
+    "left": (
+      property: left,
+      class: start,
+      values: (
+        30px: 30px,
+      ),
+    ),
   )
 );
 
-@import '../node_modules/bootstrap/scss/utilities/api';
+@import "../node_modules/bootstrap/scss/utilities/api";

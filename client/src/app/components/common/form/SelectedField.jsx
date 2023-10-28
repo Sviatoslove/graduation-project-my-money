@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 // import { formatDataForFields, getInputClasses } from '../../../utils'
 
 const SelectedField = ({
@@ -12,7 +12,6 @@ const SelectedField = ({
   onChange,
   valueTwo,
 }) => {
-
   const optionsArray = Object.values(options)?.map((optionName) => ({
     name: optionName.name,
     value: optionName._id,
@@ -35,7 +34,7 @@ const SelectedField = ({
           {defaultOption}
         </option>
         {optionsArray?.map((option) => {
-          if(valueTwo) {
+          if (valueTwo) {
             if (option.value !== valueTwo) {
               return (
                 <option value={option.value} key={option.value}>
@@ -58,7 +57,7 @@ const SelectedField = ({
 };
 
 SelectedField.defaultProps = {
-  defaultOption: 'Choose...',
+  defaultOption: "Choose...",
 };
 
 SelectedField.propTypes = {

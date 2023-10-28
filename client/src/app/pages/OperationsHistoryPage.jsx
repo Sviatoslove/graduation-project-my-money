@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const OperationsHistoryPage = () => {
-  return null
-}
+  return null;
+};
 
-export default OperationsHistoryPage
+export default OperationsHistoryPage;

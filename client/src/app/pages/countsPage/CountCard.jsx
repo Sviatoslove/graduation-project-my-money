@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { displayDate } from '../../utils';
-import Button from '../../components/common/Button';
-import currency from '../../mock/currency';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { displayDate } from "../../utils";
+import Button from "../../components/common/Button";
+import currency from "../../mock/currency";
+import { useDispatch, useSelector } from "react-redux";
 import {
   loadCountsData,
   selectCountsData,
   selectCountsDataStatus,
-} from '../../store/countsSlice';
-import Badge from '../../components/common/Badge';
+} from "../../store/countsSlice";
+import Badge from "../../components/common/Badge";
 
 const CountCard = ({ count, onChange }) => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const CountCard = ({ count, onChange }) => {
             src={count.icon}
             className="card-img-top"
             alt="icon"
-            style={{ width: '100px' }}
+            style={{ width: "100px" }}
           />
           <h5 className="card-title ff-roboto ls-1">{count.name}</h5>
           <hr />
@@ -40,11 +40,12 @@ const CountCard = ({ count, onChange }) => {
                 Тип счёта: <Badge {...countsData[count.type]} />
               </div>
             ) : (
-              'Loading...'
+              "Loading..."
             )}
 
             <div className="card-text">
-              <p className="h6">Описание:</p> <p className='ff-BS'>{count.content}</p>
+              <p className="h6">Описание:</p>{" "}
+              <p className="ff-BS">{count.content}</p>
             </div>
             <p className="card-text">Создан: {displayDate(count.createdAt)}</p>
             <p className="card-text">
@@ -56,11 +57,11 @@ const CountCard = ({ count, onChange }) => {
               <p className="fw-bold ls-2 fs-5">Баланс:</p>
               <div className="flex-grow-1 justify-content-center d-flex">
                 <p className="fw-bold ls-1 fs-4 align-items-center d-flex">
-                  {count.balance}{' '}
+                  {count.balance}{" "}
                   <img
                     src={currency[count.currency].icon}
                     alt="img"
-                    style={{ width: '40px' }}
+                    style={{ width: "40px" }}
                   />
                 </p>
               </div>
@@ -93,7 +94,7 @@ const CountCard = ({ count, onChange }) => {
             classes="btn-sm"
             onClick={onChange}
             id={count._id}
-            icon={'bi bi-heart' + (count.like ? '-fill' : '')}
+            icon={"bi bi-heart" + (count.like ? "-fill" : "")}
           />
 
           <Button

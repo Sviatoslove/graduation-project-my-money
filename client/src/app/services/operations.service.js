@@ -1,21 +1,21 @@
-import { httpService } from './http.service'
-import localStorageService from './localStorage.service'
+import { httpService } from "./http.service";
 
-const operationsEndpoint = 'operations/'
+const operationsEndpoint = "operation/";
 
 const operationsService = {
-  getOperations: async () => {
-    const { data } = await httpService.get(operationsEndpoint)
-    return data
+  get: async () => {
+    const { data } = await httpService.get(operationsEndpoint);
+    return data;
   },
-  updateOperation: async (operation) => {
-    const { data } = await httpService.patch(userEndpoint + user._id, operation)
-    return data
+  create: async (operation) => {
+    const { data } = await httpService.post(operationsEndpoint, operation);
+    return data;
   },
-  removeOperation: async () => {
-    const { data } = await httpService.delete(operationsEndpoint)
-    return data
-  }
-}
 
-export default operationsService
+  remove: async () => {
+    const { data } = await httpService.delete(operationsEndpoint);
+    return data;
+  },
+};
+
+export default operationsService;

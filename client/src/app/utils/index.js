@@ -1,12 +1,12 @@
-import displayDate from './displayDate'
-import formatDataCountsIcons from './formatDataCountsIcons'
-import formatDataAvatars from './formatDataForAvatarsFields'
-import generateAuthError from './generateAuthError'
-import getCountLike from './getCountLike'
-import getInputClasses from './getInputClasses'
-import getTitleNavbar from './getTitleNavbar'
-import history from './history'
-import paginate from './paginate'
+import displayDate from "./displayDate";
+import formatDataCountsIcons from "./formatDataCountsIcons";
+import formatDataAvatars from "./formatDataForAvatarsFields";
+import generateAuthError from "./generateAuthError";
+import getCountLike from "./getCountLike";
+import getInputClasses from "./getInputClasses";
+import getTitleNavbar from "./getTitleNavbar";
+import history from "./history";
+import paginate from "./paginate";
 
 export {
   displayDate,
@@ -17,5 +17,5 @@ export {
   getInputClasses,
   getTitleNavbar,
   history,
-  paginate
-}
+  paginate,
+};

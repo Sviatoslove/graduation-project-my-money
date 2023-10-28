@@ -1,6 +1,6 @@
 export default function getCountLike(data) {
   let arr;
-  if (data && typeof data === 'object') {
+  if (data && typeof data === "object") {
     arr = Object.values(data);
   } else arr = data;
   let count = 0;

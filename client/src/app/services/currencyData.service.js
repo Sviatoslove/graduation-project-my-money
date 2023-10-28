@@ -1,12 +1,12 @@
-import { httpService } from './http.service'
+import { httpService } from "./http.service";
 
-const currencyDataEndpoint = 'currencyData/'
+const currencyDataEndpoint = "currencyData/";
 
 const currencyDataService = {
   get: async () => {
-    const { data } = await httpService.get(currencyDataEndpoint)
-    return data
-  }
-}
+    const { data } = await httpService.get(currencyDataEndpoint);
+    return data;
+  },
+};
 
-export default currencyDataService
+export default currencyDataService;

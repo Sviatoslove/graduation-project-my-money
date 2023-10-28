@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import currency from '../../mock/currency';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import currency from "../../mock/currency";
+import { useDispatch, useSelector } from "react-redux";
 import {
   countsLoad,
   loadCountsData,
@@ -8,15 +8,15 @@ import {
   selectCountsData,
   selectCountsDataStatus,
   selectCountsStatus,
-} from '../../store/countsSlice';
-import { selectUser, updateUser } from '../../store/usersSlice';
-import LoadingSpinners from './LoadingSpinners';
-import Badge from './Badge';
-import localStorageService from '../../services/localStorage.service';
+} from "../../store/countsSlice";
+import { selectUser, updateUser } from "../../store/usersSlice";
+import LoadingSpinners from "./LoadingSpinners";
+import Badge from "./Badge";
+import localStorageService from "../../services/localStorage.service";
 
 const MasterCount = () => {
   const dispatch = useDispatch();
-  const [masterCount, setMasterCount] = useState('');
+  const [masterCount, setMasterCount] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector(selectUser());
   const countsDataLoaded = useSelector(selectCountsDataStatus());
@@ -37,14 +37,14 @@ const MasterCount = () => {
 
   const handleClick = (e) => {
     const { target } = e;
-    console.log('target:', target);
-    if ((target.dataset.bsToggle = 'dropdown')) setIsOpen((state) => !state);
-    const countId = target.closest('button').dataset.item;
+    console.log("target:", target);
+    if ((target.dataset.bsToggle = "dropdown")) setIsOpen((state) => !state);
+    const countId = target.closest("button").dataset.item;
     if (countId) {
-      console.log('countId:', countId)
+      console.log("countId:", countId);
       dispatch(updateUser({ ...user, masterCount: countId }));
       setMasterCount(counts[countId]);
-      localStorageService.setMasterCount(countId)
+      localStorageService.setMasterCount(countId);
     }
   };
 
@@ -77,16 +77,16 @@ const MasterCount = () => {
           <Badge
             balance={masterCount.balance}
             imgSrc={currency[masterCount.currency].icon}
-            iconSize={'32px'}
-            color={'success'}
-            classes={'fw-bold ls-1 fs-4 align-items-center d-flex p-1 m-2'}
+            iconSize={"32px"}
+            color={"success"}
+            classes={"fw-bold ls-1 fs-4 align-items-center d-flex p-1 m-2"}
           />
         ) : (
           <p className="balance ff-roboto fw-bold h4 mt-2">-</p>
         )}
 
         {countsDataLoaded && countsLoaded ? (
-          <ul className={'p-0 w-300px dropdown-menu' + (isOpen ? ' show' : '')}>
+          <ul className={"p-0 w-500px dropdown-menu" + (isOpen ? " show" : "")}>
             <li className="text-center w-100 bg-secondary fw-bold">
               <span className="dropdown-item-text">Выберите главный счёт</span>
             </li>
@@ -95,12 +95,17 @@ const MasterCount = () => {
               {Object.values(counts).map((count) => (
                 <li key={count._id}>
                   <button
-                    className={'p-1 m-0 dropdown-item'}
+                    className={"p-1 m-0 dropdown-item"}
                     type="button"
                     onClick={handleClick}
                     data-item={count._id}
                   >
-                    <Badge text={count.name} {...countsData[count.type]} />
+                    <Badge
+                      text={count.name}
+                      {...countsData[count.type]}
+                      imgSrc={count.icon}
+                      iconSize={"32px"}
+                    />
                   </button>
                 </li>
               ))}

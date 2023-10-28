@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 const ContainerApp = ({ children, classes }) => {
   return <div className={classes}>{children}</div>;
@@ -7,7 +7,7 @@ const ContainerApp = ({ children, classes }) => {
 
 ContainerApp.defaultProps = {
   classes:
-    'mw-1200 w-100 m-20-auto mh-96vh position-relative shadow-appShadow br-3 pb-20',
+    "mw-1200 w-100 m-20-auto mh-96vh position-relative shadow-appShadow br-3 pb-20",
 };
 
 ContainerApp.propTypes = {

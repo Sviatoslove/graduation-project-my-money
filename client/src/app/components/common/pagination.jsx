@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
+import React from "react";
+import PropTypes from "prop-types";
+import _ from "lodash";
 
 const Pagination = ({
   itemsCount,
@@ -21,7 +21,7 @@ const Pagination = ({
           <li
             role="button"
             key={page}
-            className={'page-item ' + (page === currentPage ? 'active' : '')}
+            className={"page-item " + (page === currentPage ? "active" : "")}
           >
             <a
               className="page-link"

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../store/usersSlice';
-import Button from '../../components/common/Button';
-import MasterCount from '../../components/common/MasterCount';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/usersSlice";
+import Button from "../../components/common/Button";
+import MasterCount from "../../components/common/MasterCount";
 
 const Translations = ({ onChange, counts }) => {
-  const [masterCount, setMasterCount] = useState('');
+  const [masterCount, setMasterCount] = useState("");
   const user = useSelector(selectUser());
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Translations = ({ onChange, counts }) => {
         )}
         <div className="d-flex justify-content-evenly">
           <Button
-            link={'/counts/translations'}
+            link={"/counts/translations"}
             dataType="translationsHistory"
             outline={true}
             classes="w-90px shadow-custom mt-auto"
@@ -35,7 +35,7 @@ const Translations = ({ onChange, counts }) => {
             <p>История</p>
           </Button>
 
-          <MasterCount/>
+          <MasterCount />
 
           <Button
             dataType="translationsAdd"

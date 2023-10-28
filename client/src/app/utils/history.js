@@ -1,6 +1,6 @@
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from "history";
 
-const history = createBrowserHistory()
+const history = createBrowserHistory();
 
 // history.listen((history) => {
 //   console.log("history:", history);
@@ -8,4 +8,4 @@ const history = createBrowserHistory()
 //   // the action is POP, PUSH, or REPLACE
 // });
 
-export default history
+export default history;

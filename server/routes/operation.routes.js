@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth.middleware');
-const Translation = require('../models/Translation');
+const Operation = require('../models/Operation');
 const Count = require('../models/Count');
 const router = express.Router({ mergeParams: true });
 
@@ -8,9 +8,9 @@ router
   .route('/')
   .get(auth, async (req, res) => {
     try {
-      const listAll = await Translation.find();
+      const listAll = await Operation.find();
       const list = listAll.filter(
-        (translation) => String(translation.userId) === req.user._id
+        (operation) => String(operation.userId) === req.user._id
       ); //получаем список всех комментариев
       res.send(list); // отправили их на клиента с статус кодом 200
     } catch (e) {
@@ -22,25 +22,21 @@ router
   .post(auth, async (req, res) => {
     try {
       const userId = req.user._id;
-      const newTranslation = await Translation.create({
+      const newOperation = await Operation.create({
         // ждём пока создадим комментарий
         ...req.body, // здесь у нас прилетают все необходимые данные
         userId: userId, // добавляем здесь id, т.к. у нас в модели коммента есть userId
       });
       //Получаем счёт из которого после вычитаем перевод
-      const { fromCount, toCount, balanceFrom, balanceTo } = newTranslation;
-      if (fromCount !== '0') {
-        const countFrom = await Count.findById(fromCount);
-        countFrom.balance = Number(countFrom.balance) - Number(balanceFrom);
-        await Count.findByIdAndUpdate(fromCount, countFrom);
-      }
-      const countTo = await Count.findById(toCount);
-      countTo.balance = Number(countTo.balance) + Number(balanceTo);
-      await Count.findByIdAndUpdate(toCount, countTo);
+      const { countId, balance, status } = newOperation;
+        const count = await Count.findById(countId);
+        if(status === 'increment') count.balance = Number(count.balance) + Number(balance);
+        else count.balance = Number(count.balance) - Number(balance);
+        await Count.findByIdAndUpdate(countId, count);
 
-      const listAllTranslation = await Translation.find();
-      const list = listAllTranslation.filter(
-        (translation) => String(translation.userId) === userId
+      const listAllOperation = await Operation.find();
+      const list = listAllOperation.filter(
+        (operation) => String(operation.userId) === userId
       );
       res.status(201).send(list); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
     } catch (e) {
@@ -49,11 +45,11 @@ router
         .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
     }
   })
-  router.delete('/:translId', auth, async (req, res) => {
+  router.delete('/:operId', auth, async (req, res) => {
     try {
-      const { translId } = req.params;
-      const removedTranslation = await Translation.findById(translId);
-      await removedTranslation.deleteOne(); // ждём пока удалится коммент
+      const { operId } = req.params;
+      const removedOperation = await Operation.findById(operId);
+      await removedOperation.deleteOne(); // ждём пока удалится коммент
       return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
     } catch (e) {
       res

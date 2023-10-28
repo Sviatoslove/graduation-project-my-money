@@ -1,8 +1,8 @@
-import React from 'react'
-import CountsPage from './CountsPage'
+import React from "react";
+import CountsPage from "./CountsPage";
 
 const CountsLikes = () => {
-  return <CountsPage />
-}
+  return <CountsPage />;
+};
 
-export default CountsLikes
+export default CountsLikes;

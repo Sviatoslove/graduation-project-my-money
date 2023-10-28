@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Button = ({
   imgSrc,
@@ -19,48 +19,51 @@ const Button = ({
   onClick,
   children,
 }) => {
-
   return (
     <>
       {!link ? (
         <button
           type={type}
           data-type={dataType}
-          className={`btn btn-${outline ? 'outline-' : ''}${color} ${classes}`}
+          className={`btn btn-${outline ? "outline-" : ""}${color} ${classes}`}
           onClick={onClick}
           style={{ zIndex: zIndex }}
           id={id}
           disabled={disabled}
         >
-          {imgSrc && <img src={imgSrc} alt="image" style={{ width: imgFontSize }}/>}
+          {imgSrc && (
+            <img src={imgSrc} alt="image" style={{ width: imgFontSize }} />
+          )}
           {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
           {children}
         </button>
       ) : (
-        <Link 
-         to={link}
-         className={`text-center ${classes} btn btn-${outline ? 'outline-' : ''}${color}`}
-         >
+        <Link
+          to={link}
+          className={`text-center ${classes} btn btn-${
+            outline ? "outline-" : ""
+          }${color}`}
+        >
           {imgSrc && <img src={imgSrc} alt="image" />}
           {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
           {children}
-          </Link>
+        </Link>
       )}
     </>
   );
 };
 
 Button.defaultProps = {
-  imgSrc: '',
-  icon: '',
-  dataType: '',
-  color: 'primary',
+  imgSrc: "",
+  icon: "",
+  dataType: "",
+  color: "primary",
   outline: false,
-  classes: '',
-  id: '',
-  link: '',
-  type: 'button',
-  iconFontSize: '24px',
+  classes: "",
+  id: "",
+  link: "",
+  type: "button",
+  iconFontSize: "24px",
   zIndex: 1,
   disabled: false,
 };

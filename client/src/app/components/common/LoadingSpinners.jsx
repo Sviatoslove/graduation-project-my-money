@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 const LoadingSpinners = ({
   number,
@@ -8,7 +8,6 @@ const LoadingSpinners = ({
   classesSpinner,
   style,
 }) => {
-
   function range(count) {
     return Array.from({ length: count }, (v, i) => i + 1);
   }
@@ -33,13 +32,15 @@ const LoadingSpinners = ({
           color: getRandomColorRgba(),
         },
       }),
-    {}
+    {},
   );
   return (
     <div className={`spinners-wrapper ${classesDiv}`}>
-      {text && <strong className=''
-          style={{ ...style}}
-      role="status">{text}</strong>}
+      {text && (
+        <strong className="" style={{ ...style }} role="status">
+          {text}
+        </strong>
+      )}
       {Object.values(spinners).map((spinner, idx) => (
         <div
           className={`spinner-grow ${classesSpinner}`}
@@ -54,7 +55,7 @@ const LoadingSpinners = ({
 
 LoadingSpinners.defaultProps = {
   style: {},
-  classesDiv: 'position-absolute top-50 start-50 translate-middle'
+  classesDiv: "position-absolute top-50 start-50 translate-middle",
 };
 
 LoadingSpinners.propTypes = {

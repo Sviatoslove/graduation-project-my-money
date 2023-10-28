@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { getInputClasses } from '../../../utils';
-import Button from '../Button';
+import React from "react";
+import PropTypes from "prop-types";
+import { getInputClasses } from "../../../utils";
+import Button from "../Button";
 
 const CurrencyField = ({
   label,
@@ -13,29 +13,30 @@ const CurrencyField = ({
   convert,
   icon,
   handleClick,
-  inputBalanceToCount
+  inputBalanceToCount,
 }) => {
-
   const cleanInput = (e) => {
-    const {target} = e
-    if (target.type === 'number' && target.value === '0') target.value = '';
-    if(target.type === 'text' ) target.blur()
+    const { target } = e;
+    if (target.type === "number" && target.value === "0") target.value = "";
+    if (target.type === "text") target.blur();
   };
 
   return (
     <div className="mb-2 w-100 d-flex flex-column">
-      <label className='flex-grow-1' htmlFor={name}>{label}</label>
+      <label className="flex-grow-1" htmlFor={name}>
+        {label}
+      </label>
       <div className="input-group flex-column">
         <div className="d-flex">
           <input
-          ref={inputBalanceToCount}
+            ref={inputBalanceToCount}
             type={type}
             id={name}
             name={name}
             onChange={onChange}
             onClick={cleanInput}
             value={value}
-            className={'w-100 ' + getInputClasses('form-control', error)}
+            className={"w-100 " + getInputClasses("form-control", error)}
           />
           {icon && (
             <Button
@@ -54,11 +55,14 @@ const CurrencyField = ({
 };
 
 CurrencyField.defaultProps = {
-  type: 'text',
+  type: "text",
 };
 
 CurrencyField.propTypes = {
-  inputBalanceToCount:PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  inputBalanceToCount: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   icon: PropTypes.string,
   convert: PropTypes.bool,
   label: PropTypes.string.isRequired,
