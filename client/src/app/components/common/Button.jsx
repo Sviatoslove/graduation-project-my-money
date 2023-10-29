@@ -18,11 +18,13 @@ const Button = ({
   imgFontSize,
   onClick,
   children,
+  name
 }) => {
   return (
     <>
       {!link ? (
         <button
+          name={name}
           type={type}
           data-type={dataType}
           className={`btn btn-${outline ? "outline-" : ""}${color} ${classes}`}
@@ -69,6 +71,7 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
+  name: PropTypes.string,
   imgFontSize: PropTypes.string,
   imgSrc: PropTypes.string,
   icon: PropTypes.string,

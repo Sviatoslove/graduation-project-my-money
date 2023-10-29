@@ -139,17 +139,8 @@ code {
   transition: transform 0.5s ease-in-out 0s;
 }
 
-.counts-add-page {
-  background-color: aliceblue;
-}
-
-.counts-add-page.active {
-  margin: 0;
-}
-
-.wrapper-counts-form {
+.wrapper-counts-form.show {
   position: absolute;
-  min-width: 600px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -158,9 +149,10 @@ code {
   z-index: 1;
 }
 
-.wrapper-counts-form.down {
+.wrapper-counts-form {
   animation: 0.5s ease-in-out 0s movingDown;
   animation-fill-mode: both;
+  background-color: aliceblue;
 }
 
 @keyframes movingUp {
@@ -188,6 +180,7 @@ code {
     position: absolute;
     top: 50%;
     left: 50%;
+ 
     display: block;
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);

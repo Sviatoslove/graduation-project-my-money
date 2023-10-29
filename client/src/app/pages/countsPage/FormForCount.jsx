@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AddAndUpdateCountForm from "./AddAndUpdateCountForm";
-import TranslationsForm from "./TranslationsForm";
+import TranslationsForm from "../translationsPage/TranslationsForm";
 
 const FormForCount = ({ currentCount, closeForm, type }) => {
   return (

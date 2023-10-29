@@ -1,4 +1,4 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {
   CategoriesPage,
   ChartsPage,
@@ -14,7 +14,8 @@ import {
 import { AuthLayout, CountsLayout, UserLayout } from "../../layouts";
 import localStorageService from "../../services/localStorage.service";
 import CountsLikes from "../../pages/countsPage/CountsLikes";
-import CountsTranslations from "../../pages/countsPage/HistoryTranslations";
+import HistoryTranslations from "../../pages/translationsPage/HistoryTranslations";
+import { FormsProvider } from "../../hooks/useForm";
 
 const routes = (isLoggedIn, location) => {
   const currentUserId = localStorageService.getUserId();
@@ -52,7 +53,7 @@ const routes = (isLoggedIn, location) => {
       path: `counts`,
       display: isLoggedIn,
       element: isLoggedIn ? (
-        <CountsLayout />
+        <FormsProvider><CountsLayout /></FormsProvider>
       ) : (
         <Navigate to="/auth/login" state={{ referrer: location }} />
       ),
@@ -73,7 +74,7 @@ const routes = (isLoggedIn, location) => {
           name: "История переводов",
           path: "translations",
           pathname: `/counts/translations`,
-          element: <CountsTranslations />,
+          element: <HistoryTranslations />,
         },
       ],
     },
@@ -91,7 +92,7 @@ const routes = (isLoggedIn, location) => {
       path: "categories",
       pathname: location.pathname,
       display: isLoggedIn,
-      element: <CategoriesPage />,
+      element: <FormsProvider><CategoriesPage /></FormsProvider>,
     },
     {
       name: "Регулярные платежи",

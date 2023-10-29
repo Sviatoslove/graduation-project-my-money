@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import Button from "../Button";
 
-const AvatarsField = ({ label, name, type, options, onChange }) => {
+const AvatarsField = ({ label, name, currentElement, options, onChange }) => {
   const [index, setIndex] = useState(0);
   const [active, setActive] = useState(null);
   const prevRef = useRef(active);
@@ -16,11 +17,11 @@ const AvatarsField = ({ label, name, type, options, onChange }) => {
   const prevActive = prevRef.current;
 
   const handleClick = ({ target }) => {
-    setActive(target);
+    setActive(target.closest('button'));
     onChange({
       target: {
-        name: target.name,
-        value: target.src,
+        name: target.closest('button').name,
+        value: target.closest('button').dataset.type,
       },
     });
   };
@@ -33,19 +34,37 @@ const AvatarsField = ({ label, name, type, options, onChange }) => {
   };
 
   const drawingAvatars = (n) => {
+    if(typeof options[n][n] === 'object') {
+      return options[n].map((item) => {
+        return (
+          <Button
+            name={name}
+            outline={item.color ? false : true}
+            color={item.color}
+            id={item._id}
+            icon={item.name}
+            dataType={item.color ? item.color : item.name}
+            key={item._id}
+            onClick={handleClick}
+            classes="avatar border-0 m-1 br-5"
+            iconFontSize="52px"
+          />
+        );
+      });
+    }
     return options[n].map((item) => {
       return (
-        <img
-          alt="icon"
-          role="button"
-          type={type}
-          id={name}
+        <Button
           name={name}
-          src={item}
+          outline={true}
+          imgFontSize={'52px'}
+          id={name}
+          dataType={item}
+          imgSrc={item}
           key={item}
           onClick={handleClick}
-          className="avatar"
-          style={{ height: "52px", width: "52px", flexGrow: 1 }}
+          classes="avatar border-0 bg-transparent br-10"
+          zIndex={0}
         />
       );
     });
@@ -53,20 +72,20 @@ const AvatarsField = ({ label, name, type, options, onChange }) => {
 
   const handleIncrement = () => {
     if (!index) setShowClassesDecBt("");
-    if (index === 8) setShowClassesIncBt("-fill");
-    if (index < 9) setIndex((prevState) => ++prevState);
+    if (index === options.length-2) setShowClassesIncBt("-fill");
+    if (index < options.length-1) setIndex((prevState) => ++prevState);
   };
 
   const handleDecrement = () => {
-    if (index === 9) setShowClassesIncBt("");
+    if (index === options.length-1) setShowClassesIncBt("");
     if (index === 1) setShowClassesDecBt("-fill");
     if (index > 0) setIndex((prevState) => --prevState);
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-1">
       <label htmlFor={name}>{label}</label>
-      <div className="input-group mt-2">{drawingAvatars(index)}</div>
+      <div className="input-group mt-2 justify-content-center">{drawingAvatars(index)}</div>
       {options.length > 1 && (
         <div className="text-center mt-2">
           <button
@@ -100,7 +119,7 @@ AvatarsField.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
-  type: PropTypes.string,
+  currentElement: PropTypes.string,
 };
 
 export default AvatarsField;

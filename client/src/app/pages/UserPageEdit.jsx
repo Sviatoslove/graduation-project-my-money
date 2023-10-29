@@ -13,6 +13,7 @@ const UserPageEdit = ({ user, onShow }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState(user);
   const [errors, setErrors] = useState({});
+
   const avatarsDataStatus = useSelector(selectAvatarsDataStatus());
   const avatars = useSelector(selectAvatars());
 

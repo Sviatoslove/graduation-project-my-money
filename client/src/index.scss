@@ -140,6 +140,13 @@ $utilities: map-merge(
         10: 10px,
       ),
     ),
+    "border-bottom-color": (
+      property: border-bottom-color,
+      class: bbc,
+      values: (
+        tr: transparent,
+      ),
+    ),
     "background-color": (
       property: background-color,
       class: bc,

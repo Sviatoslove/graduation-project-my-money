@@ -4,13 +4,13 @@ import LogoutPage from "./LogoutPage";
 import CountsPage from "./countsPage/CountsPage";
 import AddAndUpdateCountForm from "./countsPage/AddAndUpdateCountForm";
 import ChartsPage from "./ChartsPage";
-import CategoriesPage from "./CategoriesPage";
+import CategoriesPage from "./categories/CategoriesPage";
 import RegularPaymentsPage from "./RegularPaymentsPage";
 import CurrencyPage from "./CurrencyPage";
 import OperationsHistoryPage from "./OperationsHistoryPage";
 import UserPage from "./UserPage";
 import UserPageEdit from "./UserPageEdit";
-import Translations from "./countsPage/Translations";
+import Translations from "./translationsPage/Translations";
 
 export {
   LoginPage,

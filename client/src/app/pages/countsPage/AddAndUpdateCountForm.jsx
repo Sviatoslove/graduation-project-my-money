@@ -14,9 +14,11 @@ import AvatarsField from "../../components/common/form/AvatarsField";
 import currency from "../../mock/currency";
 import countsIconsMock from "../../mock/countsIcons";
 import Button from "../../components/common/Button";
+import { useForms } from "../../hooks/useForm";
 
 const CountsForm = ({ currentCount, closeForm }) => {
   const dispatch = useDispatch();
+  const {show} = useForms()
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
   const initialState = currentCount
@@ -60,8 +62,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
       {countsDataLoaded ? (
         <div
           className={
-            "container rounded-3 shadow-lg p-5 counts-add-page " +
-            (currentCount !== "" ? "active" : "")
+            "rounded-3 shadow-lg p-5 wrapper-counts-form " + show
           }
         >
           <form onSubmit={handleSubmit}>
@@ -76,7 +77,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
               error={errors.name}
             />
             <TextField
-              label="Комментарий к счёту"
+              label="Комментарий"
               value={data.content}
               name="content"
               onChange={handleChange}

@@ -108,12 +108,12 @@ export const loadСategoriesIcons = () => async (dispatch) => {
   }
 };
 
-export const selectCategriesDataloaded = () => (state) => state.dataLoaded;
-export const selectCategriesIsLoading = () => (state) => state.isLoading;
-export const selectCategries = () => (state) => state.entities;
+export const selectCategriesDataloaded = () => (state) => state.categories.dataLoaded;
+export const selectCategriesIsLoading = () => (state) => state.categories.isLoading;
+export const selectCategries = () => (state) => state.categories.entities;
 
 export const selectCategriesIconsDataloaded = () => (state) =>
-  state.IconsDataLoaded;
-export const selectCategriesIcons = () => (state) => state.categoriesIcons;
+  state.categories.categoriesIconsDataLoaded;
+export const selectCategriesIcons = () => (state) => state.categories.categoriesIcons;
 
 export default categoriesReducer;

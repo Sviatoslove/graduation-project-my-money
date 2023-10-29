@@ -6,14 +6,11 @@ const avatarsSlice = createSlice({
   name: "avatars",
   initialState: {
     entities: null,
-    isLoading: false,
+    isLoading: true,
     error: null,
     dataLoaded: null,
   },
   reducers: {
-    avatarsRequested: (state) => {
-      state.isLoading = true;
-    },
     avatarsReceived: (state, action) => {
       state.entities = action.payload;
       state.isLoading = false;
@@ -28,13 +25,12 @@ const avatarsSlice = createSlice({
 
 const { reducer: avatarsReducer, actions } = avatarsSlice;
 
-const { avatarsRequested, avatarsReceived, avatarsRequestedFailed } = actions;
+const { avatarsReceived, avatarsRequestedFailed } = actions;
 
 export const loadAvatars = () => async (dispatch) => {
-  dispatch(avatarsRequested());
   try {
     const { content } = await avatarsService.getAvatars();
-    const avatars = formatDataAvatars(content);
+    const avatars = formatDataAvatars(12 ,content);
     dispatch(avatarsReceived(avatars));
   } catch (error) {
     dispatch(avatarsRequestedFailed(error.message));

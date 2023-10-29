@@ -6,6 +6,7 @@ const schema = new Schema(
     name: String,
     content: String,
     icon: String,
+    iconColor: String,
     status: String,
   },
   {

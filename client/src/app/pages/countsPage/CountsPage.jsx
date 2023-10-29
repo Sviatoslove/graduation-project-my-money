@@ -1,35 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import addIcon from "../../../assets/icons/patch-plus-fill.svg";
-import likesIcon from "../../../assets/icons/heart-fill.svg";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import addIcon from '../../../assets/icons/patch-plus-fill.svg';
+import likesIcon from '../../../assets/icons/heart-fill.svg';
 import {
   countRemove,
   countUpdate,
   countsLoad,
   selectCounts,
   selectCountsStatus,
-} from "../../store/countsSlice";
-import { paginate } from "../../utils";
-import Pagination from "../../components/common/pagination";
-import getCountLike from "../../utils/getCountLike";
-import Translations from "./Translations";
-import CountCard from "./CountCard";
-import Button from "../../components/common/Button";
-import FormForCount from "./FormForCount";
-import Container from "../../components/common/Containers/Container";
-import LoadingSpinners from "../../components/common/LoadingSpinners";
+} from '../../store/countsSlice';
+import { paginate } from '../../utils';
+import Pagination from '../../components/common/pagination';
+import getCountLike from '../../utils/getCountLike';
+import Translations from '../translationsPage/Translations';
+import CountCard from './CountCard';
+import Button from '../../components/common/Button';
+import FormForCount from './FormForCount';
+import Container from '../../components/common/Containers/Container';
+import LoadingSpinners from '../../components/common/LoadingSpinners';
+import { useForms } from '../../hooks/useForm';
 
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
+  const {
+    show,
+    countAdd,
+    appearanceCountsForm,
+    disAppearanceCountsForm,
+    transform
+  } = useForms();
   const [currentPage, setCurrentPage] = useState(1);
-  const [typeForm, setTypeForm] = useState("");
-  const [currentCount, setCurrentCount] = useState("");
+  const [typeForm, setTypeForm] = useState('');
+  const [currentCount, setCurrentCount] = useState('');
 
-  const [down, setDown] = useState(false);
-  const [scale, setScale] = useState(false);
-  const [countAdd, setCountAdd] = useState(false);
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
 
@@ -57,41 +62,29 @@ const CountsPage = () => {
     setCurrentPage(pageIndex);
   };
 
-  const appearanceCountsForm = () => {
-    setScale(true);
-    setCountAdd(true);
-    setDown(false);
-  };
-
-  const disAppearanceCountsForm = () => {
-    setScale(false);
-    setDown(true);
-    setTimeout(() => setCountAdd(false), 500);
-  };
-
   const handleToEdit = ({ target }) => {
-    const btnType = target.closest("button").dataset.type;
-    const countId = target.closest("button").id;
+    const btnType = target.closest('button').dataset.type;
+    const countId = target.closest('button').id;
     const currentCount = counts[countId];
     switch (btnType) {
-      case "add":
-        setCurrentCount("");
+      case 'add':
+        setCurrentCount('');
         setTypeForm(btnType);
         appearanceCountsForm();
         break;
-      case "edit":
+      case 'edit':
         setCurrentCount(currentCount);
         setTypeForm(btnType);
         appearanceCountsForm();
         break;
-      case "like":
+      case 'like':
         const editedCount = { ...currentCount, like: !currentCount.like };
         dispatch(countUpdate(editedCount));
         break;
-      case "remove":
+      case 'remove':
         dispatch(countRemove({ countId }));
         break;
-      case "translationsAdd":
+      case 'translationsAdd':
         setTypeForm(btnType);
         appearanceCountsForm();
         break;
@@ -107,20 +100,17 @@ const CountsPage = () => {
     const countsCrop = paginate(
       likesPage ? countsLikes : arrCounts,
       currentPage,
-      pageSize,
+      pageSize
     );
-    const transform = scale ? "scale(0)" : "";
 
     return (
       <Container>
         {countAdd && (
-          <div className={"wrapper-counts-form " + (down ? "down" : "")}>
             <FormForCount
               type={typeForm}
               currentCount={currentCount}
               closeForm={disAppearanceCountsForm}
             />
-          </div>
         )}
         {!count && (
           <h1 className="position-absolute top-50 start-50 translate-middle">
@@ -146,16 +136,16 @@ const CountsPage = () => {
             ))}
           </div>
         </div>
-        {!scale && (
+        {!show && (
           <div
             className={
-              "mt-auto footer-group d-flex mb-4" +
+              'mt-auto footer-group d-flex mb-4' +
               (count > pageSize
-                ? " justify-content-between "
-                : " justify-content-end ") +
+                ? ' justify-content-between '
+                : ' justify-content-end ') +
               (!count || (countsLikes && countsLikes.length < pageSize)
-                ? "position-absolute bottom-0 end-0 translate-middle"
-                : "")
+                ? 'position-absolute bottom-0 end-0 translate-middle'
+                : '')
             }
           >
             <Pagination
@@ -174,13 +164,13 @@ const CountsPage = () => {
               {(likesPage ? true : likesButton) && (
                 <Button
                   classes={
-                    "btn btn-primary shadow-lg p-2 like " +
-                    ((likesPage ? true : likes) ? "appearance" : "")
+                    'btn btn-primary shadow-lg p-2 like ' +
+                    ((likesPage ? true : likes) ? 'appearance' : '')
                   }
-                  link={likesPage ? "/counts" : "/counts/likesPage"}
+                  link={likesPage ? '/counts' : '/counts/likesPage'}
                   imgSrc={
                     likesPage
-                      ? "https://img.icons8.com/cute-clipart/54/circled-chevron-left.png"
+                      ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
                       : likesIcon
                   }
                 />
@@ -200,7 +190,7 @@ const CountsPage = () => {
   }
   return (
     <LoadingSpinners
-      style={{ width: "56px", height: "56px" }}
+      style={{ width: '56px', height: '56px' }}
       classesSpinner=""
       number={6}
     />
