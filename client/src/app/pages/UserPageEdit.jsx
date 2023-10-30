@@ -60,6 +60,7 @@ const UserPageEdit = ({ user, onShow }) => {
             />
           </div>
           <AvatarsField
+            value={user.avatar}
             label="Выбери аватарку"
             name="avatar"
             onChange={handleChange}

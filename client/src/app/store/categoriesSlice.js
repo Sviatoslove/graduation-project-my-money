@@ -16,7 +16,7 @@ const categoriesSlice = createSlice({
     categoriesReceived: (state, action) => {
       state.entities = action.payload;
       state.isLoading = false;
-      state.dataLoaded = true;
+      if(Object.keys(state.entities).length)state.dataLoaded = true;
     },
     categoriesRequestedFailed: (state, action) => {
       state.error = action.payload;

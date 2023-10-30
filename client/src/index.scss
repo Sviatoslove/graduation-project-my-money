@@ -52,6 +52,9 @@ $utilities: map-merge(
         130px: 130px,
         300px: 300px,
         500px: 500px,
+        516px: 516px,
+        604px: 604px,
+        700px: 700px,
       ),
     ),
     "max-width": (
@@ -73,6 +76,7 @@ $utilities: map-merge(
         50vh: 50vh,
         40vh: 40vh,
         10vh: 10vh,
+        711px: 711px,
         80: 80%,
       ),
     ),
@@ -83,6 +87,8 @@ $utilities: map-merge(
         96vh: 96vh,
         94vh: 94vh,
         86vh: 86vh,
+        105px: 105px,
+        866px: 866px,
       ),
     ),
     "margin": (
@@ -176,6 +182,7 @@ $utilities: map-merge(
       class: top,
       values: (
         110px: 110px,
+        48: 48%,
       ),
     ),
     "left": (
@@ -183,9 +190,73 @@ $utilities: map-merge(
       class: start,
       values: (
         30px: 30px,
+        24:24%,
+      ),
+    ),
+    "colorText": (
+      property: color,
+      class: text,
+      values: (
+        violet: rgb(183, 0, 255),
+        orange: rgb(255, 115, 0),
+        pink: rgb(255, 0, 212),
+      ),
+    ),
+    "btnColor": (
+      property: background-color,
+      class: btn,
+      values: (
+        violet: rgb(183, 0, 255),
+        orange: rgb(255, 115, 0),
+        pink: rgb(255, 0, 212),
       ),
     ),
   )
 );
+
+$bd-violet:rgb(183, 0, 255);
+.btn-outline-violet {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(183, 0, 255);
+  --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(183, 0, 255);
+  --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
+};
+
+$bd-orange: rgb(255, 115, 0);
+.btn-outline-orange {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(255, 115, 0);
+  --bs-btn-hover-border-color: #{shade-color($bd-orange, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(255, 115, 0);
+  --bs-btn-active-border-color: #{shade-color($bd-orange, 20%)};
+};
+
+$bd-pink: rgb(255, 0, 212);
+.btn-outline-pink {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(255, 0, 212);
+  --bs-btn-hover-border-color: #{shade-color($bd-pink, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(255, 0, 212);
+  --bs-btn-active-border-color: #{shade-color($bd-pink, 20%)};
+}
 
 @import "../node_modules/bootstrap/scss/utilities/api";

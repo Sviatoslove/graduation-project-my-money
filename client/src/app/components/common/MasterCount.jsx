@@ -37,11 +37,9 @@ const MasterCount = () => {
 
   const handleClick = (e) => {
     const { target } = e;
-    console.log("target:", target);
     if ((target.dataset.bsToggle = "dropdown")) setIsOpen((state) => !state);
     const countId = target.closest("button").dataset.item;
     if (countId) {
-      console.log("countId:", countId);
       dispatch(updateUser({ ...user, masterCount: countId }));
       setMasterCount(counts[countId]);
       localStorageService.setMasterCount(countId);
@@ -53,7 +51,9 @@ const MasterCount = () => {
       {masterCount && countsData && (
         <Badge
           classes="mb-1 w-content"
+          imgSrc={masterCount.icon}
           text={masterCount.name}
+          iconSize={'32px'}
           {...countsData[masterCount.type]}
         />
       )}

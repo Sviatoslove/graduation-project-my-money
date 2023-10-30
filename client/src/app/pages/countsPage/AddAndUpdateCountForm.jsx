@@ -62,7 +62,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
       {countsDataLoaded ? (
         <div
           className={
-            "rounded-3 shadow-lg p-5 wrapper-counts-form " + show
+            "rounded-3 w-700px shadow-lg p-5 wrapper-counts-form " + show
           }
         >
           <form onSubmit={handleSubmit}>

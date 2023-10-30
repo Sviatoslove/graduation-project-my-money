@@ -12,21 +12,28 @@ import Button from '../../components/common/Button';
 import StatusCategories from './StatusCategories';
 import { useForms } from '../../hooks/useForm';
 import AddAndUpdateCategories from './AddAndUpdateCategories';
+import {
+  ContainerCards,
+  ContainerScale,
+  ContainerShow,
+} from '../../components/common/Containers';
+import CategoryCard from './CategoryCard';
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const {
-    countAdd,
-    appearanceCountsForm,
-    disAppearanceCountsForm,
-    transform
-  } = useForms();
+  const { appearanceCountsForm, disAppearanceCountsForm, transform } =
+    useForms();
   const [statusOperation, setStatusOperation] = useState('decrement');
 
   const categoriesDataLoaded = useSelector(selectCategriesDataloaded());
   const categoriesIsLoading = useSelector(selectCategriesIsLoading());
   const categories = useSelector(selectCategries());
   console.log('categories:', categories)
+  const filteredCategories = categories
+    ? Object.values(categories).filter(
+        (category) => category.status === statusOperation
+      )
+    : null;
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
@@ -36,28 +43,38 @@ const CategoriesPage = () => {
     const { target } = e;
     const btnType = target.closest('button').dataset.type;
     if (btnType === 'add') {
-      appearanceCountsForm()
+      appearanceCountsForm();
     } else {
       setStatusOperation(btnType);
     }
   };
 
-
   return (
     <Container classes={'shadow-custom br-10 p-3'}>
-      {countAdd && <AddAndUpdateCategories status={statusOperation} closeForm={disAppearanceCountsForm} currentCategory={''}/>}
+      {!categoriesIsLoading && !categoriesDataLoaded && (
+        <h1
+          className="scaleTransition position-absolute ws-nw top-48 start-24"
+          style={{ transform: transform }}
+        >
+          Добавьте свою первую категорию
+        </h1>
+      )}
 
-      <div className="mt-4 flex-grow-1">
+      <ContainerShow type={'add'}>
+        <AddAndUpdateCategories
+          status={statusOperation}
+          closeForm={disAppearanceCountsForm}
+          currentCategory={''}
+        />
+      </ContainerShow>
 
-        {!categoriesDataLoaded && (
-          <h1 className="position-absolute ws-nw top-50 start-50 translate-middle">
-            Добавьте свою первую категорию
-          </h1>
-        )}
+      <StatusCategories status={statusOperation} onClick={handleClick} />
 
-        <StatusCategories status={statusOperation} onClick={handleClick} />
-
-      </div>
+      <ContainerScale classes={'flex-grow-1 mt-5'}>
+        <ContainerCards colsNumber={'6'}>
+          {filteredCategories?.map(category=><CategoryCard {...category} key={category._id}/>)}
+        </ContainerCards>
+      </ContainerScale>
 
       <Button
         color="primary"
@@ -66,7 +83,6 @@ const CategoriesPage = () => {
         onClick={handleClick}
         imgSrc={addIcon}
       />
-
     </Container>
   );
 };

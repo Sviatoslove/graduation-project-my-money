@@ -14,6 +14,7 @@ import {
 import { useForms } from '../../hooks/useForm';
 import { formatDataForIconsCategories } from '../../utils';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
+import LoadingSpinners from '../../components/common/LoadingSpinners';
 
 const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
   const dispatch = useDispatch();
@@ -33,15 +34,16 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
         content: '',
         icon: '',
         iconColor: '',
+        textColor:'', 
+        bgColor:''
       };
+  const [data, setData] = useState(initialState);
 
   useEffect(() => {
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
 
-  const [data, setData] = useState(initialState);
   const [errors] = useState({});
-
 
   const handleChange = ({ target }) => {
     setData((state) => ({ ...state, [target.name]: target.value }));
@@ -63,7 +65,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
       {categoriesIconsDataLoaded ? (
         <div
           className={
-            'rounded-3 shadow-lg p-5 wrapper-counts-form ' + show
+            'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-counts-form ' + show
           }
         >
           <form onSubmit={handleSubmit}>
@@ -89,6 +91,10 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
             <AvatarsField
               label="Выбери аватарку"
               name="icon"
+              nameCategory={data.name}
+              valueIconColor={data.iconColor}
+              valueTextColor={data.textColor}
+              valueBgColor={data.bgColor}
               value={data.icon}
               options={formatDataForIconsCategories(10, categoriesIcons)}
               onChange={handleChange}
@@ -97,14 +103,30 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет иконки'}
               name="iconColor"
               value={data.iconColor}
-              options={formatDataForIconsCategories(10, colorsIconsForCategories)}
+              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
+              onChange={handleChange}
+              // error={errors.toCount}
+            />
+                 <AvatarsField
+              label={'Выбери цвет текста иконки'}
+              name="textColor"
+              value={data.textColor}
+              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
+              onChange={handleChange}
+              // error={errors.toCount}
+            />
+                 <AvatarsField
+              label={'Выбери цвет фона иконки'}
+              name="bgColor"
+              value={data.bgColor}
+              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
             {/* {enterError && <p className="text-danger">{enterError}</p>} */}
             <Button
               type="submit"
-              classes="w-100 mx-auto"
+              classes="w-100 mx-auto mt-4"
               // disabled={isValid || enterError}
             >
               {!currentCategory ? 'Создать' : 'Обновить'}
@@ -119,7 +141,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
           </form>
         </div>
       ) : (
-        'Loading'
+        <LoadingSpinners number={3} classesSpinner="spinner-grow-lg"/>
       )}
     </>
   );

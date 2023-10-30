@@ -5,6 +5,7 @@ const schema = new Schema(
     names: [String],
     keys: [String],
     url: String,
+    active: Boolean,
   },
   {
     timestamps: true,

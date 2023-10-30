@@ -6,6 +6,9 @@ const schema = new Schema(
       type: String,
       required: true,
     },
+
+    active: Boolean,
+    color: String,
   },
   {
     timestamps: true,

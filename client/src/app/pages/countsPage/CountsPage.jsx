@@ -10,6 +10,12 @@ import {
   selectCounts,
   selectCountsStatus,
 } from '../../store/countsSlice';
+import {
+  Container,
+  ContainerCards,
+  ContainerScale,
+  ContainerShow,
+} from '../../components/common/Containers';
 import { paginate } from '../../utils';
 import Pagination from '../../components/common/pagination';
 import getCountLike from '../../utils/getCountLike';
@@ -17,20 +23,14 @@ import Translations from '../translationsPage/Translations';
 import CountCard from './CountCard';
 import Button from '../../components/common/Button';
 import FormForCount from './FormForCount';
-import Container from '../../components/common/Containers/Container';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useForms } from '../../hooks/useForm';
+
 
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const {
-    show,
-    countAdd,
-    appearanceCountsForm,
-    disAppearanceCountsForm,
-    transform
-  } = useForms();
+  const { appearanceCountsForm, disAppearanceCountsForm } = useForms();
   const [currentPage, setCurrentPage] = useState(1);
   const [typeForm, setTypeForm] = useState('');
   const [currentCount, setCurrentCount] = useState('');
@@ -41,7 +41,7 @@ const CountsPage = () => {
   const counts = useSelector(selectCounts());
 
   const countsDataLoaded = useSelector(selectCountsStatus());
-  const pageSize = 8;
+  const pageSize = 6;
 
   useEffect(() => {
     if (!countsDataLoaded) dispatch(countsLoad());
@@ -105,28 +105,25 @@ const CountsPage = () => {
 
     return (
       <Container>
-        {countAdd && (
-            <FormForCount
-              type={typeForm}
-              currentCount={currentCount}
-              closeForm={disAppearanceCountsForm}
-            />
-        )}
+        <ContainerShow type={'add'}>
+          <FormForCount
+            type={typeForm}
+            currentCount={currentCount}
+            closeForm={disAppearanceCountsForm}
+          />
+        </ContainerShow>
         {!count && (
           <h1 className="position-absolute top-50 start-50 translate-middle">
             Добавьте свой первый счёт
           </h1>
         )}
 
-        <div
-          className="counts-list flex-grow-1"
-          style={{ transform: transform }}
-        >
+        <ContainerScale>
           {count ? (
             <Translations onChange={handleToEdit} counts={counts} />
           ) : null}
 
-          <div className="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+          <ContainerCards colsNumber={'3'}>
             {countsCrop.map((count) => (
               <CountCard
                 count={count}
@@ -134,57 +131,58 @@ const CountsPage = () => {
                 key={count._id}
               />
             ))}
-          </div>
-        </div>
-        {!show && (
-          <div
-            className={
-              'mt-auto footer-group d-flex mb-4' +
-              (count > pageSize
-                ? ' justify-content-between '
-                : ' justify-content-end ') +
-              (!count || (countsLikes && countsLikes.length < pageSize)
-                ? 'position-absolute bottom-0 end-0 translate-middle'
-                : '')
-            }
-          >
-            <Pagination
-              countsLikes={countsLikes}
-              itemsCount={count}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
+          </ContainerCards>
+        </ContainerScale>
 
-            <div
-              className="btn-group me-5 mt-2"
-              role="group"
-              aria-label="Button group"
-            >
-              {(likesPage ? true : likesButton) && (
-                <Button
-                  classes={
-                    'btn btn-primary shadow-lg p-2 like ' +
-                    ((likesPage ? true : likes) ? 'appearance' : '')
-                  }
-                  link={likesPage ? '/counts' : '/counts/likesPage'}
-                  imgSrc={
-                    likesPage
-                      ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
-                      : likesIcon
-                  }
-                />
-              )}
+        <ContainerShow
+          type={'show'}
+          reverse={true}
+          classes={
+            'mt-auto footer-group d-flex mb-4' +
+            (count > pageSize
+              ? ' justify-content-between '
+              : ' justify-content-end ') +
+            (!count || (countsLikes && countsLikes.length < pageSize)
+              ? 'position-absolute bottom-0 end-0 translate-middle'
+              : '')
+          }
+        >
+          <Pagination
+            countsLikes={countsLikes}
+            itemsCount={count}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+
+          <div
+            className="btn-group me-5 mt-2"
+            role="group"
+            aria-label="Button group"
+          >
+            {(likesPage ? true : likesButton) && (
               <Button
-                color="primary"
-                classes="shadow-lg p-2"
-                dataType="add"
-                onClick={handleToEdit}
-                imgSrc={addIcon}
+                classes={
+                  'btn btn-primary shadow-lg p-2 like ' +
+                  ((likesPage ? true : likes) ? 'appearance' : '')
+                }
+                link={likesPage ? '/counts' : '/counts/likesPage'}
+                imgSrc={
+                  likesPage
+                    ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
+                    : likesIcon
+                }
               />
-            </div>
+            )}
+            <Button
+              color="primary"
+              classes="shadow-lg p-2"
+              dataType="add"
+              onClick={handleToEdit}
+              imgSrc={addIcon}
+            />
           </div>
-        )}
+        </ContainerShow>
       </Container>
     );
   }

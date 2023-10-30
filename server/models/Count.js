@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const schema = new Schema(
   {
-    name: String ,
+    name: String,
     content: String,
     type: String,
     currency: String,
@@ -12,6 +12,7 @@ const schema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     totalBalance: String,
     masterCount: String,
+    active: Boolean,
   },
   {
     timestamps: true,

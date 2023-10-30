@@ -1,4 +1,4 @@
-import formatDataForIconsCategories from "./formatDataForIconsCategories";
+import _ from "lodash";
 
 export default function formatDataAvatars(n, data) {
   let arr;
@@ -11,6 +11,16 @@ export default function formatDataAvatars(n, data) {
     const res = arr[0]["names"].map((name) => urlKey.replace("name", name));
     return (acc = [...acc, res]);
   }, []);
-  const oneArray = newData.reduce((acc, item)=>acc=[...acc, ...item], [])
-  return formatDataForIconsCategories(n, oneArray)
+  const oneArray = _.concat(...newData)
+  return _.chunk(oneArray, n)
 }
+
+export const getActiveElment = (value) => {
+  const btns = Array.from(document.querySelectorAll('.avatar'));
+  for (let i = 0; i < btns.length - 1; i++) {
+    const el = btns[i];
+    if (el.dataset.type === value) {
+      return el;
+    }
+  }
+};

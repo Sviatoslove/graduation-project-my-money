@@ -7,6 +7,8 @@ const schema = new Schema(
     content: String,
     icon: String,
     iconColor: String,
+    textColor: String,
+    bgColor: String,
     status: String,
   },
   {

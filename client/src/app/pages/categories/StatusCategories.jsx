@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const StatusCategories = ({ status, onClick }) => {
   return (
-    <ul className="nav nav-tabs nav-tabs justify-content-evenly border-primary ff-roboto">
+    <ul className="nav nav-tabs nav-tabs justify-content-evenly mt-4 border-primary ff-roboto">
       <li className="nav-item border-4">
         <button
           className={

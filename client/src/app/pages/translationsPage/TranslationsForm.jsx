@@ -16,9 +16,11 @@ import currency from "../../mock/currency";
 import getExchangeRates from "../../utils/getExchangeRates";
 import { translationCreate } from "../../store/translationsSlice";
 import LoadingBtn from "../../components/common/LoadingBtn";
+import { useForms } from "../../hooks/useForm";
 
 const TranslationsForm = ({ closeForm }) => {
   const dispatch = useDispatch();
+  const {show} = useForms()
   const inputBalanceTo = useRef();
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
@@ -95,7 +97,7 @@ const TranslationsForm = ({ closeForm }) => {
   };
 
   return (
-    <div className="container rounded-3 shadow-lg p-5 counts-add-page">
+    <div className={"rounded-3 w-604px h-711px shadow-lg p-5 wrapper-counts-form " + show}>
       <form onSubmit={handleSubmit}>
         <h3 className="text-center">Создайте перевод</h3>
         <SelectedField
@@ -157,11 +159,10 @@ const TranslationsForm = ({ closeForm }) => {
             />
           )}
         </div>
-        {convertCurrency && (
           <Button
             outline={true}
             color="success"
-            classes={"mb-3 br-5 w-100"}
+            classes={"mb-3 br-5 w-100" + (convertCurrency ? ' opacity-1' : ' opacity-0')}
             disabled={!data.balanceFrom > 0}
             onClick={handleConverter}
           >
@@ -171,7 +172,6 @@ const TranslationsForm = ({ closeForm }) => {
               "Конвертировать"
             )}
           </Button>
-        )}
         <TextField
           name="date"
           type="date"
