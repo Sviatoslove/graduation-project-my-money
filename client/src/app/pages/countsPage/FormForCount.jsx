@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import AddAndUpdateCountForm from "./AddAndUpdateCountForm";
+import CountsForm from "./CountsForm";
 import TranslationsForm from "../translationsPage/TranslationsForm";
 
 const FormForCount = ({ currentCount, closeForm, type }) => {
@@ -9,7 +9,7 @@ const FormForCount = ({ currentCount, closeForm, type }) => {
       {type === "translationsAdd" ? (
         <TranslationsForm closeForm={closeForm} />
       ) : (
-        <AddAndUpdateCountForm
+        <CountsForm
           currentCount={currentCount}
           closeForm={closeForm}
         />

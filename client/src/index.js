@@ -5,8 +5,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
-import "./index.css";
-import "./index.scss";
+import "./styles/index.css";
+import "./styles/index.scss";
+import "./styles/customBtns.scss";
 import App from "./app/App";
 import createStore from "./app/store/createStore";
 import history from "./app/utils/history";

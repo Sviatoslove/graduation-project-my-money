@@ -15,11 +15,11 @@ export default function formatDataAvatars(n, data) {
   return _.chunk(oneArray, n)
 }
 
-export const getActiveElment = (value) => {
-  const btns = Array.from(document.querySelectorAll('.avatar'));
+export const getActiveElment = (value, rate) => {
+  const btns = Array.from(document.querySelectorAll((`[data-type = ${rate}]`)));
   for (let i = 0; i < btns.length - 1; i++) {
     const el = btns[i];
-    if (el.dataset.type === value) {
+    if (el.dataset.value === value) {
       return el;
     }
   }

@@ -29,7 +29,8 @@ const categoriesSlice = createSlice({
       };
     },
     categoriesRemovedReceived: (state, action) => {
-      delete state.entities[action.payload.categoriesId];
+      delete state.entities[action.payload];
+      if(!Object.keys(state.entities).length) state.dataLoaded=false
     },
     categoriesIconsReceived: (state, action) => {
       state.categoriesIcons = action.payload;
@@ -88,7 +89,7 @@ export const categoriesUpdate = (payload) => async (dispatch) => {
 
 export const categoriesRemove = (payload) => async (dispatch) => {
   try {
-    await categoriesService.remove(payload.categoriesId);
+    await categoriesService.remove(payload);
     dispatch(categoriesRemovedReceived(payload));
   } catch (error) {
     dispatch(categoriesRequestedFailed(error.message));
@@ -108,12 +109,12 @@ export const loadСategoriesIcons = () => async (dispatch) => {
   }
 };
 
-export const selectCategriesDataloaded = () => (state) => state.categories.dataLoaded;
-export const selectCategriesIsLoading = () => (state) => state.categories.isLoading;
-export const selectCategries = () => (state) => state.categories.entities;
+export const selectCategoriesDataloaded = () => (state) => state.categories.dataLoaded;
+export const selectCategoriesIsLoading = () => (state) => state.categories.isLoading;
+export const selectCategories = () => (state) => state.categories.entities;
 
-export const selectCategriesIconsDataloaded = () => (state) =>
+export const selectCategoriesIconsDataloaded = () => (state) =>
   state.categories.categoriesIconsDataLoaded;
-export const selectCategriesIcons = () => (state) => state.categories.categoriesIcons;
+export const selectCategoriesIcons = () => (state) => state.categories.categoriesIcons;
 
 export default categoriesReducer;

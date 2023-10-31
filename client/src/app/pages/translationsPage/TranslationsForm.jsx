@@ -97,7 +97,7 @@ const TranslationsForm = ({ closeForm }) => {
   };
 
   return (
-    <div className={"rounded-3 w-604px h-711px shadow-lg p-5 wrapper-counts-form " + show}>
+    <div className={"rounded-3 w-604px h-711px shadow-lg p-5 wrapper-form " + show}>
       <form onSubmit={handleSubmit}>
         <h3 className="text-center">Создайте перевод</h3>
         <SelectedField

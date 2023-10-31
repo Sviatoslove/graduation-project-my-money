@@ -8,7 +8,7 @@ const Button = ({
   zIndex,
   dataType,
   color,
-  texColor,
+  textColor,
   outline,
   classes,
   id,
@@ -21,7 +21,9 @@ const Button = ({
   children,
   name,
   width,
-  height
+  height,
+  iconColor,
+  dataValue
 }) => {
   return (
     <>
@@ -30,7 +32,8 @@ const Button = ({
           name={name}
           type={type}
           data-type={dataType}
-          className={`btn btn-${outline ? "outline-" : ""}${color} ${classes} text-${texColor}`}
+          data-value={dataValue}
+          className={`btn btn-${outline ? "outline-" : ""}${color} ${classes} text-${textColor}`}
           onClick={onClick}
           style={{ zIndex: zIndex, width: width, height: height }}
           id={id}
@@ -39,10 +42,10 @@ const Button = ({
           {imgSrc && (
             <img src={imgSrc} alt="image" style={{ width: imgFontSize }} />
           )}
-          {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
-          <p className="mx-auto">
+          {icon && <i className={`${icon} text-${iconColor}`} style={{ fontSize: iconFontSize }}></i>}
+          <small className="mx-auto">
           {children}
-          </p>
+          </small>
         </button>
       ) : (
         <Link
@@ -76,7 +79,9 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
-  texColor: PropTypes.string,
+  dataValue: PropTypes.string,
+  iconColor: PropTypes.string,
+  textColor: PropTypes.string,
   name: PropTypes.string,
   imgFontSize: PropTypes.string,
   imgSrc: PropTypes.string,

@@ -1,6 +1,6 @@
 import { httpService } from "./http.service";
 
-const operationsEndpoint = "operation/";
+const operationsEndpoint = "operations/";
 
 const operationsService = {
   get: async () => {

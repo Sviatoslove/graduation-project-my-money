@@ -2,12 +2,12 @@ import MainPage from "./MainPage";
 import LoginPage from "./LoginPage";
 import LogoutPage from "./LogoutPage";
 import CountsPage from "./countsPage/CountsPage";
-import AddAndUpdateCountForm from "./countsPage/AddAndUpdateCountForm";
+import CountsForm from "./countsPage/CountsForm";
 import ChartsPage from "./ChartsPage";
 import CategoriesPage from "./categories/CategoriesPage";
 import RegularPaymentsPage from "./RegularPaymentsPage";
 import CurrencyPage from "./CurrencyPage";
-import OperationsHistoryPage from "./OperationsHistoryPage";
+import OperationsHistoryPage from "./operationsPage/OperationsHistoryPage";
 import UserPage from "./UserPage";
 import UserPageEdit from "./UserPageEdit";
 import Translations from "./translationsPage/Translations";
@@ -17,7 +17,7 @@ export {
   LogoutPage,
   MainPage,
   CountsPage,
-  AddAndUpdateCountForm,
+  CountsForm,
   ChartsPage,
   CategoriesPage,
   RegularPaymentsPage,

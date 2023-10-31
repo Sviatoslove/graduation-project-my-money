@@ -35,7 +35,7 @@ const Translations = ({ onChange, counts }) => {
             <p>История</p>
           </Button>
 
-          <MasterCount />
+          <MasterCount classes={'mb-5'}/>
 
           <Button
             dataType="translationsAdd"

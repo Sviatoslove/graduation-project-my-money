@@ -4,7 +4,7 @@ import Button from '../Button';
 import { getActiveElment } from '../../../utils/formatDataForAvatarsFields';
 
 const AvatarsField = ({ label, name, value, valueIconColor, valueTextColor, nameCategory, valueBgColor, options, onChange }) => {
-  console.log('valueBgColor:', valueBgColor)
+  console.log('options:', options)
   const [index, setIndex] = useState(0);
   const [active, setActive] = useState();
   const prevRef = useRef();
@@ -13,7 +13,7 @@ const AvatarsField = ({ label, name, value, valueIconColor, valueTextColor, name
 
   useEffect(() => {
     if(!active) {
-      setActive(getActiveElment(value))
+      setActive(getActiveElment(value, name))
     }
     prevRef.current = active;
     toggleActive();
@@ -26,7 +26,7 @@ const AvatarsField = ({ label, name, value, valueIconColor, valueTextColor, name
     onChange({
       target: {
         name: target.closest('button').name,
-        value: target.closest('button').dataset.type,
+        value: target.closest('button').dataset.value,
       },
     });
   };
@@ -41,35 +41,48 @@ const AvatarsField = ({ label, name, value, valueIconColor, valueTextColor, name
   const drawingAvatars = (n) => {
     if (typeof options[n][n] === 'object') {
       return options[n].map((item) => {
+        if(item.userId) {
+          return <Button
+          name={name}
+          
+          
+          />
+        }
         return (
           <Button
             name={name}
-            outline={item.color ? false : true}
-            color={valueBgColor ? valueBgColor : item.color}
-            texColor={valueTextColor}
-            icon={item.name + ' text-' + valueIconColor}
-            dataType={item.color ? item.color : item.name}
+            icon={item.name}
+            dataType={name}
             key={item._id}
             onClick={handleClick}
-            classes="avatar border-0 m-1 br-5 categories d-flex flex-column"
             iconFontSize="46px"
+            
+
+            dataValue={item.color ? item.color : item.name}
+            outline={item.color ? false : true}
+            color={valueBgColor ? valueBgColor : item.color}
+            textColor={valueTextColor}
+            iconColor={valueIconColor}
+            classes={"avatar border-0 m-1 br-5 categories d-flex flex-column"}
             width={item.color ? '16px' : ''}
             height={item.color ? '24px' : '105px'}
           >{nameCategory && nameCategory.slice(0,4)}</Button>
         );
       });
     }
+
     return options[n].map((item) => {
       return (
         <Button
           name={name}
           outline={true}
           imgFontSize={'52px'}
-          dataType={item}
+          dataType={name}
+          dataValue={item}
           imgSrc={item}
           key={item}
           onClick={handleClick}
-          classes="avatar border-0 bg-transparent br-10"
+          classes={"avatar border-0 bg-transparent br-10"}
           zIndex={0}
         />
       );

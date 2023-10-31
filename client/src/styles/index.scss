@@ -1,7 +1,7 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Functions first
-@import "../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/functions";
 
 // Variable overrides second
 $primary: #900;
@@ -11,18 +11,18 @@ $pMargin: 0;
 
 
 // Required Bootstrap imports
-// @import '../node_modules/bootstrap/scss/variables';
-// @import "../node_modules/bootstrap/scss/variables-dark";
-// @import "../node_modules/bootstrap/scss/maps";
-// @import "../node_modules/bootstrap/scss/mixins";
-// @import "../node_modules/bootstrap/scss/root";
+// @import '../../node_modules/bootstrap/scss/variables';
+// @import "../../node_modules/bootstrap/scss/variables-dark";
+// @import "../../node_modules/bootstrap/scss/maps";
+// @import "../../node_modules/bootstrap/scss/mixins";
+// @import "../../node_modules/bootstrap/scss/root";
 
 // Optional components
-@import "../node_modules/bootstrap/scss/utilities";
-// @import "../node_modules/bootstrap/scss/reboot";
-// @import "../node_modules/bootstrap/scss/containers";
-// @import "../node_modules/bootstrap/scss/grid";
-// @import "../node_modules/bootstrap/scss/helpers";
+@import "../../node_modules/bootstrap/scss/utilities";
+// @import "../../node_modules/bootstrap/scss/reboot";
+// @import "../../node_modules/bootstrap/scss/containers";
+// @import "../../node_modules/bootstrap/scss/grid";
+// @import "../../node_modules/bootstrap/scss/helpers";
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;900&display=swap");
@@ -70,6 +70,7 @@ $utilities: map-merge(
       class: h,
       values: (
         content: fit-content,
+        mc: min-content,
         100vh: 100vh,
         100: 100%,
         90vh: 90vh,
@@ -130,6 +131,14 @@ $utilities: map-merge(
         400: 400,
       ),
     ),
+    "font-size": (
+      property: font-size,
+      class: fs,
+      values: (
+        56px: 56px,
+        400: 400,
+      ),
+    ),
     "shadow": (
       property: box-shadow,
       class: shadow,
@@ -144,6 +153,16 @@ $utilities: map-merge(
       values: (
         5: 5px,
         10: 10px,
+        50: 50px,
+      ),
+    ),
+    "border-top-right-radius": (
+      property: border-top-right-radius,
+      class: btrr,
+      values: (
+        5: 5px,
+        10: 10px,
+        50: 50px,
       ),
     ),
     "border-bottom-color": (
@@ -155,11 +174,15 @@ $utilities: map-merge(
     ),
     "background-color": (
       property: background-color,
-      class: bc,
+      class: bg,
       values: (
         yellow: rgb(244, 244, 158),
         l-blue: rgba(75, 75, 207, 0.565),
         white: rgb(191, 234, 226),
+        violet: rgb(183, 0, 255),
+        orange: rgb(255, 115, 0),
+        pink: rgb(255, 0, 212),
+        brown: rgb(143, 66, 3),
       ),
     ),
     "white-space": (
@@ -200,6 +223,8 @@ $utilities: map-merge(
         violet: rgb(183, 0, 255),
         orange: rgb(255, 115, 0),
         pink: rgb(255, 0, 212),
+        brown: rgb(143, 66, 3),
+
       ),
     ),
     "btnColor": (
@@ -209,54 +234,11 @@ $utilities: map-merge(
         violet: rgb(183, 0, 255),
         orange: rgb(255, 115, 0),
         pink: rgb(255, 0, 212),
+        brown: rgb(143, 66, 3),
+
       ),
     ),
   )
 );
 
-$bd-violet:rgb(183, 0, 255);
-.btn-outline-violet {
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: var(--bs-white);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg:rgb(183, 0, 255);
-  --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: rgb(183, 0, 255);
-  --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
-};
-
-$bd-orange: rgb(255, 115, 0);
-.btn-outline-orange {
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: var(--bs-white);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg:rgb(255, 115, 0);
-  --bs-btn-hover-border-color: #{shade-color($bd-orange, 10%)};
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: rgb(255, 115, 0);
-  --bs-btn-active-border-color: #{shade-color($bd-orange, 20%)};
-};
-
-$bd-pink: rgb(255, 0, 212);
-.btn-outline-pink {
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: var(--bs-white);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg:rgb(255, 0, 212);
-  --bs-btn-hover-border-color: #{shade-color($bd-pink, 10%)};
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: rgb(255, 0, 212);
-  --bs-btn-active-border-color: #{shade-color($bd-pink, 20%)};
-}
-
-@import "../node_modules/bootstrap/scss/utilities/api";
+@import "../../node_modules/bootstrap/scss/utilities/api";

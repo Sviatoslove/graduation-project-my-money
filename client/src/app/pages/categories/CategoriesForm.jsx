@@ -5,27 +5,27 @@ import TextField from '../../components/common/form/TextField';
 import AvatarsField from '../../components/common/form/AvatarsField';
 import Button from '../../components/common/Button';
 import {
-  selectCategriesIcons,
-  selectCategriesIconsDataloaded,
   loadСategoriesIcons,
   categoriesUpdate,
-  categoriesCreate
+  categoriesCreate,
+  selectCategoriesIcons,
+  selectCategoriesIconsDataloaded
 } from '../../store/categoriesSlice';
 import { useForms } from '../../hooks/useForm';
 import { formatDataForIconsCategories } from '../../utils';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 
-const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
+const CategoriesForm = ({ status, currentCategory, closeForm }) => {
   const dispatch = useDispatch();
   const {
     show,
   } = useForms();
 
   const categoriesIconsDataLoaded = useSelector(
-    selectCategriesIconsDataloaded()
+    selectCategoriesIconsDataloaded()
   );
-  const categoriesIcons = useSelector(selectCategriesIcons());
+  const categoriesIcons = useSelector(selectCategoriesIcons());
 
   const initialState = currentCategory
     ? currentCategory
@@ -33,9 +33,9 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
         name: '',
         content: '',
         icon: '',
-        iconColor: '',
-        textColor:'', 
-        bgColor:''
+        iconColor: 'dark',
+        textColor:'light', 
+        bgColor:'primary'
       };
   const [data, setData] = useState(initialState);
 
@@ -65,7 +65,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
       {categoriesIconsDataLoaded ? (
         <div
           className={
-            'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-counts-form ' + show
+            'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-form ' + show
           }
         >
           <form onSubmit={handleSubmit}>
@@ -103,7 +103,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет иконки'}
               name="iconColor"
               value={data.iconColor}
-              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
+              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
@@ -111,7 +111,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет текста иконки'}
               name="textColor"
               value={data.textColor}
-              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
+              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
@@ -119,7 +119,7 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет фона иконки'}
               name="bgColor"
               value={data.bgColor}
-              options={formatDataForIconsCategories(11, colorsIconsForCategories)}
+              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
@@ -147,14 +147,14 @@ const AddAndUpdateCategories = ({ status, currentCategory, closeForm }) => {
   );
 };
 
-AddAndUpdateCategories.defaultProps = {
+CategoriesForm.defaultProps = {
   currentCategory: '',
 };
 
-AddAndUpdateCategories.propTypes = {
+CategoriesForm.propTypes = {
   status: PropTypes.string,
   currentCategory: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   closeForm: PropTypes.func,
 };
 
-export default AddAndUpdateCategories;
+export default CategoriesForm;

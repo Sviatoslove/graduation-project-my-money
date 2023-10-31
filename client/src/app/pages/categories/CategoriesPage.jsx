@@ -3,50 +3,42 @@ import Container from '../../components/common/Containers/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import {
+  categoriesRemove,
   loadCategories,
-  selectCategries,
-  selectCategriesDataloaded,
-  selectCategriesIsLoading,
+  selectCategoriesDataloaded,
+  selectCategories,
+  selectCategoriesIsLoading,
 } from '../../store/categoriesSlice';
 import Button from '../../components/common/Button';
-import StatusCategories from './StatusCategories';
 import { useForms } from '../../hooks/useForm';
-import AddAndUpdateCategories from './AddAndUpdateCategories';
+import CategoriesForm from './CategoriesForm';
 import {
   ContainerCards,
   ContainerScale,
   ContainerShow,
 } from '../../components/common/Containers';
 import CategoryCard from './CategoryCard';
+import StatusAll from '../../components/common/StatusAll';
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const { appearanceCountsForm, disAppearanceCountsForm, transform } =
-    useForms();
-  const [statusOperation, setStatusOperation] = useState('decrement');
+  const { disAppearanceForm, transform, statusOperation, handleClick } = useForms();
+  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
+  const categoriesIsLoading = useSelector(selectCategoriesIsLoading());
+  const categories = useSelector(selectCategories());
 
-  const categoriesDataLoaded = useSelector(selectCategriesDataloaded());
-  const categoriesIsLoading = useSelector(selectCategriesIsLoading());
-  const categories = useSelector(selectCategries());
-  console.log('categories:', categories)
-  const filteredCategories = categories
-    ? Object.values(categories).filter(
-        (category) => category.status === statusOperation
-      )
-    : null;
+  const filteredCategories =
+    categories &&
+    Object.values(categories).filter(
+      (category) => category.status === statusOperation
+    );
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
   }, []);
 
-  const handleClick = (e) => {
-    const { target } = e;
-    const btnType = target.closest('button').dataset.type;
-    if (btnType === 'add') {
-      appearanceCountsForm();
-    } else {
-      setStatusOperation(btnType);
-    }
+  const handleRemove = (id) => {
+    dispatch(categoriesRemove(id));
   };
 
   return (
@@ -61,18 +53,24 @@ const CategoriesPage = () => {
       )}
 
       <ContainerShow type={'add'}>
-        <AddAndUpdateCategories
+        <CategoriesForm
           status={statusOperation}
-          closeForm={disAppearanceCountsForm}
+          closeForm={disAppearanceForm}
           currentCategory={''}
         />
       </ContainerShow>
 
-      <StatusCategories status={statusOperation} onClick={handleClick} />
+      <StatusAll classes={'mt-4'} />
 
       <ContainerScale classes={'flex-grow-1 mt-5'}>
-        <ContainerCards colsNumber={'6'}>
-          {filteredCategories?.map(category=><CategoryCard {...category} key={category._id}/>)}
+        <ContainerCards colsNumber={'5'} gap={'4'}>
+          {filteredCategories?.map((category) => (
+            <CategoryCard
+              remove={handleRemove}
+              {...category}
+              key={category._id}
+            />
+          ))}
         </ContainerCards>
       </ContainerScale>
 

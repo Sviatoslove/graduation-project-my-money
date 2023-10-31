@@ -54,6 +54,11 @@ const colorsIconsForCategories = {
     name: 'Розовый',
     color: 'pink',
   },
+  '67rdca3eeb7f6fgeed471826': {
+    _id: '67rdca3eeb7f6fgeed471826',
+    name: 'Коричневый',
+    color: 'brown',
+  },
 }
 
 export default colorsIconsForCategories

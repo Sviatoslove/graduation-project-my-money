@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import currency from "../../mock/currency";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from 'prop-types';
+import currency from "../../mock/currency";
 import {
   countsLoad,
   loadCountsData,
@@ -14,7 +15,7 @@ import LoadingSpinners from "./LoadingSpinners";
 import Badge from "./Badge";
 import localStorageService from "../../services/localStorage.service";
 
-const MasterCount = () => {
+const MasterCount = ({classes}) => {
   const dispatch = useDispatch();
   const [masterCount, setMasterCount] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +48,7 @@ const MasterCount = () => {
   };
 
   return (
-    <div className="text-center">
+    <div className={"text-center " + classes}>
       {masterCount && countsData && (
         <Badge
           classes="mb-1 w-content"
@@ -58,7 +59,7 @@ const MasterCount = () => {
         />
       )}
 
-      <div className="dropdown w-content info br-5 text-center mx-auto shadow-custom mb-5">
+      <div className="dropdown w-content info br-5 text-center mx-auto shadow-custom">
         <div className="d-flex">
           <img
             className="w-content mx-auto"
@@ -118,5 +119,9 @@ const MasterCount = () => {
     </div>
   );
 };
+
+MasterCount.propTypes={
+  classes: PropTypes.string
+}
 
 export default MasterCount;

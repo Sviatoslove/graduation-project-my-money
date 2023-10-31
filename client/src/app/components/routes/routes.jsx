@@ -15,7 +15,6 @@ import { AuthLayout, CountsLayout, UserLayout } from "../../layouts";
 import localStorageService from "../../services/localStorage.service";
 import CountsLikes from "../../pages/countsPage/CountsLikes";
 import HistoryTranslations from "../../pages/translationsPage/HistoryTranslations";
-import { FormsProvider } from "../../hooks/useForm";
 
 const routes = (isLoggedIn, location) => {
   const currentUserId = localStorageService.getUserId();
@@ -53,7 +52,7 @@ const routes = (isLoggedIn, location) => {
       path: `counts`,
       display: isLoggedIn,
       element: isLoggedIn ? (
-        <FormsProvider><CountsLayout /></FormsProvider>
+        <CountsLayout />
       ) : (
         <Navigate to="/auth/login" state={{ referrer: location }} />
       ),
@@ -92,7 +91,7 @@ const routes = (isLoggedIn, location) => {
       path: "categories",
       pathname: location.pathname,
       display: isLoggedIn,
-      element: <FormsProvider><CategoriesPage /></FormsProvider>,
+      element: <CategoriesPage />,
     },
     {
       name: "Регулярные платежи",

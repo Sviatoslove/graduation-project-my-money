@@ -9,21 +9,34 @@ const useForms = () => useContext(FormsContext);
 const FormsProvider = ({ children }) => {
   const location = useLocation()
   const [show, setShow] = useState('');
-  const [countAdd, setCountAdd] = useState(false);
+  const [add, setAdd] = useState(false);
+  const [statusOperation, setStatusOperation] = useState('decrement');
 
-  const appearanceCountsForm = () => {
-    setCountAdd(true);
+
+  const appearanceForm = () => {
+    setAdd(true);
     setShow('show');
   };
 
   useEffect(()=>{
     setShow('');
-    setCountAdd(false)
+    setAdd(false)
   },[location.pathname])
 
-  const disAppearanceCountsForm = () => {
+  const disAppearanceForm = () => {
     setShow('');
-    setTimeout(() => setCountAdd(false), 500);
+    setTimeout(() => setAdd(false), 500);
+  };
+
+  const handleClick = (e) => {
+    const { target } = e;
+    const btnType = target.closest('button').dataset.type;
+    console.log('btnType:', btnType)
+    if (btnType === 'add') {
+      appearanceForm();
+    } else {
+      setStatusOperation(btnType);
+    }
   };
 
   const transform = show ? 'scale(0)' : '';
@@ -32,10 +45,12 @@ const FormsProvider = ({ children }) => {
     <FormsContext.Provider
       value={{
         show,
-        countAdd,
-        appearanceCountsForm,
-        disAppearanceCountsForm,
+        add,
+        appearanceForm,
+        disAppearanceForm,
         transform,
+        handleClick,
+        statusOperation
       }}
     >
       {children}

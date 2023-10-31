@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useForms } from '../../../hooks/useForm';
 
 const ContainerShow = ({ children, classes, type }) => {
-  const { show, countAdd } = useForms();
+  const { show, add } = useForms();
   if (type === 'add') {
     return (
       <>
-        {countAdd && (
+        {add && (
           <div className={'scaleTransition ' + classes}>{children}</div>
         )}
       </>

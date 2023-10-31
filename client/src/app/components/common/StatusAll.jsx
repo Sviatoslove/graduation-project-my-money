@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useForms } from '../../hooks/useForm';
 
-const StatusCategories = ({ status, onClick }) => {
+const StatusAll = ({classes}) => {
+  const {statusOperation, handleClick} = useForms()
+
   return (
-    <ul className="nav nav-tabs nav-tabs justify-content-evenly mt-4 border-primary ff-roboto">
+    <ul className={"nav nav-tabs nav-tabs justify-content-evenly border-primary ff-roboto " + classes}>
       <li className="nav-item border-4">
         <button
           className={
             'nav-link border-primary bbc-tr ' +
-            (status === 'decrement' ? 'active' : 'border-0')
+            (statusOperation === 'decrement' ? 'active' : 'border-0')
           }
           aria-current="true"
-          onClick={onClick}
+          onClick={handleClick}
           data-type="decrement"
         >
           Расходы
@@ -21,9 +24,9 @@ const StatusCategories = ({ status, onClick }) => {
         <button
           className={
             'nav-link border-primary bbc-tr ' +
-            (status === 'decrement' ? 'border-0' : 'active')
+            (statusOperation === 'decrement' ? 'border-0' : 'active')
           }
-          onClick={onClick}
+          onClick={handleClick}
           data-type="increment"
         >
           Доходы
@@ -33,9 +36,8 @@ const StatusCategories = ({ status, onClick }) => {
   );
 };
 
-StatusCategories.propTypes = {
-  status: PropTypes.string,
-  onClick: PropTypes.func,
-};
+StatusAll.propTypes={
+  classes: PropTypes.string
+}
 
-export default StatusCategories;
+export default StatusAll;

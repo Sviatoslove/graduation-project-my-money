@@ -1,0 +1,62 @@
+
+
+
+$bd-violet:rgb(183, 0, 255);
+.btn-outline-violet {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(183, 0, 255);
+  --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(183, 0, 255);
+  --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
+};
+
+$bd-orange: rgb(255, 115, 0);
+.btn-outline-orange {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(255, 115, 0);
+  --bs-btn-hover-border-color: #{shade-color($bd-orange, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(255, 115, 0);
+  --bs-btn-active-border-color: #{shade-color($bd-orange, 20%)};
+};
+
+$bd-pink: rgb(255, 0, 212);
+.btn-outline-pink {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(255, 0, 212);
+  --bs-btn-hover-border-color: #{shade-color($bd-pink, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(255, 0, 212);
+  --bs-btn-active-border-color: #{shade-color($bd-pink, 20%)};
+}
+
+$bd-brown: rgb(143, 66, 3);
+.btn-outline-brown {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:rgb(143, 66, 3);
+  --bs-btn-hover-border-color: #{shade-color($bd-brown, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: rgb(143, 66, 3);
+  --bs-btn-active-border-color: #{shade-color($bd-brown, 20%)};
+}

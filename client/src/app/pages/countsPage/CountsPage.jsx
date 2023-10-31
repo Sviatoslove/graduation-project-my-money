@@ -30,7 +30,7 @@ import { useForms } from '../../hooks/useForm';
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const { appearanceCountsForm, disAppearanceCountsForm } = useForms();
+  const { appearanceForm, disAppearanceForm } = useForms();
   const [currentPage, setCurrentPage] = useState(1);
   const [typeForm, setTypeForm] = useState('');
   const [currentCount, setCurrentCount] = useState('');
@@ -70,12 +70,12 @@ const CountsPage = () => {
       case 'add':
         setCurrentCount('');
         setTypeForm(btnType);
-        appearanceCountsForm();
+        appearanceForm();
         break;
       case 'edit':
         setCurrentCount(currentCount);
         setTypeForm(btnType);
-        appearanceCountsForm();
+        appearanceForm();
         break;
       case 'like':
         const editedCount = { ...currentCount, like: !currentCount.like };
@@ -86,7 +86,7 @@ const CountsPage = () => {
         break;
       case 'translationsAdd':
         setTypeForm(btnType);
-        appearanceCountsForm();
+        appearanceForm();
         break;
     }
   };
@@ -104,12 +104,12 @@ const CountsPage = () => {
     );
 
     return (
-      <Container>
+      <Container classes='shadow-custom br-10 p-3'>
         <ContainerShow type={'add'}>
           <FormForCount
             type={typeForm}
             currentCount={currentCount}
-            closeForm={disAppearanceCountsForm}
+            closeForm={disAppearanceForm}
           />
         </ContainerShow>
         {!count && (
@@ -123,7 +123,7 @@ const CountsPage = () => {
             <Translations onChange={handleToEdit} counts={counts} />
           ) : null}
 
-          <ContainerCards colsNumber={'3'}>
+          <ContainerCards colsNumber={'3'} gap={'4'}>
             {countsCrop.map((count) => (
               <CountCard
                 count={count}

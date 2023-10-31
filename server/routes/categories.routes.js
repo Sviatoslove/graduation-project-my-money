@@ -46,11 +46,11 @@ router
   }
 });
 
-router.delete('/:CategoryId', auth, async (req, res) => {
+router.delete('/:categoryId', auth, async (req, res) => {
   try {
-    const { categoryid } = req.params; // получаем параметр commentId
+    const { categoryId } = req.params; // получаем параметр commentId
     //const removedComment = await Comment.find({ _id: commentId }) или ===>>>
-    const removedCategory = await Category.findById(categoryid); // найдём комментарий который нужно удалить
+    const removedCategory = await Category.findById(categoryId); // найдём комментарий который нужно удалить
     if (removedCategory.userId.toString() === req.user._id) {
       // проверить, а можем ли мы удалять комментарий, т.к. его может удалять только тот пользователь который его оставлял
       await removedCategory.deleteOne(); // ждём пока удалится коммент
