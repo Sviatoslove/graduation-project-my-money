@@ -15,6 +15,8 @@ import currency from "../../mock/currency";
 import countsIconsMock from "../../mock/countsIcons";
 import Button from "../../components/common/Button";
 import { useForms } from "../../hooks/useForm";
+import { formatDataCountsIcons } from "../../utils";
+import { formatDataForAvatarsFields } from "../../utils/formatDataForAvatarsFields";
 
 const CountsForm = ({ currentCount, closeForm }) => {
   const dispatch = useDispatch();
@@ -53,9 +55,12 @@ const CountsForm = ({ currentCount, closeForm }) => {
     closeForm();
   };
 
-  const countsIcons = [
-    countsIconsMock.map((item) => `https://img.icons8.com/${item.name}`),
-  ];
+  // const countsIcons = [
+  //   countsIconsMock.map((item) => `https://img.icons8.com/${item.name}`),
+  // ];
+
+  
+  const countsIcons = formatDataCountsIcons(countsIconsMock)
 
   return (
     <>
@@ -104,7 +109,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
               name="icon"
               value={data.icon}
               onChange={handleChange}
-              options={countsIcons}
+              options={formatDataForAvatarsFields(16, countsIcons)}
             />
             {/* {enterError && <p className="text-danger">{enterError}</p>} */}
             <Button

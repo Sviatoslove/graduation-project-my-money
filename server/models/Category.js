@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose');
 const schema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    dataType:String,
     name: String,
     content: String,
     icon: String,

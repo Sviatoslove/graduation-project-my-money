@@ -43,7 +43,7 @@ const CurrencyField = ({
               outline={true}
               classes="secondary border-0 p-0"
               imgSrc={icon}
-              imgFontSize="34px"
+              iconFontSize="34px"
               disabled
             />
           )}

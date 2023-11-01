@@ -22,7 +22,7 @@ function App() {
         {!path && (
           <BackBtn
             classes={
-              'w-content shadow-custom position-absolute top-110px start-30px'
+              'w-content shadow-custom position-absolute top-94px start-30px'
             }
           />
         )}

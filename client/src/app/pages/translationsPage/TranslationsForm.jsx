@@ -25,6 +25,7 @@ const TranslationsForm = ({ closeForm }) => {
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
   const [valueConverted, setValueConverted] = useState();
+  
   const [data, setData] = useState({
     fromCount: "0",
     toCount: "",

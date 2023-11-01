@@ -1,90 +1,76 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button';
-import { getActiveElment } from '../../../utils/formatDataForAvatarsFields';
 
-const AvatarsField = ({ label, name, value, valueIconColor, valueTextColor, nameCategory, valueBgColor, options, onChange }) => {
-  console.log('options:', options)
+const AvatarsField = ({
+  label,
+  name,
+  value,
+  valueIconColor,
+  valueTextColor,
+  nameCategory,
+  valueBgColor,
+  options,
+  onChange,
+}) => {
   const [index, setIndex] = useState(0);
-  const [active, setActive] = useState();
-  const prevRef = useRef();
   const [showClassesIncBt, setShowClassesIncBt] = useState('');
   const [showClassesDecBt, setShowClassesDecBt] = useState('-fill');
 
-  useEffect(() => {
-    if(!active) {
-      setActive(getActiveElment(value, name))
-    }
-    prevRef.current = active;
-    toggleActive();
-  });
-
-  const prevActive = prevRef.current;
-
   const handleClick = ({ target }) => {
-    setActive(target.closest('button'));
+    const activeBtn = target.closest('div').querySelector('.active');
+    activeBtn?.classList.remove('active');
     onChange({
       target: {
         name: target.closest('button').name,
         value: target.closest('button').dataset.value,
       },
     });
-  };
-
-  const toggleActive = () => {
-    if (prevActive !== active) {
-      prevActive?.classList.remove('active');
-    }
-    active?.classList.add('active');
+    target.closest('button')?.classList.add('active');
   };
 
   const drawingAvatars = (n) => {
-    if (typeof options[n][n] === 'object') {
-      return options[n].map((item) => {
-        if(item.userId) {
-          return <Button
-          name={name}
-          
-          
-          />
-        }
-        return (
-          <Button
-            name={name}
-            icon={item.name}
-            dataType={name}
-            key={item._id}
-            onClick={handleClick}
-            iconFontSize="46px"
-            
-
-            dataValue={item.color ? item.color : item.name}
-            outline={item.color ? false : true}
-            color={valueBgColor ? valueBgColor : item.color}
-            textColor={valueTextColor}
-            iconColor={valueIconColor}
-            classes={"avatar border-0 m-1 br-5 categories d-flex flex-column"}
-            width={item.color ? '16px' : ''}
-            height={item.color ? '24px' : '105px'}
-          >{nameCategory && nameCategory.slice(0,4)}</Button>
-        );
-      });
-    }
-
     return options[n].map((item) => {
+      const active = value === (item.imgSrc || item.icon) ? 'active' : '';
+      let settingsBtn = {
+        name: name,
+        key: item._id,
+        dataValue: item.imgSrc || item.icon || item.color,
+        onClick: handleClick,
+        outline: true,
+        classes: `avatar border-0 bg-transparent br-10 ${active}`,
+        zIndex: 0,
+        ...item,
+      };
+      if (item.dataType === 'iconsForCategories') {
+        const activeColor = value === item.color ? 'active' : '';
+        settingsBtn = {
+          ...settingsBtn,
+          name: name,
+          outline: item.color ? false : true,
+          bgColor: valueBgColor ? valueBgColor : item.color,
+          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor}`,
+          textColor: valueTextColor,
+          iconColor: valueIconColor,
+          width: item.color ? '16px' : '',
+          height: item.color ? '24px' : '105px',
+          children: nameCategory && nameCategory.slice(0, 4),
+
+        };
+      }
+      if (item.dataType === 'category') {
+        const active = value === item._id ? 'active' : '';
+        settingsBtn = {
+          ...settingsBtn,
+          name: name,
+          dataValue: item._id,
+          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center`,
+          children: item.name,
+        };
+      }
+
       return (
-        <Button
-          name={name}
-          outline={true}
-          imgFontSize={'52px'}
-          dataType={name}
-          dataValue={item}
-          imgSrc={item}
-          key={item}
-          onClick={handleClick}
-          classes={"avatar border-0 bg-transparent br-10"}
-          zIndex={0}
-        />
+        <Button {...settingsBtn}/>
       );
     });
   };

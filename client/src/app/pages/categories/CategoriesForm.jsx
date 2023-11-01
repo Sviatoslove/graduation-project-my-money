@@ -12,9 +12,9 @@ import {
   selectCategoriesIconsDataloaded
 } from '../../store/categoriesSlice';
 import { useForms } from '../../hooks/useForm';
-import { formatDataForIconsCategories } from '../../utils';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
+import { formatDataForAvatarsFields } from '../../utils/formatDataForAvatarsFields';
 
 const CategoriesForm = ({ status, currentCategory, closeForm }) => {
   const dispatch = useDispatch();
@@ -38,6 +38,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
         bgColor:'primary'
       };
   const [data, setData] = useState(initialState);
+  console.log('data:', data)
 
   useEffect(() => {
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
@@ -55,7 +56,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
     if (currentCategory) {
       dispatch(categoriesUpdate(data));
     } else {
-    dispatch(categoriesCreate({...data, status: status}));
+    dispatch(categoriesCreate({...data, status: status, dataType: 'category'}));
     }
     closeForm();
   };
@@ -96,14 +97,14 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               valueTextColor={data.textColor}
               valueBgColor={data.bgColor}
               value={data.icon}
-              options={formatDataForIconsCategories(10, categoriesIcons)}
+              options={formatDataForAvatarsFields(10, categoriesIcons)}
               onChange={handleChange}
             />
             <AvatarsField
               label={'Выбери цвет иконки'}
               name="iconColor"
               value={data.iconColor}
-              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
+              options={formatDataForAvatarsFields(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
@@ -111,7 +112,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет текста иконки'}
               name="textColor"
               value={data.textColor}
-              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
+              options={formatDataForAvatarsFields(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />
@@ -119,7 +120,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               label={'Выбери цвет фона иконки'}
               name="bgColor"
               value={data.bgColor}
-              options={formatDataForIconsCategories(12, colorsIconsForCategories)}
+              options={formatDataForAvatarsFields(12, colorsIconsForCategories)}
               onChange={handleChange}
               // error={errors.toCount}
             />

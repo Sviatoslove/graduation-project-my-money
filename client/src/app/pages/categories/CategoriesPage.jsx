@@ -80,6 +80,7 @@ const CategoriesPage = () => {
         dataType="add"
         onClick={handleClick}
         imgSrc={addIcon}
+        iconFontSize={'52px'}
       />
     </Container>
   );

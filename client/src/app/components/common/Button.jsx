@@ -7,7 +7,7 @@ const Button = ({
   icon,
   zIndex,
   dataType,
-  color,
+  bgColor,
   textColor,
   outline,
   classes,
@@ -16,7 +16,6 @@ const Button = ({
   disabled,
   link,
   iconFontSize,
-  imgFontSize,
   onClick,
   children,
   name,
@@ -33,16 +32,16 @@ const Button = ({
           type={type}
           data-type={dataType}
           data-value={dataValue}
-          className={`btn btn-${outline ? "outline-" : ""}${color} ${classes} text-${textColor}`}
+          className={`btn btn-${outline ? "outline-" : ""}${bgColor} ${classes} text-${textColor}`}
           onClick={onClick}
           style={{ zIndex: zIndex, width: width, height: height }}
           id={id}
           disabled={disabled}
         >
           {imgSrc && (
-            <img src={imgSrc} alt="image" style={{ width: imgFontSize }} />
+            <img src={imgSrc} alt="image" style={{ width: iconFontSize }} />
           )}
-          {icon && <i className={`${icon} text-${iconColor}`} style={{ fontSize: iconFontSize }}></i>}
+          {icon && <i className={`${icon} text-${iconColor} mx-auto`} style={{ fontSize: iconFontSize }}></i>}
           <small className="mx-auto">
           {children}
           </small>
@@ -52,7 +51,7 @@ const Button = ({
           to={link}
           className={`text-center ${classes} btn btn-${
             outline ? "outline-" : ""
-          }${color}`}
+          }${bgColor}`}
         >
           {imgSrc && <img src={imgSrc} alt="image" />}
           {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
@@ -67,13 +66,13 @@ Button.defaultProps = {
   imgSrc: "",
   icon: "",
   dataType: "",
-  color: "primary",
+  bgColor: "primary",
   outline: false,
   classes: "",
   id: "",
   link: "",
   type: "button",
-  iconFontSize: "24px",
+  iconFontSize: "52px",
   zIndex: 1,
   disabled: false,
 };
@@ -83,11 +82,10 @@ Button.propTypes = {
   iconColor: PropTypes.string,
   textColor: PropTypes.string,
   name: PropTypes.string,
-  imgFontSize: PropTypes.string,
   imgSrc: PropTypes.string,
   icon: PropTypes.string,
   dataType: PropTypes.string,
-  color: PropTypes.string,
+  bgColor: PropTypes.string,
   outline: PropTypes.bool,
   classes: PropTypes.string,
   link: PropTypes.string,

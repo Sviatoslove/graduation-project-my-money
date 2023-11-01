@@ -12,9 +12,11 @@ import {
   selectCategories,
 } from '../../store/categoriesSlice';
 import { useForms } from '../../hooks/useForm';
-import { formatDataForIconsCategories } from '../../utils';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
+import { formatDataForAvatarsFields } from '../../utils/formatDataForAvatarsFields';
+import { operationCreate, operationUpdate } from '../../store/operationsSlice';
+import localStorageService from '../../services/localStorage.service';
 
 const OperationsForm = ({ currentOperation }) => {
   const { disAppearanceForm, statusOperation, handleClick } = useForms();
@@ -53,9 +55,9 @@ const OperationsForm = ({ currentOperation }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (currentOperation) {
-      dispatch(categoriesUpdate(data));
+      dispatch(operationUpdate(data));
     } else {
-      dispatch(categoriesCreate({ ...data, status: statusOperation }));
+      dispatch(operationCreate({ ...data, status: statusOperation, count: localStorageService.getMasterCount(), userId: localStorageService.getUserId() }));
     }
     disAppearanceForm();
   };
@@ -85,7 +87,8 @@ const OperationsForm = ({ currentOperation }) => {
             <AvatarsField
               label="Выбери категорию"
               name="category"
-              options={formatDataForIconsCategories(10, filteredCategories)}
+              value={data.category}
+              options={formatDataForAvatarsFields(10, filteredCategories)}
               onChange={handleChange}
             />
             <TextField

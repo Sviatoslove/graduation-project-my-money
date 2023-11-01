@@ -31,7 +31,7 @@ const MasterCount = ({classes}) => {
   }, []);
 
   useEffect(() => {
-    if (user.masterCount && counts && !masterCount) {
+    if (user?.masterCount && counts && !masterCount) {
       setMasterCount(counts[user.masterCount]);
     }
   }, [counts]);
@@ -48,6 +48,9 @@ const MasterCount = ({classes}) => {
   };
 
   return (
+    <>
+        {countsDataLoaded && countsLoaded ? (
+    
     <div className={"text-center " + classes}>
       {masterCount && countsData && (
         <Badge
@@ -86,7 +89,6 @@ const MasterCount = ({classes}) => {
           <p className="balance ff-roboto fw-bold h4 mt-2">-</p>
         )}
 
-        {countsDataLoaded && countsLoaded ? (
           <ul className={"p-0 w-500px dropdown-menu" + (isOpen ? " show" : "")}>
             <li className="text-center w-100 bg-secondary fw-bold">
               <span className="dropdown-item-text">Выберите главный счёт</span>
@@ -112,11 +114,14 @@ const MasterCount = ({classes}) => {
               ))}
             </div>
           </ul>
-        ) : (
-          <LoadingSpinners number={3} classesSpinner="spinner-grow-sm" />
-        )}
+      
       </div>
     </div>
+      ) : (
+        <LoadingSpinners number={3} classesSpinner="spinner-grow-sm" />
+      )}
+    </>
+
   );
 };
 

@@ -1,54 +1,210 @@
 [
-  { "name": "bi bi-airplane" },
-  { "name": "bi bi-airplane-engines-fill" },
-  { "name": "bi bi-alarm" },
-  { "name": "bi bi-alarm-fill"},
-  { "name": "bi bi-alipay"},
-  { "name": "bi bi-android2"},
-  { "name": "bi bi-amazon"},
-  { "name": "bi bi-apple"},
-  { "name": "bi bi-app-indicator"},
-  { "name": "bi bi-archive"},
-  { "name": "bi bi-arrow-through-heart-fill"},
-  { "name": "bi bi-award"},
-  { "name": "bi bi-backpack2"},
-  { "name": "bi bi-badge-hd-fill"},
-  { "name": "bi bi-bag-heart"},
-  { "name": "bi bi-bicycle"},
-  { "name": "bi bi-book"},
-  { "name": "bi bi-bluetooth"},
-  { "name": "bi bi-boombox"},
-  { "name": "bi bi-building-fill-add"},
-  { "name": "bi bi-buildings"},
-  { "name": "bi bi-bus-front"},
-  { "name": "bi bi-cake"},
-  { "name": "bi bi-calculator-fill"},
-  { "name": "bi bi-calendar-day"},
-  { "name": "bi bi-car-front"},
-  { "name": "bi bi-card-image"},
-  { "name": "bi bi-cart-check"},
-  { "name": "bi bi-cart4"},
-  { "name": "bi bi-cassette"},
-  { "name": "bi bi-chat-square-text-fill"},
-  { "name": "bi bi-cup-hot"},
-  { "name": "bi bi-device-hdd-fill"},
-  { "name": "bi bi-dice-3"},
-  { "name": "bi bi-disc"},
-  { "name": "bi bi-earbuds"},
-  { "name": "bi bi-easel"},
-  { "name": "bi bi-ev-station"},
-  { "name": "bi bi-ev-front-fill"},
-  { "name": "bi bi-ethernet"},
-  { "name": "bi bi-file-spreadsheet"},
-  { "name": "bi bi-floppy"},
-  { "name": "bi bi-gift-fill"},
-  { "name": "bi bi-hospital"},
-  { "name": "bi bi-house-gear-fill"},
-  { "name": "bi bi-incognito"},
-  { "name": "bi bi-people"},
-  { "name": "bi bi-person-wheelchair"},
-  { "name": "bi bi-xbox"},
-  { "name": "bi bi-wrench-adjustable"},
-  { "name": "bi bi-watch"},
-  { "name": "bi bi-sunglasses"}
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-airplane"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-airplane-engines-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-alarm"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-alarm-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-alipay"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-android2"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-amazon"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-apple"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-app-indicator"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-archive"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-arrow-through-heart-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-award"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-backpack2"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-badge-hd-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-bag-heart"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-bicycle"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-book"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-bluetooth"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-boombox"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-building-fill-add"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-buildings"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-bus-front"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-cake"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-calculator-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-calendar-day"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-car-front"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-card-image"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-cart-check"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-cart4"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-cassette"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-chat-square-text-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-cup-hot"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-device-hdd-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-dice-3"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-disc"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-earbuds"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-easel"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-ev-station"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-ev-front-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-ethernet"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-file-spreadsheet"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-floppy"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-gift-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-hospital"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-house-gear-fill"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-incognito"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-people"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-person-wheelchair"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-xbox"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-wrench-adjustable"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-watch"
+  },
+  {
+    "dataType": "iconsForCategories",
+    "icon": "bi bi-sunglasses"
+  }
 ]

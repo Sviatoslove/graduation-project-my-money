@@ -7,7 +7,7 @@ import getInputClasses from './getInputClasses';
 import getTitleNavbar from './getTitleNavbar';
 import history from './history';
 import paginate from './paginate';
-import formatDataForIconsCategories from './formatDataForIconsCategories';
+import formatDataForAvatarsFields from './formatDataForAvatarsFields';
 
 export {
   displayDate,
@@ -19,5 +19,5 @@ export {
   getTitleNavbar,
   history,
   paginate,
-  formatDataForIconsCategories,
+  formatDataForAvatarsFields,
 };

@@ -87,6 +87,8 @@ const CountCard = ({ count, onChange }) => {
             onClick={onChange}
             id={count._id}
             icon="bi bi-gear"
+            iconFontSize="24px"
+
           />
           <Button
             dataType="like"
@@ -95,6 +97,8 @@ const CountCard = ({ count, onChange }) => {
             onClick={onChange}
             id={count._id}
             icon={"bi bi-heart" + (count.like ? "-fill" : "")}
+            iconFontSize="24px"
+
           />
 
           <Button
@@ -104,6 +108,8 @@ const CountCard = ({ count, onChange }) => {
             onClick={onChange}
             id={count._id}
             icon="bi bi-trash"
+            iconFontSize="24px"
+
           />
         </div>
       </div>

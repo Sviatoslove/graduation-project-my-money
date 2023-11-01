@@ -30,7 +30,7 @@ const { avatarsReceived, avatarsRequestedFailed } = actions;
 export const loadAvatars = () => async (dispatch) => {
   try {
     const { content } = await avatarsService.getAvatars();
-    const avatars = formatDataAvatars(12 ,content);
+    const avatars = formatDataAvatars(content);
     dispatch(avatarsReceived(avatars));
   } catch (error) {
     dispatch(avatarsRequestedFailed(error.message));

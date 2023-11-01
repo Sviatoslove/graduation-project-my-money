@@ -31,9 +31,10 @@ const CategoryCard = ({
             color={textColor}
             iconColor={bgColor}
             classes="btn-sm p-1 h-mc btrr-50 btn-item-categories position-absolute top-0 end-0"
-            onClick={()=>remove(id)}
             id={id}
             icon="bi bi-trash"
+            onClick={()=>remove(id)}
+            iconFontSize={'24px'}
           />
       </div>
     </div>

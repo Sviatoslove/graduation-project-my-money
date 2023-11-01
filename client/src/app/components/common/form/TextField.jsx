@@ -9,6 +9,11 @@ const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
     setShowPassword((state) => !state);
   };
 
+  const cleanInput = (e) => {
+    const { target } = e;
+    if (target.value === "0") target.value = "";
+  };
+
   return (
     <div className="mb-4">
       <label htmlFor={name}>{label}</label>
@@ -18,6 +23,7 @@ const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
           id={name}
           name={name}
           onChange={onChange}
+          onClick={cleanInput}
           value={value}
           className={getInputClasses("form-control", error)}
         />

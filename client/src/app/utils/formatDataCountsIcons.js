@@ -7,7 +7,8 @@ export default function formatDataCountsIcons(arr) {
       ...acc,
       [_id]: {
         _id: _id,
-        icon: `https://img.icons8.com/${item.name}`,
+        imgSrc: `https://img.icons8.com/${item.name}`,
+        dataType:'icon'
       },
     });
   }, {});

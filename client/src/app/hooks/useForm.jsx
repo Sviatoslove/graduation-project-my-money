@@ -31,7 +31,6 @@ const FormsProvider = ({ children }) => {
   const handleClick = (e) => {
     const { target } = e;
     const btnType = target.closest('button').dataset.type;
-    console.log('btnType:', btnType)
     if (btnType === 'add') {
       appearanceForm();
     } else {

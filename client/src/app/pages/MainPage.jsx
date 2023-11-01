@@ -28,7 +28,6 @@ const MainPage = () => {
   const filteredOperations =
     opertions &&
     Object.values(opertions).filter((operation) => operation.status === statusOperation);
-    console.log('filteredOperations:', filteredOperations)
 
   useEffect(() => {
     if (!operationsDataLoaded) dispatch(loadOperations());

@@ -2,13 +2,12 @@ const { Schema, model } = require('mongoose');
 
 const schema = new Schema(
   {
-    name: {
+    icon: {
       type: String,
       required: true,
     },
+    dataType: String
 
-    active: Boolean,
-    color: String,
   },
   {
     timestamps: true,
