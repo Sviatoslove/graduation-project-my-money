@@ -53,8 +53,21 @@ router
     try {
       const { translId } = req.params;
       const removedTranslation = await Translation.findById(translId);
+      const { fromCount, toCount, balanceFrom, balanceTo, userId } = removedTranslation;
+      if (fromCount !== '0') {
+        const countFrom = await Count.findById(fromCount);
+        countFrom.balance = Number(countFrom.balance) + Number(balanceFrom);
+        await Count.findByIdAndUpdate(fromCount, countFrom);
+      }
+      const countTo = await Count.findById(toCount);
+      countTo.balance = Number(countTo.balance) - Number(balanceTo);
+      await Count.findByIdAndUpdate(toCount, countTo);
+      const counts = await Count.find()
+      const countsList = counts.filter(
+        (count) => String(count.userId) === String(userId)
+      );
       await removedTranslation.deleteOne(); // ждём пока удалится коммент
-      return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
+      return res.send(countsList); // можем вернуть null, т.к. на фронте мы ничего не ждём
     } catch (e) {
       res
         .status(500)
