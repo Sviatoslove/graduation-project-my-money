@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { getArray } from "../../utils/formatData";
 
 const LoadingSpinners = ({
   number,
@@ -8,9 +9,6 @@ const LoadingSpinners = ({
   classesSpinner,
   style,
 }) => {
-  function range(count) {
-    return Array.from({ length: count }, (v, i) => i + 1);
-  }
 
   function getRandomColorRgba() {
     const red = randomNum(0, 255);
@@ -24,7 +22,7 @@ const LoadingSpinners = ({
     return Math.round(min - 0.5 + Math.random() * (max - min + 1));
   }
 
-  const spinners = range(number).reduce(
+  const spinners = getArray(number).reduce(
     (acc, item) =>
       (acc = {
         ...acc,
@@ -34,6 +32,7 @@ const LoadingSpinners = ({
       }),
     {},
   );
+  
   return (
     <div className={`spinners-wrapper ${classesDiv}`}>
       {text && (

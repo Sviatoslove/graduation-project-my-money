@@ -9,7 +9,7 @@ import {
   selectCategories,
   selectCategoriesIsLoading,
 } from '../../store/categoriesSlice';
-import Button from '../../components/common/Button';
+import Button from '../../components/common/buttons/Button';
 import { useForms } from '../../hooks/useForm';
 import CategoriesForm from './CategoriesForm';
 import {
@@ -22,7 +22,8 @@ import StatusAll from '../../components/common/StatusAll';
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const { disAppearanceForm, transform, statusOperation, handleClick } = useForms();
+  const { disAppearanceForm, transform, statusOperation, handleClick } =
+    useForms();
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categoriesIsLoading = useSelector(selectCategoriesIsLoading());
   const categories = useSelector(selectCategories());
@@ -38,12 +39,13 @@ const CategoriesPage = () => {
   }, []);
 
   const handleRemove = (id) => {
+    console.log('handleRemove:')
     dispatch(categoriesRemove(id));
   };
 
   return (
     <Container classes={'shadow-custom br-10 p-3'}>
-      {!categoriesIsLoading && !categoriesDataLoaded && (
+      {!categoriesDataLoaded && (
         <h1
           className="scaleTransition position-absolute ws-nw top-48 start-24"
           style={{ transform: transform }}
@@ -73,15 +75,16 @@ const CategoriesPage = () => {
           ))}
         </ContainerCards>
       </ContainerScale>
-
-      <Button
-        color="primary"
-        classes="shadow-lg p-2 ms-auto"
-        dataType="add"
-        onClick={handleClick}
-        imgSrc={addIcon}
-        iconFontSize={'52px'}
-      />
+      <ContainerScale classes={'p-2 ms-auto'}>
+        <Button
+          bgColor="primary"
+          classes="shadow-lg"
+          dataType="add"
+          onClick={handleClick}
+          imgSrc={addIcon}
+          iconSize={'52px'}
+        />
+      </ContainerScale>
     </Container>
   );
 };

@@ -5,6 +5,7 @@ const localStorageService = {
   USER_ID: "user-id",
   STAY_ON: "stay-on",
   MASTER_COUNT: "master-count",
+  CATEGORIES_DATA: "categories_data",
 
   setTokens({
     expiresIn = 3600,
@@ -43,8 +44,17 @@ const localStorageService = {
   getMasterCount() {
     return localStorage.getItem(this.MASTER_COUNT);
   },
+  getCategoriesData() {
+    return localStorage.getItem(this.CATEGORIES_DATA);
+  },
   setMasterCount(data) {
     localStorage.setItem(this.MASTER_COUNT, data);
+  },
+  setCategoriesData(data) {
+    localStorage.setItem(this.CATEGORIES_DATA, data);
+  },
+  removeCategoriesData() {
+    localStorage.removeItem(this.CATEGORIES_DATA);
   },
   removeMasterCount() {
     localStorage.removeItem(this.MASTER_COUNT);

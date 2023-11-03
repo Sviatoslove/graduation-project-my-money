@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import translationsService from "../services/translations.service";
+import { countsUpdateAfterDeleteTranslation } from "./countsSlice";
 
 const translationsSlice = createSlice({
   name: "translations",
@@ -61,8 +62,9 @@ export const loadTranslations = () => async (dispatch) => {
 export const translationRemove = (payload) => async (dispatch) => {
   dispatch(translationsRequested());
   try {
-    await translationsService.remove(payload);
+    const {content} = await translationsService.remove(payload);
     dispatch(translationsRemovedReceived(payload));
+    dispatch(countsUpdateAfterDeleteTranslation(content));
   } catch (error) {
     dispatch(translationsRequestedFailed(error.message));
   }

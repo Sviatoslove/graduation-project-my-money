@@ -8,14 +8,16 @@ const Pagination = ({
   onPageChange,
   currentPage,
   countsLikes,
+  likesPage
 }) => {
-  const pagesCount = Math.ceil(itemsCount / pageSize);
+  const num = likesPage ? countsLikes.length : itemsCount
+  const pagesCount = Math.ceil(num / pageSize);
   const pages = _.range(1, pagesCount + 1);
 
-  if (pagesCount === 1 || (countsLikes && countsLikes.length < pageSize))
+  if (pagesCount <= 1 || (countsLikes && countsLikes.length < pageSize))
     return null;
   return (
-    <nav className="pagination-counts align-self-end ms-5">
+    <nav className="pagination-counts align-self-end ms-5 me-auto">
       <ul className="pagination">
         {pages.map((page) => (
           <li
@@ -38,8 +40,9 @@ const Pagination = ({
   );
 };
 Pagination.propTypes = {
+  likesPage: PropTypes.string,
   countsLikes: PropTypes.array,
-  itemsCount: PropTypes.number.isRequired,
+  itemsCount: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,

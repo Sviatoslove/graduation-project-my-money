@@ -13,10 +13,9 @@ import {
 import AvatarsField from "../../components/common/form/AvatarsField";
 import currency from "../../mock/currency";
 import countsIconsMock from "../../mock/countsIcons";
-import Button from "../../components/common/Button";
+import Button from "../../components/common/buttons/Button";
 import { useForms } from "../../hooks/useForm";
-import { formatDataCountsIcons } from "../../utils";
-import { formatDataForAvatarsFields } from "../../utils/formatDataForAvatarsFields";
+import { formatDataForAvatarsFields, formatDataCountsIcons } from "../../utils/formatData";
 
 const CountsForm = ({ currentCount, closeForm }) => {
   const dispatch = useDispatch();
@@ -121,7 +120,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
             </Button>
             <Button
               classes="w-100 mx-auto mt-2"
-              color="warning"
+              bgColor="warning"
               onClick={closeForm}
             >
               Назад

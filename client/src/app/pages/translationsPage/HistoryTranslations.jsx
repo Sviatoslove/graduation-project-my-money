@@ -20,15 +20,11 @@ import {
   selectCountsStatus,
 } from "../../store/countsSlice";
 import Badge from "../../components/common/Badge";
-import localStorageService from "../../services/localStorage.service";
 import currency from "../../mock/currency";
-import Button from "../../components/common/Button";
-import BackBtn from "../../components/common/BackBtn";
+import {Button} from "../../components/common/buttons";
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
-  const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
   const isLoading = useSelector(selectTranslationsLoadedStatus());
@@ -54,7 +50,6 @@ const HistoryTranslations = () => {
   const handleClick = (e) => {
     const { target } = e;
     const translId = target.closest("li").id;
-    console.log("target:", target.closest("li").id);
     dispatch(translationRemove(translId));
   };
 
@@ -62,9 +57,9 @@ const HistoryTranslations = () => {
     <Container classes="br-10 shadow-custom">
       {!isLoading && counts && countsData ? (
         <>
-          <div className="d-flex mt-7"></div>
+          <div className="mt-7"></div>
 
-          <ul className="d-flex list-group list-group-flush ">
+          <ul className="list-group list-group-flush ">
             {Object.values(translations).map((transl, idx) => {
               const countFrom = counts[transl.fromCount];
               const countTo = counts[transl.toCount];
@@ -80,9 +75,9 @@ const HistoryTranslations = () => {
                     <p className="ff-BS">{displayDate(transl.createdAt)}</p>
                   </div>
 
-                  <div className="oper-counts d-flex w-100 flex-grow-1 justify-content-between px-1 align-items-center">
+                  <div className="d-flex w-100 justify-content-between px-1 align-items-center">
                     <Badge
-                      classes={"fs-5"}
+                      classes={"fs-3 h-i"}
                       text={countFrom?.name}
                       {...countsData[countFrom?.type]}
                     />
@@ -94,7 +89,7 @@ const HistoryTranslations = () => {
                     />
 
                     <Badge
-                      classes={"fs-5"}
+                      classes={"fs-3 h-i"}
                       text={countTo?.name}
                       {...countsData[countTo?.type]}
                     />
@@ -102,7 +97,7 @@ const HistoryTranslations = () => {
 
                   <div className="oper-balance w-100 d-flex justify-content-between px-1 align-items-center">
                     <Badge
-                      classes={"fs-6"}
+                      classes={"fs-3 h-i"}
                       balance={transl.balanceFrom}
                       imgSrc={
                         transl.fromCount === "0"
@@ -120,7 +115,7 @@ const HistoryTranslations = () => {
                     />
 
                     <Badge
-                      classes={"fs-6"}
+                      classes={"fs-3 h-i"}
                       balance={transl.balanceTo}
                       imgSrc={currency[countTo?.currency]?.icon}
                       iconSize={"32px"}
@@ -130,7 +125,8 @@ const HistoryTranslations = () => {
 
                   <Button
                     outline={true}
-                    color="secondary"
+                    bgColor="secondary"
+                    iconSize={"32px"}
                     imgSrc="https://img.icons8.com/arcade/32/delete-sign.png"
                     onClick={handleClick}
                   />

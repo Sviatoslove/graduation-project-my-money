@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { displayDate } from "../../utils";
-import Button from "../../components/common/Button";
+import Button from "../../components/common/buttons/Button";
 import currency from "../../mock/currency";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -82,33 +82,33 @@ const CountCard = ({ count, onChange }) => {
         >
           <Button
             dataType="edit"
-            color="light"
+            bgColor="light"
             classes="btn-sm"
             onClick={onChange}
             id={count._id}
             icon="bi bi-gear"
-            iconFontSize="24px"
+            iconSize="24px"
 
           />
           <Button
             dataType="like"
-            color="light"
+            bgColor="light"
             classes="btn-sm"
             onClick={onChange}
             id={count._id}
             icon={"bi bi-heart" + (count.like ? "-fill" : "")}
-            iconFontSize="24px"
+            iconSize="24px"
 
           />
 
           <Button
             dataType="remove"
-            color="light"
+            bgColor="light"
             classes="btn-sm"
             onClick={onChange}
             id={count._id}
             icon="bi bi-trash"
-            iconFontSize="24px"
+            iconSize="24px"
 
           />
         </div>

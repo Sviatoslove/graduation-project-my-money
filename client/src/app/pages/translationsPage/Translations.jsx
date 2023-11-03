@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/usersSlice";
-import Button from "../../components/common/Button";
+import Button from "../../components/common/buttons/Button";
 import MasterCount from "../../components/common/MasterCount";
 
 const Translations = ({ onChange, counts }) => {
   const [masterCount, setMasterCount] = useState("");
+  console.log('masterCount:', masterCount)
   const user = useSelector(selectUser());
 
   useEffect(() => {
     if (user.masterCount) {
       setMasterCount(counts[user.masterCount]);
     }
-  }, []);
+  }, [user, counts]);
 
   return (
     <div className="info-action-panel mb-4">

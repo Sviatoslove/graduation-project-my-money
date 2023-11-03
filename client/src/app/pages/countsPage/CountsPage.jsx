@@ -21,11 +21,10 @@ import Pagination from '../../components/common/pagination';
 import getCountLike from '../../utils/getCountLike';
 import Translations from '../translationsPage/Translations';
 import CountCard from './CountCard';
-import Button from '../../components/common/Button';
+import Button from '../../components/common/buttons/Button';
 import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useForms } from '../../hooks/useForm';
-
 
 const CountsPage = () => {
   const dispatch = useDispatch();
@@ -104,7 +103,7 @@ const CountsPage = () => {
     );
 
     return (
-      <Container classes='shadow-custom br-10 p-3'>
+      <Container classes="shadow-custom br-10 p-3">
         <ContainerShow type={'add'}>
           <FormForCount
             type={typeForm}
@@ -113,9 +112,11 @@ const CountsPage = () => {
           />
         </ContainerShow>
         {!count && (
-          <h1 className="position-absolute top-50 start-50 translate-middle">
-            Добавьте свой первый счёт
-          </h1>
+          <ContainerScale classes={'my-auto mx-auto'}>
+            <h1 className="">
+              Добавьте свой первый счёт
+            </h1>
+          </ContainerScale>
         )}
 
         <ContainerScale>
@@ -134,20 +135,11 @@ const CountsPage = () => {
           </ContainerCards>
         </ContainerScale>
 
-        <ContainerShow
-          type={'show'}
-          reverse={true}
-          classes={
-            'mt-auto footer-group d-flex mb-4' +
-            (count > pageSize
-              ? ' justify-content-between '
-              : ' justify-content-end ') +
-            (!count || (countsLikes && countsLikes.length < pageSize)
-              ? 'position-absolute bottom-0 end-0 translate-middle'
-              : '')
-          }
+        <ContainerScale
+          classes={`mt-auto footer-group d-flex mb-4`}
         >
           <Pagination
+            likesPage={likesPage}
             countsLikes={countsLikes}
             itemsCount={count}
             pageSize={pageSize}
@@ -156,7 +148,7 @@ const CountsPage = () => {
           />
 
           <div
-            className="btn-group me-5 mt-2"
+            className="btn-group mt-2 w-content ms-auto"
             role="group"
             aria-label="Button group"
           >
@@ -175,14 +167,14 @@ const CountsPage = () => {
               />
             )}
             <Button
-              color="primary"
+              bgColor="primary"
               classes="shadow-lg p-2"
               dataType="add"
               onClick={handleToEdit}
               imgSrc={addIcon}
             />
           </div>
-        </ContainerShow>
+        </ContainerScale>
       </Container>
     );
   }

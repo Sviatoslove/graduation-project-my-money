@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/common/form/TextField';
 import AvatarsField from '../../components/common/form/AvatarsField';
-import Button from '../../components/common/Button';
+import Button from '../../components/common/buttons/Button';
 import {
   loadСategoriesIcons,
   categoriesUpdate,
@@ -14,7 +14,7 @@ import {
 import { useForms } from '../../hooks/useForm';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
-import { formatDataForAvatarsFields } from '../../utils/formatDataForAvatarsFields';
+import { formatDataForAvatarsFields } from '../../utils/formatData';
 
 const CategoriesForm = ({ status, currentCategory, closeForm }) => {
   const dispatch = useDispatch();
@@ -25,7 +25,10 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
   );
+  console.log('categoriesIconsDataLoaded:', categoriesIconsDataLoaded)
+
   const categoriesIcons = useSelector(selectCategoriesIcons());
+  console.log('categoriesIcons:', categoriesIcons)
 
   const initialState = currentCategory
     ? currentCategory
@@ -134,7 +137,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
             </Button>
             <Button
               classes="w-100 mx-auto mt-2"
-              color="warning"
+              bgColor="warning"
               onClick={closeForm}
             >
               Назад

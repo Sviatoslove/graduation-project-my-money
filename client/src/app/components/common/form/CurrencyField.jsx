@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { getInputClasses } from "../../../utils";
-import Button from "../Button";
+import Button from "../buttons/Button";
 
 const CurrencyField = ({
   label,
@@ -43,7 +43,7 @@ const CurrencyField = ({
               outline={true}
               classes="secondary border-0 p-0"
               imgSrc={icon}
-              iconFontSize="34px"
+              iconSize="34px"
               disabled
             />
           )}

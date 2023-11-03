@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import operationsService from '../services/operations.service';
+import { countsUpdateAfterOperation } from './countsSlice';
 
 const operationsSlice = createSlice({
   name: 'operations',
@@ -11,7 +12,10 @@ const operationsSlice = createSlice({
   },
   reducers: {
     operationsReceived: (state, action) => {
-      state.entities = action.payload;
+      const { payload } = action;
+      if (!Object.keys(action.payload).length) return;
+      if (!state.entities) state.entities = action.payload;
+      else state.entities = { ...state.entities, [payload._id]:payload };
       state.isLoading = false;
       state.dataLoaded = true;
     },
@@ -50,6 +54,7 @@ export const operationCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.create(payload);
     dispatch(operationsReceived(content));
+    dispatch(countsUpdateAfterOperation(content));
   } catch (error) {
     dispatch(operationsRequestedFailed(error.message));
   }

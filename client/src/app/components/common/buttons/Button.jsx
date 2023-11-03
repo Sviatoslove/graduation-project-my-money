@@ -15,14 +15,16 @@ const Button = ({
   type,
   disabled,
   link,
-  iconFontSize,
+  iconSize,
   onClick,
   children,
   name,
   width,
   height,
   iconColor,
-  dataValue
+  dataValue,
+  dataRate,
+  classesEl
 }) => {
   return (
     <>
@@ -32,16 +34,17 @@ const Button = ({
           type={type}
           data-type={dataType}
           data-value={dataValue}
-          className={`btn btn-${outline ? "outline-" : ""}${bgColor} ${classes} text-${textColor}`}
+          data-rate={dataRate}
+          className={`btn btn-${outline ? "outline-" : ""}${bgColor} ${classes} ${classesEl} text-${textColor}`}
           onClick={onClick}
           style={{ zIndex: zIndex, width: width, height: height }}
           id={id}
           disabled={disabled}
         >
           {imgSrc && (
-            <img src={imgSrc} alt="image" style={{ width: iconFontSize }} />
+            <img src={imgSrc} alt="image" style={{ width: iconSize }} />
           )}
-          {icon && <i className={`${icon} text-${iconColor} mx-auto`} style={{ fontSize: iconFontSize }}></i>}
+          {icon && <i className={`${icon} text-${iconColor} mx-auto`} style={{ fontSize: iconSize }}></i>}
           <small className="mx-auto">
           {children}
           </small>
@@ -54,7 +57,7 @@ const Button = ({
           }${bgColor}`}
         >
           {imgSrc && <img src={imgSrc} alt="image" />}
-          {icon && <i className={icon} style={{ fontSize: iconFontSize }}></i>}
+          {icon && <i className={icon} style={{ fontSize: iconSize }}></i>}
           {children}
         </Link>
       )}
@@ -72,12 +75,14 @@ Button.defaultProps = {
   id: "",
   link: "",
   type: "button",
-  iconFontSize: "52px",
+  iconSize: "52px",
   zIndex: 1,
   disabled: false,
 };
 
 Button.propTypes = {
+  dataRate: PropTypes.number,
+  classesEl: PropTypes.string,
   dataValue: PropTypes.string,
   iconColor: PropTypes.string,
   textColor: PropTypes.string,
@@ -88,10 +93,10 @@ Button.propTypes = {
   bgColor: PropTypes.string,
   outline: PropTypes.bool,
   classes: PropTypes.string,
-  link: PropTypes.string,
+  link: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   id: PropTypes.string,
   type: PropTypes.string,
-  iconFontSize: PropTypes.string,
+  iconSize: PropTypes.string,
   zIndex: PropTypes.number,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,

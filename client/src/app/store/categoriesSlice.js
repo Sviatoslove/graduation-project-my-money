@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import categoriesService from "../services/categories.service";
 import categoriesIconsService from "../services/categoriesIcons.service";
+import localStorageService from "../services/localStorage.service";
 
 const categoriesSlice = createSlice({
   name: "categories",
@@ -64,6 +65,7 @@ export const categoriesCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await categoriesService.create(payload);
     dispatch(categoriesReceived(content));
+    localStorageService.setCategoriesData('true')
   } catch (error) {
     dispatch(categoriesRequestedFailed(error.message));
   }
@@ -98,6 +100,7 @@ export const categoriesRemove = (payload) => async (dispatch) => {
 
 export const categoriesDestroyed = () => async (dispatch) => {
   dispatch(categoriesDataRemoved());
+  localStorageService.removeCategoriesData()
 };
 
 export const loadСategoriesIcons = () => async (dispatch) => {

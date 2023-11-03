@@ -9,7 +9,7 @@ const BackBtn = ({ classes }) => {
     <Button
       outline={true}
       classes={classes}
-      color={"warning"}
+      bgColor={"warning"}
       imgSrc={"https://img.icons8.com/arcade/32/circled-left-2.png"}
       onClick={() => navigate(-1)}
     />

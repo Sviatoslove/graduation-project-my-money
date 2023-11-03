@@ -9,7 +9,7 @@ const UserPage = () => {
   const [show, setShow] = useState("");
   const user = useSelector(selectUser());
 
-  const handleToEdit = () => {
+  const handleToEdit = ({target}) => {
     show ? setShow("") : setShow("show");
   };
 

@@ -6,7 +6,7 @@ import {
   SelectedField,
   TextField,
 } from "../../components/common/form";
-import Button from "../../components/common/Button";
+import Button from "../../components/common/buttons/Button";
 import {
   countsUpdateAfterTranslation,
   selectCounts,
@@ -162,7 +162,7 @@ const TranslationsForm = ({ closeForm }) => {
         </div>
           <Button
             outline={true}
-            color="success"
+            bgColor="success"
             classes={"mb-3 br-5 w-100" + (convertCurrency ? ' opacity-1' : ' opacity-0')}
             disabled={!data.balanceFrom > 0}
             onClick={handleConverter}
@@ -193,7 +193,7 @@ const TranslationsForm = ({ closeForm }) => {
         </Button>
         <Button
           classes="w-100 mx-auto mt-2"
-          color="warning"
+          bgColor="warning"
           onClick={closeForm}
         >
           Назад

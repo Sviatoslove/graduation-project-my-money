@@ -17,6 +17,7 @@ const countsSlice = createSlice({
     countsIconsDataLoaded: null,
     currencyDataLoaded: null,
     currencyData: null,
+    masterCount:null
   },
   reducers: {
     countsRequested: (state) => {
@@ -96,6 +97,11 @@ const countsSlice = createSlice({
         count.balance = Number(count.balance) + Number(balance);
       else count.balance = Number(count.balance) - Number(balance);
     },
+
+
+    // masterCountReceived: (state, action) => {
+    //   state.masterCount = 
+    // }
   },
 });
 
@@ -157,6 +163,14 @@ export const countsUpdateAfterTranslation = (payload) => async (dispatch) => {
 
 export const countsUpdateAfterOperation = (payload) => async (dispatch) => {
   dispatch(countsUpdatedByOperation(payload));
+};
+
+export const countsUpdateAfterDeleteTranslation = (payload) => async (dispatch) => {
+  dispatch(countsReceived(payload));
+};
+
+export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
+  dispatch(countsReceived(payload));
 };
 
 export const countRemove = (payload) => async (dispatch) => {

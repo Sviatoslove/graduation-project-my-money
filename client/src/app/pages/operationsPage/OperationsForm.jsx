@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/common/form/TextField';
 import AvatarsField from '../../components/common/form/AvatarsField';
-import Button from '../../components/common/Button';
+import Button from '../../components/common/buttons/Button';
 import {
   categoriesUpdate,
   categoriesCreate,
@@ -14,7 +14,7 @@ import {
 import { useForms } from '../../hooks/useForm';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import { formatDataForAvatarsFields } from '../../utils/formatDataForAvatarsFields';
+import { formatDataForAvatarsFields } from '../../utils/formatData';
 import { operationCreate, operationUpdate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 
@@ -31,13 +31,17 @@ const OperationsForm = ({ currentOperation }) => {
       (category) => category.status === statusOperation
     );
 
+  const [hour, minutes] = [new Date().getHours(), new Date().getMinutes()];
+
   const initialState = currentOperation
     ? currentOperation
     : {
         balance: 0,
-        category: '',
+        categoryId: '',
         content: '',
-        date: getDate(),
+        date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
+          minutes < 10 ? '0' + minutes : minutes
+        }`,
       };
   const [data, setData] = useState(initialState);
 
@@ -57,7 +61,14 @@ const OperationsForm = ({ currentOperation }) => {
     if (currentOperation) {
       dispatch(operationUpdate(data));
     } else {
-      dispatch(operationCreate({ ...data, status: statusOperation, count: localStorageService.getMasterCount(), userId: localStorageService.getUserId() }));
+      dispatch(
+        operationCreate({
+          ...data,
+          status: statusOperation,
+          countId: localStorageService.getMasterCount(),
+          userId: localStorageService.getUserId(),
+        })
+      );
     }
     disAppearanceForm();
   };
@@ -67,8 +78,7 @@ const OperationsForm = ({ currentOperation }) => {
       {categoriesDataLoaded ? (
         <div
           className={
-            'rounded-3 shadow-lg py-3 px-5 wrapper-form ' +
-            show
+            'rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
           }
         >
           <form onSubmit={handleSubmit}>
@@ -86,9 +96,9 @@ const OperationsForm = ({ currentOperation }) => {
             />
             <AvatarsField
               label="Выбери категорию"
-              name="category"
-              value={data.category}
-              options={formatDataForAvatarsFields(10, filteredCategories)}
+              name="categoryId"
+              value={data.categoryId}
+              options={formatDataForAvatarsFields(12, filteredCategories)}
               onChange={handleChange}
             />
             <TextField
@@ -100,7 +110,7 @@ const OperationsForm = ({ currentOperation }) => {
             />
             <TextField
               name="date"
-              type="date"
+              type="datetime-local"
               label="Дата"
               value={data.date}
               onChange={handleChange}
@@ -115,9 +125,10 @@ const OperationsForm = ({ currentOperation }) => {
             >
               {!currentOperation ? 'Создать' : 'Обновить'}
             </Button>
+
             <Button
               classes="w-100 mx-auto mt-2"
-              color="warning"
+              bgColor="warning"
               onClick={disAppearanceForm}
             >
               Назад

@@ -7,8 +7,9 @@ import { selectIsLoggedIn } from './store/usersSlice';
 import { useLocation, useRoutes } from 'react-router-dom';
 import routes from './components/routes/routes';
 import ContainerApp from './components/common/Containers/ContainerApp';
-import BackBtn from './components/common/BackBtn';
 import { FormsProvider } from './hooks/useForm';
+import BackBtn from './components/common/buttons/BackBtn';
+import { TablesProvider } from './hooks/useTable';
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn());
@@ -27,8 +28,10 @@ function App() {
           />
         )}
         <FormsProvider>
+          <TablesProvider>
             <Navbar />
             {elements}
+          </TablesProvider>
         </FormsProvider>
       </ContainerApp>
     </AppLoader>

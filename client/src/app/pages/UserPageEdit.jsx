@@ -8,7 +8,7 @@ import {
   selectAvatarsDataStatus,
 } from "../store/avatarsSlice";
 import { updateUser } from "../store/usersSlice";
-import { formatDataForAvatarsFields } from "../utils/formatDataForAvatarsFields";
+import { formatDataForAvatarsFields } from "../utils/formatData";
 
 const UserPageEdit = ({ user, onShow }) => {
 console.log('user:', user)

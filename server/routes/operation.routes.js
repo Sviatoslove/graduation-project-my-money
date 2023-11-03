@@ -31,14 +31,9 @@ router
       const { countId, balance, status } = newOperation;
         const count = await Count.findById(countId);
         if(status === 'increment') count.balance = Number(count.balance) + Number(balance);
-        else count.balance = Number(count.balance) - Number(balance);
+        else if(status === 'decrement') count.balance = Number(count.balance) - Number(balance);
         await Count.findByIdAndUpdate(countId, count);
-
-      const listAllOperation = await Operation.find();
-      const list = listAllOperation.filter(
-        (operation) => String(operation.userId) === userId
-      );
-      res.status(201).send(list); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(newOperation)
     } catch (e) {
       res
         .status(500)

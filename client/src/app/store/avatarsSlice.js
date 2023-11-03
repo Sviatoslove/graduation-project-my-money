@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import avatarsService from "../services/avatars.service";
-import { formatDataAvatars } from "../utils";
+import { formatDataAvatars } from "../utils/formatData";
 
 const avatarsSlice = createSlice({
   name: "avatars",

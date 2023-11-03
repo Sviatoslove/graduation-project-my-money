@@ -40,6 +40,7 @@ $utilities: map-merge(
       class: w,
       values: (
         content: fit-content,
+        mc: min-content,
         100vw: 100vw,
         90vw: 90vw,
         50vw: 50vw,
@@ -54,6 +55,7 @@ $utilities: map-merge(
         500px: 500px,
         516px: 516px,
         604px: 604px,
+        664px: 664px,
         700px: 700px,
       ),
     ),
@@ -71,6 +73,7 @@ $utilities: map-merge(
       values: (
         content: fit-content,
         mc: min-content,
+        i:inherit,
         100vh: 100vh,
         100: 100%,
         90vh: 90vh,
@@ -136,6 +139,7 @@ $utilities: map-merge(
       class: fs,
       values: (
         56px: 56px,
+        42px: 42px,
         400: 400,
       ),
     ),
@@ -159,6 +163,15 @@ $utilities: map-merge(
     "border-top-right-radius": (
       property: border-top-right-radius,
       class: btrr,
+      values: (
+        5: 5px,
+        10: 10px,
+        50: 50px,
+      ),
+    ),
+    "border-bottom-right-radius": (
+      property: border-bottom-right-radius,
+      class: bbrr,
       values: (
         5: 5px,
         10: 10px,

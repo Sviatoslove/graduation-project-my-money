@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Button';
+import Button from '../buttons/Button';
+import { getFindActiveIndex } from '../../../utils/formatData';
 
 const AvatarsField = ({
   label,
@@ -13,9 +14,9 @@ const AvatarsField = ({
   options,
   onChange,
 }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(getFindActiveIndex(value, options)||0);
   const [showClassesIncBt, setShowClassesIncBt] = useState('');
-  const [showClassesDecBt, setShowClassesDecBt] = useState('-fill');
+  const [showClassesDecBt, setShowClassesDecBt] = useState('');
 
   const handleClick = ({ target }) => {
     const activeBtn = target.closest('div').querySelector('.active');
@@ -28,6 +29,8 @@ const AvatarsField = ({
     });
     target.closest('button')?.classList.add('active');
   };
+
+
 
   const drawingAvatars = (n) => {
     return options[n].map((item) => {
@@ -55,7 +58,6 @@ const AvatarsField = ({
           width: item.color ? '16px' : '',
           height: item.color ? '24px' : '105px',
           children: nameCategory && nameCategory.slice(0, 4),
-
         };
       }
       if (item.dataType === 'category') {
@@ -65,13 +67,11 @@ const AvatarsField = ({
           name: name,
           dataValue: item._id,
           classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center`,
-          children: item.name,
+          children: item.name.slice(0,8),
         };
       }
 
-      return (
-        <Button {...settingsBtn}/>
-      );
+      return <Button {...settingsBtn} />;
     });
   };
 
