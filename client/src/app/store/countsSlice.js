@@ -39,7 +39,8 @@ const countsSlice = createSlice({
       };
     },
     countsRemovedReceived: (state, action) => {
-      delete state.entities[action.payload.countId];
+      console.log('action:', action)
+      delete state.entities[action.payload];
     },
     countsDataRequested: (state) => {
       state.isLoading = true;
@@ -176,7 +177,7 @@ export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
 export const countRemove = (payload) => async (dispatch) => {
   dispatch(countsRequested());
   try {
-    await countsService.remove(payload.countId);
+    await countsService.remove(payload);
     dispatch(countsRemovedReceived(payload));
   } catch (error) {
     dispatch(countsRequestedFailed(error.message));

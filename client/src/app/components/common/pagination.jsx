@@ -14,7 +14,7 @@ const Pagination = ({
   const pagesCount = Math.ceil(num / pageSize);
   const pages = _.range(1, pagesCount + 1);
 
-  if (pagesCount <= 1 || (countsLikes && countsLikes.length < pageSize))
+  if (pagesCount <= 1 || isNaN(pagesCount) || (countsLikes && countsLikes.length < pageSize))
     return null;
   return (
     <nav className="pagination-counts align-self-end ms-5 me-auto">

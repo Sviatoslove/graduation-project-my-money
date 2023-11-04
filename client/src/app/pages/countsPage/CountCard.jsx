@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { displayDate } from "../../utils";
-import Button from "../../components/common/buttons/Button";
-import currency from "../../mock/currency";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { displayDate } from '../../utils';
+import Button from '../../components/common/buttons/Button';
+import currency from '../../mock/currency';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   loadCountsData,
   selectCountsData,
   selectCountsDataStatus,
-} from "../../store/countsSlice";
-import Badge from "../../components/common/Badge";
+} from '../../store/countsSlice';
+import Badge from '../../components/common/Badge';
+import { BtnsGroup } from '../../components/common/buttons';
 
 const CountCard = ({ count, onChange }) => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const CountCard = ({ count, onChange }) => {
             src={count.icon}
             className="card-img-top"
             alt="icon"
-            style={{ width: "100px" }}
+            style={{ width: '100px' }}
           />
           <h5 className="card-title ff-roboto ls-1">{count.name}</h5>
           <hr />
@@ -40,11 +41,11 @@ const CountCard = ({ count, onChange }) => {
                 Тип счёта: <Badge {...countsData[count.type]} />
               </div>
             ) : (
-              "Loading..."
+              'Loading...'
             )}
 
             <div className="card-text">
-              <p className="h6">Описание:</p>{" "}
+              <p className="h6">Описание:</p>{' '}
               <p className="ff-BS">{count.content}</p>
             </div>
             <p className="card-text">Создан: {displayDate(count.createdAt)}</p>
@@ -57,61 +58,32 @@ const CountCard = ({ count, onChange }) => {
               <p className="fw-bold ls-2 fs-5">Баланс:</p>
               <div className="flex-grow-1 justify-content-center d-flex">
                 <p className="fw-bold ls-1 fs-4 align-items-center d-flex">
-                  {count.balance}{" "}
+                  {count.balance}{' '}
                   <img
                     src={currency[count.currency].icon}
                     alt="img"
-                    style={{ width: "40px" }}
+                    style={{ width: '40px' }}
                   />
                 </p>
               </div>
             </small>
-
-            {/* <i
-              className={
-                'fs-24 position-absolute top-50 end-0 translate-middle-y bi bi-eye' +
-                (count.totalBalance === 'true' ? '' : '-slash')
-              }
-            ></i> */}
           </div>
         </div>
-        <div
-          className="btn-group-settings btn-group-vertical position-absolute top-0 end-0"
-          role="group"
-          aria-label="Vertical button group"
-        >
-          <Button
-            dataType="edit"
-            bgColor="light"
-            classes="btn-sm"
-            onClick={onChange}
-            id={count._id}
-            icon="bi bi-gear"
-            iconSize="24px"
-
-          />
-          <Button
-            dataType="like"
-            bgColor="light"
-            classes="btn-sm"
-            onClick={onChange}
-            id={count._id}
-            icon={"bi bi-heart" + (count.like ? "-fill" : "")}
-            iconSize="24px"
-
-          />
-
-          <Button
-            dataType="remove"
-            bgColor="light"
-            classes="btn-sm"
-            onClick={onChange}
-            id={count._id}
-            icon="bi bi-trash"
-            iconSize="24px"
-
-          />
-        </div>
+        <BtnsGroup
+          count={3}
+          id={count._id}
+          dataType={['edit', 'like', 'remove']}
+          dataEssence={'count'}
+          classes="btn-sm"
+          func={(e) => onChange(e, count)}
+          icon={[
+            'bi bi-gear',
+            'bi bi-heart' + (count.like ? '-fill' : ''),
+            'bi bi-trash',
+          ]}
+          bgColor="light"
+          iconSize={'24px'}
+        />
       </div>
     </div>
   );

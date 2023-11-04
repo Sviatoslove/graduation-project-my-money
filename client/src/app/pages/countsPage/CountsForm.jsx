@@ -17,13 +17,13 @@ import Button from "../../components/common/buttons/Button";
 import { useForms } from "../../hooks/useForm";
 import { formatDataForAvatarsFields, formatDataCountsIcons } from "../../utils/formatData";
 
-const CountsForm = ({ currentCount, closeForm }) => {
+const CountsForm = ({ counts, closeForm }) => {
   const dispatch = useDispatch();
-  const {show} = useForms()
+  const {show, idCurrentEssence} = useForms()
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
-  const initialState = currentCount
-    ? currentCount
+  const initialState = idCurrentEssence
+    ? counts[idCurrentEssence]
     : {
         name: "",
         content: "",
@@ -46,18 +46,13 @@ const CountsForm = ({ currentCount, closeForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentCount) {
+    if (idCurrentEssence) {
       dispatch(countUpdate(data));
     } else {
       dispatch(countCreate(data));
     }
     closeForm();
   };
-
-  // const countsIcons = [
-  //   countsIconsMock.map((item) => `https://img.icons8.com/${item.name}`),
-  // ];
-
   
   const countsIcons = formatDataCountsIcons(countsIconsMock)
 
@@ -71,7 +66,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
         >
           <form onSubmit={handleSubmit}>
             <h3 className="text-center">
-              {currentCount !== "" ? "Редактирование счёта" : "Создание счёта"}
+              {idCurrentEssence !== "" ? "Редактирование счёта" : "Создание счёта"}
             </h3>
             <TextField
               label="Название счёта"
@@ -116,7 +111,7 @@ const CountsForm = ({ currentCount, closeForm }) => {
               classes="w-100 mx-auto"
               // disabled={isValid || enterError}
             >
-              {!currentCount ? "Создать" : "Обновить"}
+              {!idCurrentEssence ? "Создать" : "Обновить"}
             </Button>
             <Button
               classes="w-100 mx-auto mt-2"
@@ -134,13 +129,8 @@ const CountsForm = ({ currentCount, closeForm }) => {
   );
 };
 
-CountsForm.defaultProps = {
-  currentCount: "",
-};
-
 CountsForm.propTypes = {
-  type: PropTypes.string,
-  currentCount: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  counts: PropTypes.object,
   closeForm: PropTypes.func,
 };
 

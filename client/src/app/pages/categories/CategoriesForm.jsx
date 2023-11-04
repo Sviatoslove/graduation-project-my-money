@@ -9,43 +9,30 @@ import {
   categoriesUpdate,
   categoriesCreate,
   selectCategoriesIcons,
-  selectCategoriesIconsDataloaded
+  selectCategoriesIconsDataloaded,
 } from '../../store/categoriesSlice';
 import { useForms } from '../../hooks/useForm';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { formatDataForAvatarsFields } from '../../utils/formatData';
 
-const CategoriesForm = ({ status, currentCategory, closeForm }) => {
+const CategoriesForm = ({ status, categoriesIcons, categories, closeForm }) => {
   const dispatch = useDispatch();
-  const {
-    show,
-  } = useForms();
+  const { show, idCurrentEssence } = useForms();
 
-  const categoriesIconsDataLoaded = useSelector(
-    selectCategoriesIconsDataloaded()
-  );
-  console.log('categoriesIconsDataLoaded:', categoriesIconsDataLoaded)
-
-  const categoriesIcons = useSelector(selectCategoriesIcons());
-  console.log('categoriesIcons:', categoriesIcons)
-
-  const initialState = currentCategory
-    ? currentCategory
+  const initialState = idCurrentEssence
+    ? categories[idCurrentEssence]
     : {
         name: '',
         content: '',
         icon: '',
         iconColor: 'dark',
-        textColor:'light', 
-        bgColor:'primary'
+        textColor: 'light',
+        bgColor: 'primary',
       };
   const [data, setData] = useState(initialState);
-  console.log('data:', data)
+  console.log('data:', data);
 
-  useEffect(() => {
-    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
-  }, []);
 
   const [errors] = useState({});
 
@@ -56,25 +43,30 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentCategory) {
-      dispatch(categoriesUpdate(data));
+    const icon = Object.values(categoriesIcons).find(icon=> icon.icon === data.icon)
+    console.log('icon:', icon)
+    if (idCurrentEssence) {
+      dispatch(categoriesUpdate({ ...data, iconId: icon._id}));//!!!!!!!!!!! Потом удалить iconId: icon._id
     } else {
-    dispatch(categoriesCreate({...data, status: status, dataType: 'category'}));
+      dispatch(
+        categoriesCreate({ ...data, status: status, dataType: 'category', iconId: icon._id})
+      );
     }
     closeForm();
   };
 
   return (
     <>
-      {categoriesIconsDataLoaded ? (
+      {/* { ( */}
         <div
           className={
-            'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-form ' + show
+            'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-form ' +
+            show
           }
         >
           <form onSubmit={handleSubmit}>
             <h3 className="text-center">
-              {currentCategory !== ''
+              {idCurrentEssence !== ''
                 ? 'Редактирование категории'
                 : 'Создание категории'}
             </h3>
@@ -111,7 +103,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               onChange={handleChange}
               // error={errors.toCount}
             />
-                 <AvatarsField
+            <AvatarsField
               label={'Выбери цвет текста иконки'}
               name="textColor"
               value={data.textColor}
@@ -119,7 +111,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               onChange={handleChange}
               // error={errors.toCount}
             />
-                 <AvatarsField
+            <AvatarsField
               label={'Выбери цвет фона иконки'}
               name="bgColor"
               value={data.bgColor}
@@ -133,7 +125,7 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
               classes="w-100 mx-auto mt-4"
               // disabled={isValid || enterError}
             >
-              {!currentCategory ? 'Создать' : 'Обновить'}
+              {!idCurrentEssence ? 'Создать' : 'Обновить'}
             </Button>
             <Button
               classes="w-100 mx-auto mt-2"
@@ -144,20 +136,17 @@ const CategoriesForm = ({ status, currentCategory, closeForm }) => {
             </Button>
           </form>
         </div>
-      ) : (
-        <LoadingSpinners number={3} classesSpinner="spinner-grow-lg"/>
-      )}
+      {/* // ) : ( */}
+        {/* // <LoadingSpinners number={3} classesSpinner="spinner-grow-lg" /> */}
+      {/* // )} */}
     </>
   );
 };
 
-CategoriesForm.defaultProps = {
-  currentCategory: '',
-};
-
 CategoriesForm.propTypes = {
   status: PropTypes.string,
-  currentCategory: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  categories: PropTypes.object,
+  categoriesIcons: PropTypes.object,
   closeForm: PropTypes.func,
 };
 

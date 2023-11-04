@@ -11,6 +11,7 @@ const schema = new Schema(
     textColor: String,
     bgColor: String,
     status: String,
+    iconId: String
   },
   {
     timestamps: true,

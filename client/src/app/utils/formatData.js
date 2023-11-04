@@ -33,9 +33,21 @@ const getArray = (count) => {
 
 const formatDataForAvatarsFields = (count, data) => {
   const array = getArray(count)
-  const newData =
+  let newData =
     typeof data === 'object' ? Object.values({ ...data }) : [...data];
   const result = [];
+
+  if(newData[0].like !== undefined) {
+    const sortLikeData = newData.reduce((acc,el)=>{
+      if(el.like) acc.unshift(el)
+      else acc = [...acc, el]
+      return acc
+    }, [])
+    console.log('sortLikeData:', sortLikeData)
+    newData = [...sortLikeData]
+    console.log('newData:', newData)
+  } 
+
   for (let i = 0; i < newData.length+1; i++) {
     const element = array.reduce((acc) => {
       const newObj = { ...newData.splice(0, 1)[0], rate: i };
@@ -53,7 +65,7 @@ const getFindActiveIndex = (value, arr) => {
     const el = arr[i];
     for (let i = 0; i < el.length; i++) {
       const obj = el[i];
-      if (obj.imgSrc === value) return obj.rate;
+      if ((obj.imgSrc||obj.icon) === value) return obj.rate;
     }
   }
 };

@@ -6,7 +6,8 @@ const schema = new Schema(
       type: String,
       required: true,
     },
-    dataType: String
+    dataType: String,
+    like:Boolean
 
   },
   {

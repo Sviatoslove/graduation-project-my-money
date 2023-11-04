@@ -24,7 +24,9 @@ const Button = ({
   iconColor,
   dataValue,
   dataRate,
-  classesEl
+  dataEssence,
+  classesEl,
+  like
 }) => {
   return (
     <>
@@ -34,6 +36,7 @@ const Button = ({
           type={type}
           data-type={dataType}
           data-value={dataValue}
+          data-essence={dataEssence}
           data-rate={dataRate}
           className={`btn btn-${outline ? "outline-" : ""}${bgColor} ${classes} ${classesEl} text-${textColor}`}
           onClick={onClick}
@@ -41,6 +44,9 @@ const Button = ({
           id={id}
           disabled={disabled}
         >
+          {like &&
+          <i className={'bi bi-heart' + (like ? '-fill' : '') + ' p-0 text-danger position-absolute top-0 end-0'} style={{ fontSize: '20px' }}/>
+          }
           {imgSrc && (
             <img src={imgSrc} alt="image" style={{ width: iconSize }} />
           )}
@@ -81,6 +87,8 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
+  like: PropTypes.bool,
+  dataEssence: PropTypes.string,
   dataRate: PropTypes.number,
   classesEl: PropTypes.string,
   dataValue: PropTypes.string,

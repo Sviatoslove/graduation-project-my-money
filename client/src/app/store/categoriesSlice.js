@@ -34,9 +34,20 @@ const categoriesSlice = createSlice({
       if(!Object.keys(state.entities).length) state.dataLoaded=false
     },
     categoriesIconsReceived: (state, action) => {
+      console.log('action:', action)
       state.categoriesIcons = action.payload;
       state.isLoading = false;
       state.categoriesIconsDataLoaded = true;
+    },
+    categoriesIconsUpdatedReceived: (state, action) => {
+        console.log('state.categoriesIcons:', state.categoriesIcons)
+        console.log('action:', action)
+      state.categoriesIcons[action.payload._id] = {
+        ...state.categoriesIcons[action.payload._id],
+        ...action.payload,
+      };
+      console.log(' state.categoriesIcons[action.payload._id]:',  state.categoriesIcons[action.payload._id])
+
     },
     categoriesIconsRequestedFailed: (state, action) => {
       state.error = action.payload;
@@ -59,6 +70,7 @@ const {
   categoriesDataRemoved,
   categoriesIconsReceived,
   categoriesIconsRequestedFailed,
+  categoriesIconsUpdatedReceived
 } = actions;
 
 export const categoriesCreate = (payload) => async (dispatch) => {
@@ -107,6 +119,15 @@ export const loadСategoriesIcons = () => async (dispatch) => {
   try {
     const { content } = await categoriesIconsService.get();
     dispatch(categoriesIconsReceived(content));
+  } catch (error) {
+    dispatch(categoriesIconsRequestedFailed(error.message));
+  }
+};
+
+export const categoriesIconsUpdate = (payload) => async (dispatch) => {
+  try {
+    const { content } = await categoriesIconsService.update(payload);
+    dispatch(categoriesIconsUpdatedReceived(content));
   } catch (error) {
     dispatch(categoriesIconsRequestedFailed(error.message));
   }

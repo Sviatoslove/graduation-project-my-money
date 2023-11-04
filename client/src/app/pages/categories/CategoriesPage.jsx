@@ -5,9 +5,13 @@ import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import {
   categoriesRemove,
   loadCategories,
+  loadСategoriesIcons,
   selectCategoriesDataloaded,
   selectCategories,
   selectCategoriesIsLoading,
+  categoriesUpdate,
+  selectCategoriesIconsDataloaded,
+  selectCategoriesIcons,
 } from '../../store/categoriesSlice';
 import Button from '../../components/common/buttons/Button';
 import { useForms } from '../../hooks/useForm';
@@ -19,11 +23,18 @@ import {
 } from '../../components/common/Containers';
 import CategoryCard from './CategoryCard';
 import StatusAll from '../../components/common/StatusAll';
+import LoadingSpinners from '../../components/common/LoadingSpinners';
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const { disAppearanceForm, transform, statusOperation, handleClick } =
+  const { disAppearanceForm, transform, statusOperation, countsHandleToEdit } =
     useForms();
+  const categoriesIconsDataLoaded = useSelector(
+    selectCategoriesIconsDataloaded()
+  );
+
+  const categoriesIcons = useSelector(selectCategoriesIcons());
+  console.log('categoriesIcons:', categoriesIcons);
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categoriesIsLoading = useSelector(selectCategoriesIsLoading());
   const categories = useSelector(selectCategories());
@@ -36,12 +47,8 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
+    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
-
-  const handleRemove = (id) => {
-    console.log('handleRemove:')
-    dispatch(categoriesRemove(id));
-  };
 
   return (
     <Container classes={'shadow-custom br-10 p-3'}>
@@ -56,9 +63,10 @@ const CategoriesPage = () => {
 
       <ContainerShow type={'add'}>
         <CategoriesForm
+          categoriesIcons={categoriesIcons}
           status={statusOperation}
           closeForm={disAppearanceForm}
-          currentCategory={''}
+          categories={categories}
         />
       </ContainerShow>
 
@@ -66,13 +74,15 @@ const CategoriesPage = () => {
 
       <ContainerScale classes={'flex-grow-1 mt-5'}>
         <ContainerCards colsNumber={'5'} gap={'4'}>
-          {filteredCategories?.map((category) => (
+       
+          {categoriesIcons ? filteredCategories?.map((category) => (
             <CategoryCard
-              remove={handleRemove}
-              {...category}
+              categoriesIcons={categoriesIcons}
+              onClick={countsHandleToEdit}
+              category={category}
               key={category._id}
             />
-          ))}
+          )): <LoadingSpinners number={3}/>}
         </ContainerCards>
       </ContainerScale>
       <ContainerScale classes={'p-2 ms-auto'}>
@@ -80,7 +90,7 @@ const CategoriesPage = () => {
           bgColor="primary"
           classes="shadow-lg"
           dataType="add"
-          onClick={handleClick}
+          onClick={countsHandleToEdit}
           imgSrc={addIcon}
           iconSize={'52px'}
         />

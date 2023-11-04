@@ -30,8 +30,6 @@ const AvatarsField = ({
     target.closest('button')?.classList.add('active');
   };
 
-
-
   const drawingAvatars = (n) => {
     return options[n].map((item) => {
       const active = value === (item.imgSrc || item.icon) ? 'active' : '';
@@ -58,6 +56,7 @@ const AvatarsField = ({
           width: item.color ? '16px' : '',
           height: item.color ? '24px' : '105px',
           children: nameCategory && nameCategory.slice(0, 4),
+        
         };
       }
       if (item.dataType === 'category') {

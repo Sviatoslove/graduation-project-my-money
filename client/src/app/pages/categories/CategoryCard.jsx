@@ -2,30 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BtnsGroup } from '../../components/common/buttons';
 
-const CategoryCard = ({
-  _id: id,
-  name,
-  content,
-  icon,
-  iconColor,
-  bgColor,
-  textColor,
-  remove,
-  table,
-  classesForIcon,
-  classesForWrapp,
-  classesForCardBody,
-  classesForName
-}) => {
-
+    
+const CategoryCard = ({onClick, category, categoriesIcons }) => {
+  console.log('categoriesIcons:', categoriesIcons)
+  const {
+    _id: id,
+    name,
+    content,
+    icon,
+    iconColor,
+    bgColor,
+    textColor,
+    table,
+    classesForIcon,
+    classesForWrapp,
+    classesForCardBody,
+    classesForName,
+  } = category;
   return (
     <div className="col">
       <div
-        className={`${classesForWrapp} h-100 bg-${bgColor} br-50 item-categories position-relative`}
+        className={`${
+          classesForWrapp ? classesForWrapp : 'card'
+        } h-100 bg-${bgColor} br-50 item-categories position-relative`}
       >
         <div className="wrapper-icon-category d-flex">
           <i
-            className={`${icon} card-img-top ${classesForIcon} text-${iconColor} w-content mx-auto`}
+            className={`${icon} card-img-top ${
+              classesForIcon ? classesForIcon : 'fs-56px'
+            } text-${iconColor} w-content mx-auto`}
           />
         </div>
         <div className={`card-body mx-auto ${classesForCardBody}`}>
@@ -34,7 +39,7 @@ const CategoryCard = ({
           >
             {name}
           </h5>
-          {!table && content &&  (
+          {!table && content && (
             <div className="card-text">
               <p className="h6">Описание:</p> <p className="ff-BS">{content}</p>
             </div>
@@ -45,13 +50,19 @@ const CategoryCard = ({
             count={3}
             id={id}
             dataType={['edit', 'like', 'remove']}
+            dataEssence={category.dataType}
             classes="btn-sm p-1"
             classesEl={['btrr-50', '', 'bbrr-50']}
-            func={[null, null, () => remove(id)]}
-            icon={['bi bi-gear', 'bi bi-heart', 'bi bi-trash']}
+            classesGroup="h-i px-2"
+            func={(e) => onClick(e, categoriesIcons[category.iconId])}
+            icon={[
+              'bi bi-gear',
+              'bi bi-heart' + (categoriesIcons[category.iconId]?.like ? '-fill' : ''),
+              'bi bi-trash',
+            ]}
             iconColor={bgColor}
             bgColor={textColor}
-            classesForIcon={'24px'}
+            iconSize={'24px'}
           />
         )}
       </div>
@@ -59,29 +70,10 @@ const CategoryCard = ({
   );
 };
 
-CategoryCard.defaultProps={
-  classesForIcon: 'fs-56px',
-  classesForWrapp: 'card',
-  classesForCardBody: '',
-  classesForName: ''
-
-}
-
 CategoryCard.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  content: PropTypes.string,
-  icon: PropTypes.string,
-  iconColor: PropTypes.string,
-  textColor: PropTypes.string,
-  bgColor: PropTypes.string,
-  remove: PropTypes.func,
-  table: PropTypes.string,
-  classesForIcon: PropTypes.string,
-  classesForWrapp: PropTypes.string,
-  classesForCardBody: PropTypes.string,
-  classesForName: PropTypes.string,
-
+  category: PropTypes.object,
+  categoriesIcons: PropTypes.object,
+  onClick: PropTypes.func
 };
 
 export default CategoryCard;

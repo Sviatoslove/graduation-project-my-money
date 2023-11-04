@@ -1,210 +1,262 @@
 [
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-airplane"
+    "icon": "bi bi-airplane",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-airplane-engines-fill"
+    "icon": "bi bi-airplane-engines-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-alarm"
+    "icon": "bi bi-alarm",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-alarm-fill"
+    "icon": "bi bi-alarm-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-alipay"
+    "icon": "bi bi-alipay",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-android2"
+    "icon": "bi bi-android2",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-amazon"
+    "icon": "bi bi-amazon",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-apple"
+    "icon": "bi bi-apple",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-app-indicator"
+    "icon": "bi bi-app-indicator",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-archive"
+    "icon": "bi bi-archive",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-arrow-through-heart-fill"
+    "icon": "bi bi-arrow-through-heart-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-award"
+    "icon": "bi bi-award",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-backpack2"
+    "icon": "bi bi-backpack2",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-badge-hd-fill"
+    "icon": "bi bi-badge-hd-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-bag-heart"
+    "icon": "bi bi-bag-heart",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-bicycle"
+    "icon": "bi bi-bicycle",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-book"
+    "icon": "bi bi-book",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-bluetooth"
+    "icon": "bi bi-bluetooth",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-boombox"
+    "icon": "bi bi-boombox",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-building-fill-add"
+    "icon": "bi bi-building-fill-add",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-buildings"
+    "icon": "bi bi-buildings",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-bus-front"
+    "icon": "bi bi-bus-front",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-cake"
+    "icon": "bi bi-cake",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-calculator-fill"
+    "icon": "bi bi-calculator-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-calendar-day"
+    "icon": "bi bi-calendar-day",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-car-front"
+    "icon": "bi bi-car-front",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-card-image"
+    "icon": "bi bi-card-image",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-cart-check"
+    "icon": "bi bi-cart-check",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-cart4"
+    "icon": "bi bi-cart4",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-cassette"
+    "icon": "bi bi-cassette",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-chat-square-text-fill"
+    "icon": "bi bi-chat-square-text-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-cup-hot"
+    "icon": "bi bi-cup-hot",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-device-hdd-fill"
+    "icon": "bi bi-device-hdd-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-dice-3"
+    "icon": "bi bi-dice-3",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-disc"
+    "icon": "bi bi-disc",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-earbuds"
+    "icon": "bi bi-earbuds",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-easel"
+    "icon": "bi bi-easel",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-ev-station"
+    "icon": "bi bi-ev-station",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-ev-front-fill"
+    "icon": "bi bi-ev-front-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-ethernet"
+    "icon": "bi bi-ethernet",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-file-spreadsheet"
+    "icon": "bi bi-file-spreadsheet",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-floppy"
+    "icon": "bi bi-floppy",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-gift-fill"
+    "icon": "bi bi-gift-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-hospital"
+    "icon": "bi bi-hospital",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-house-gear-fill"
+    "icon": "bi bi-house-gear-fill",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-incognito"
+    "icon": "bi bi-incognito",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-people"
+    "icon": "bi bi-people",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-person-wheelchair"
+    "icon": "bi bi-person-wheelchair",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-xbox"
+    "icon": "bi bi-xbox",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-wrench-adjustable"
+    "icon": "bi bi-wrench-adjustable",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-watch"
+    "icon": "bi bi-watch",
+    "like":"false"
   },
   {
     "dataType": "iconsForCategories",
-    "icon": "bi bi-sunglasses"
+    "icon": "bi bi-sunglasses",
+    "like":"false"
   }
 ]

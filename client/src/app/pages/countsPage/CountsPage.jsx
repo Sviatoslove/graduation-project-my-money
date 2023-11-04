@@ -29,10 +29,8 @@ import { useForms } from '../../hooks/useForm';
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const { appearanceForm, disAppearanceForm } = useForms();
+  const { countsHandleToEdit, disAppearanceForm } = useForms();
   const [currentPage, setCurrentPage] = useState(1);
-  const [typeForm, setTypeForm] = useState('');
-  const [currentCount, setCurrentCount] = useState('');
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -61,35 +59,6 @@ const CountsPage = () => {
     setCurrentPage(pageIndex);
   };
 
-  const handleToEdit = ({ target }) => {
-    const btnType = target.closest('button').dataset.type;
-    const countId = target.closest('button').id;
-    const currentCount = counts[countId];
-    switch (btnType) {
-      case 'add':
-        setCurrentCount('');
-        setTypeForm(btnType);
-        appearanceForm();
-        break;
-      case 'edit':
-        setCurrentCount(currentCount);
-        setTypeForm(btnType);
-        appearanceForm();
-        break;
-      case 'like':
-        const editedCount = { ...currentCount, like: !currentCount.like };
-        dispatch(countUpdate(editedCount));
-        break;
-      case 'remove':
-        dispatch(countRemove({ countId }));
-        break;
-      case 'translationsAdd':
-        setTypeForm(btnType);
-        appearanceForm();
-        break;
-    }
-  };
-
   if (countsDataLoaded) {
     const count = Object.keys(counts).length;
     const arrCounts = Object.values(counts);
@@ -106,8 +75,7 @@ const CountsPage = () => {
       <Container classes="shadow-custom br-10 p-3">
         <ContainerShow type={'add'}>
           <FormForCount
-            type={typeForm}
-            currentCount={currentCount}
+            counts={counts}
             closeForm={disAppearanceForm}
           />
         </ContainerShow>
@@ -121,14 +89,14 @@ const CountsPage = () => {
 
         <ContainerScale>
           {count ? (
-            <Translations onChange={handleToEdit} counts={counts} />
+            <Translations onChange={countsHandleToEdit} counts={counts} />
           ) : null}
 
           <ContainerCards colsNumber={'3'} gap={'4'}>
             {countsCrop.map((count) => (
               <CountCard
                 count={count}
-                onChange={handleToEdit}
+                onChange={countsHandleToEdit}
                 key={count._id}
               />
             ))}
@@ -170,7 +138,7 @@ const CountsPage = () => {
               bgColor="primary"
               classes="shadow-lg p-2"
               dataType="add"
-              onClick={handleToEdit}
+              onClick={countsHandleToEdit}
               imgSrc={addIcon}
             />
           </div>
