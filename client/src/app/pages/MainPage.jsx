@@ -30,15 +30,13 @@ import Pagination from '../components/common/pagination';
 
 const MainPage = () => {
   const dispatch = useDispatch();
-  const { disAppearanceForm, statusOperation, handleClick } = useForms();
+  const { essenceHandleToEdit } = useForms();
   const { operations, count, pageSize, currentPage, handlePageChange } =
     useTables();
 
   const user = useSelector(selectUser());
 
   const categoriesData = localStorageService.getCategoriesData();
-
-  const handleToEdit = () => {};
 
   return (
     <Container>
@@ -69,7 +67,7 @@ const MainPage = () => {
           bgColor="primary"
           classes="shadow-lg p-2 w-content ms-auto"
           dataType="add"
-          onClick={handleClick}
+          onClick={essenceHandleToEdit}
           imgSrc={addIcon}
         />
       </ContainerScale>

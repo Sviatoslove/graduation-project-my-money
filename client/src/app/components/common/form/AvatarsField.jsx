@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../buttons/Button';
-import { getFindActiveIndex } from '../../../utils/formatData';
+import { formatDataForAvatarsFields, getFindActiveIndex } from '../../../utils/formatData';
 
 const AvatarsField = ({
   label,
@@ -13,10 +13,12 @@ const AvatarsField = ({
   valueBgColor,
   options,
   onChange,
+  count
 }) => {
-  const [index, setIndex] = useState(getFindActiveIndex(value, options)||0);
-  const [showClassesIncBt, setShowClassesIncBt] = useState('');
-  const [showClassesDecBt, setShowClassesDecBt] = useState('');
+  const formatOptions = formatDataForAvatarsFields(count, options)
+  const [index, setIndex] = useState(getFindActiveIndex(value, formatOptions)||0);
+  const [showClassesIncBt, setShowClassesIncBt] = useState(index === formatOptions.length?'-fill': '');
+  const [showClassesDecBt, setShowClassesDecBt] = useState(index === 0 ? '-fill':'');
 
   const handleClick = ({ target }) => {
     const activeBtn = target.closest('div').querySelector('.active');
@@ -30,8 +32,20 @@ const AvatarsField = ({
     target.closest('button')?.classList.add('active');
   };
 
+  const handleIncrement = () => {
+    if (!index) setShowClassesDecBt('');
+    if (index === formatOptions.length - 2) setShowClassesIncBt('-fill');
+    if (index < formatOptions.length - 1) setIndex((prevState) => ++prevState);
+  };
+
+  const handleDecrement = () => {
+    if (index === formatOptions.length - 1) setShowClassesIncBt('');
+    if (index === 1) setShowClassesDecBt('-fill');
+    if (index > 0) setIndex((prevState) => --prevState);
+  };
+
   const drawingAvatars = (n) => {
-    return options[n].map((item) => {
+    return formatOptions[n].map((item) => {
       const active = value === (item.imgSrc || item.icon) ? 'active' : '';
       let settingsBtn = {
         name: name,
@@ -74,25 +88,13 @@ const AvatarsField = ({
     });
   };
 
-  const handleIncrement = () => {
-    if (!index) setShowClassesDecBt('');
-    if (index === options.length - 2) setShowClassesIncBt('-fill');
-    if (index < options.length - 1) setIndex((prevState) => ++prevState);
-  };
-
-  const handleDecrement = () => {
-    if (index === options.length - 1) setShowClassesIncBt('');
-    if (index === 1) setShowClassesDecBt('-fill');
-    if (index > 0) setIndex((prevState) => --prevState);
-  };
-
   return (
     <div className="mb-1">
       <label htmlFor={name}>{label}</label>
       <div className="input-group mt-2 justify-content-center">
         {drawingAvatars(index)}
       </div>
-      {options.length > 1 && (
+      {formatOptions.length > 1 && (
         <div className="text-center mt-2">
           <button
             className="lh-1 p-0 btn btn-outline-secondary w-50"
@@ -130,6 +132,7 @@ AvatarsField.propTypes = {
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   value: PropTypes.string,
+  count: PropTypes.number,
 };
 
 export default AvatarsField;

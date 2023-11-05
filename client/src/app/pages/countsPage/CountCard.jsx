@@ -24,6 +24,14 @@ const CountCard = ({ count, onChange }) => {
   return (
     <div className="col position-relative">
       <div className="card h-100 d-flex p-3 border-0 item-count">
+        {count.like && (
+          <i
+            className={
+              'like-for-card bi bi-heart-fill text-danger position-absolute top-0 start-2 translate-end fs-2'
+            }
+          />
+        )}
+
         <div className="text-center">
           <img
             src={count.icon}

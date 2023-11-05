@@ -15,11 +15,15 @@ const FormsProvider = ({ children }) => {
   const location = useLocation()
   const [show, setShow] = useState('');
   const [add, setAdd] = useState(false);
+  const [typeForm, setTypeForm] = useState(false);
   const [statusOperation, setStatusOperation] = useState('decrement');
-  const [typeForm, setTypeForm] = useState('');
-  const [idCurrentEssence, setIdCurrentEssence] = useState('');
+  const [currentEssence, setCurrentEssence] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-
+  
+  const handlePageChange = (pageIndex) => {
+    setCurrentPage(pageIndex);
+  };
 
   const appearanceForm = () => {
     setAdd(true);
@@ -37,16 +41,18 @@ const FormsProvider = ({ children }) => {
   };
 
   const handleClick = (e) => {
+    console.log('handleClick:')
     const { target } = e;
     const btnType = target.closest('button').dataset.type;
     if (btnType === 'add') {
       appearanceForm();
     } else {
+      setCurrentPage(1)
       setStatusOperation(btnType);
     }
   };
 
-  const countsHandleToEdit = (e, currentEssence) => {
+  const essenceHandleToEdit = (e, currentEssence) => {
     console.log('currentEssence:', currentEssence)
     const { target } = e
     const btn = target.closest('button')
@@ -55,20 +61,25 @@ const FormsProvider = ({ children }) => {
     const idEssence = btn.id;
     switch (btnType) {
       case 'add':
-        setIdCurrentEssence('');
+        setCurrentEssence(currentEssence);
         setTypeForm(btnType);
         appearanceForm();
         break;
       case 'edit':
-        setIdCurrentEssence(idEssence);
+        setCurrentEssence(currentEssence);
         setTypeForm(btnType);
         appearanceForm();
         break;
       case 'like':
-        const editedEssence = { ...currentEssence, like: currentEssence.like ? !currentEssence.like : true };
-        if(essence === 'count') dispatch(countUpdate(editedEssence));
-        if(essence === 'operation') dispatch(operationUpdate(editedEssence));
-        if(essence === 'category') dispatch(categoriesIconsUpdate(editedEssence))
+        let editedEssence
+        if(essence === 'category') {
+          editedEssence = Object.values(currentEssence).reduce((acc, item)=> acc={...acc, [item.dataType]:{...item, like: item.like ? !item.like : true}}, {})
+          dispatch(categoriesUpdate(editedEssence['category']))
+          dispatch(categoriesIconsUpdate(editedEssence['iconsForCategories']))
+        } else {
+          editedEssence = { ...currentEssence, like: currentEssence.like ? !currentEssence.like : true };
+          if(essence === 'count') dispatch(countUpdate(editedEssence));
+        }
         break;
       case 'remove':
         if(essence === 'count') dispatch(countRemove(idEssence));
@@ -95,8 +106,9 @@ const FormsProvider = ({ children }) => {
         handleClick,
         statusOperation,
         typeForm,
-        idCurrentEssence,
-        countsHandleToEdit
+        currentEssence,
+        essenceHandleToEdit, currentPage, setCurrentPage,
+        handlePageChange
       }}
     >
       {children}

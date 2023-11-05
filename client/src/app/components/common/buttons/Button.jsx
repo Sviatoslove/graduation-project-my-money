@@ -1,6 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { useForms } from '../../../hooks/useForm';
 
 const Button = ({
   imgSrc,
@@ -26,7 +27,7 @@ const Button = ({
   dataRate,
   dataEssence,
   classesEl,
-  like
+  like,
 }) => {
   return (
     <>
@@ -38,29 +39,45 @@ const Button = ({
           data-value={dataValue}
           data-essence={dataEssence}
           data-rate={dataRate}
-          className={`btn btn-${outline ? "outline-" : ""}${bgColor} ${classes} ${classesEl} text-${textColor}`}
+
+          className={`btn btn-${
+            outline ? 'outline-' : ''
+          }${bgColor} ${classes} ${classesEl} text-${textColor}`}
+
           onClick={onClick}
+
           style={{ zIndex: zIndex, width: width, height: height }}
           id={id}
           disabled={disabled}
         >
-          {like &&
-          <i className={'bi bi-heart' + (like ? '-fill' : '') + ' p-0 text-danger position-absolute top-0 end-0'} style={{ fontSize: '20px' }}/>
-          }
+          {like && (
+            <i
+              className={
+                'bi bi-heart' +
+                (like ? '-fill' : '') +
+                ' p-0 text-danger position-absolute top-0 end-0'
+              }
+              style={{ fontSize: '20px' }}
+            />
+          )}
           {imgSrc && (
             <img src={imgSrc} alt="image" style={{ width: iconSize }} />
           )}
-          {icon && <i className={`${icon} text-${iconColor} mx-auto`} style={{ fontSize: iconSize }}></i>}
-          <small className="mx-auto">
-          {children}
-          </small>
+          {icon && (
+            <i
+              className={`${icon} text-${iconColor} mx-auto`}
+              style={{ fontSize: iconSize }}
+            />
+          )}
+          <small className="mx-auto">{children}</small>
         </button>
       ) : (
         <Link
           to={link}
           className={`text-center ${classes} btn btn-${
-            outline ? "outline-" : ""
+            outline ? 'outline-' : ''
           }${bgColor}`}
+          onClick={onClick}
         >
           {imgSrc && <img src={imgSrc} alt="image" />}
           {icon && <i className={icon} style={{ fontSize: iconSize }}></i>}
@@ -72,16 +89,16 @@ const Button = ({
 };
 
 Button.defaultProps = {
-  imgSrc: "",
-  icon: "",
-  dataType: "",
-  bgColor: "primary",
+  imgSrc: '',
+  icon: '',
+  dataType: '',
+  bgColor: 'primary',
   outline: false,
-  classes: "",
-  id: "",
-  link: "",
-  type: "button",
-  iconSize: "52px",
+  classes: '',
+  id: '',
+  link: '',
+  type: 'button',
+  iconSize: '52px',
   zIndex: 1,
   disabled: false,
 };

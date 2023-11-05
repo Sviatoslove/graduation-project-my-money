@@ -29,8 +29,8 @@ import { useForms } from '../../hooks/useForm';
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const { countsHandleToEdit, disAppearanceForm } = useForms();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { essenceHandleToEdit, disAppearanceForm, currentPage,
+    handlePageChange, setCurrentPage } = useForms();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -55,13 +55,13 @@ const CountsPage = () => {
     }
   }, [counts]);
 
-  const handlePageChange = (pageIndex) => {
-    setCurrentPage(pageIndex);
-  };
+  const handleClick = () => {
+    setCurrentPage(1)
+  }
 
   if (countsDataLoaded) {
-    const count = Object.keys(counts).length;
     const arrCounts = Object.values(counts);
+    const count = arrCounts.length;
     let countsLikes;
     if (likesPage) countsLikes = arrCounts.filter((count) => count.like);
 
@@ -74,10 +74,7 @@ const CountsPage = () => {
     return (
       <Container classes="shadow-custom br-10 p-3">
         <ContainerShow type={'add'}>
-          <FormForCount
-            counts={counts}
-            closeForm={disAppearanceForm}
-          />
+          <FormForCount />
         </ContainerShow>
         {!count && (
           <ContainerScale classes={'my-auto mx-auto'}>
@@ -89,14 +86,14 @@ const CountsPage = () => {
 
         <ContainerScale>
           {count ? (
-            <Translations onChange={countsHandleToEdit} counts={counts} />
+            <Translations onChange={essenceHandleToEdit} counts={counts} />
           ) : null}
 
           <ContainerCards colsNumber={'3'} gap={'4'}>
             {countsCrop.map((count) => (
               <CountCard
                 count={count}
-                onChange={countsHandleToEdit}
+                onChange={essenceHandleToEdit}
                 key={count._id}
               />
             ))}
@@ -127,6 +124,7 @@ const CountsPage = () => {
                   ((likesPage ? true : likes) ? 'appearance' : '')
                 }
                 link={likesPage ? '/counts' : '/counts/likesPage'}
+                onClick={handleClick}
                 imgSrc={
                   likesPage
                     ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
@@ -138,7 +136,7 @@ const CountsPage = () => {
               bgColor="primary"
               classes="shadow-lg p-2"
               dataType="add"
-              onClick={countsHandleToEdit}
+              onClick={essenceHandleToEdit}
               imgSrc={addIcon}
             />
           </div>

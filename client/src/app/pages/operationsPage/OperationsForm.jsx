@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/common/form/TextField';
 import AvatarsField from '../../components/common/form/AvatarsField';
@@ -14,13 +13,11 @@ import {
 import { useForms } from '../../hooks/useForm';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import { formatDataForAvatarsFields } from '../../utils/formatData';
 import { operationCreate, operationUpdate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 
-const OperationsForm = ({ currentOperation }) => {
-  const { disAppearanceForm, statusOperation, handleClick } = useForms();
-
+const OperationsForm = () => {
+  const { disAppearanceForm, statusOperation, currentEssence } = useForms();
   const dispatch = useDispatch();
   const { show } = useForms();
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -33,8 +30,8 @@ const OperationsForm = ({ currentOperation }) => {
 
   const [hour, minutes] = [new Date().getHours(), new Date().getMinutes()];
 
-  const initialState = currentOperation
-    ? currentOperation
+  const initialState = currentEssence
+    ? currentEssence
     : {
         balance: 0,
         categoryId: '',
@@ -58,7 +55,7 @@ const OperationsForm = ({ currentOperation }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentOperation) {
+    if (currentEssence) {
       dispatch(operationUpdate(data));
     } else {
       dispatch(
@@ -83,7 +80,7 @@ const OperationsForm = ({ currentOperation }) => {
         >
           <form onSubmit={handleSubmit}>
             <h3 className="text-center">
-              {currentOperation !== ''
+              {currentEssence
                 ? 'Редактирование операции'
                 : 'Создание операции'}
             </h3>
@@ -98,8 +95,9 @@ const OperationsForm = ({ currentOperation }) => {
               label="Выбери категорию"
               name="categoryId"
               value={data.categoryId}
-              options={formatDataForAvatarsFields(12, filteredCategories)}
+              options={filteredCategories}
               onChange={handleChange}
+              count={12}
             />
             <TextField
               label="Комментарий"
@@ -123,13 +121,14 @@ const OperationsForm = ({ currentOperation }) => {
               classes="w-100 mx-auto mt-4"
               // disabled={isValid || enterError}
             >
-              {!currentOperation ? 'Создать' : 'Обновить'}
+              {!currentEssence ? 'Создать' : 'Обновить'}
             </Button>
 
             <Button
               classes="w-100 mx-auto mt-2"
               bgColor="warning"
               onClick={disAppearanceForm}
+
             >
               Назад
             </Button>
@@ -140,14 +139,6 @@ const OperationsForm = ({ currentOperation }) => {
       )}
     </>
   );
-};
-
-OperationsForm.defaultProps = {
-  currentOperation: '',
-};
-
-OperationsForm.propTypes = {
-  currentOperation: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 export default OperationsForm;

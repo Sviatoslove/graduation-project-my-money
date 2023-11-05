@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { useForms } from "../../hooks/useForm";
 
 const Pagination = ({
   itemsCount,
   pageSize,
-  onPageChange,
-  currentPage,
   countsLikes,
   likesPage
 }) => {
+  const {currentPage, handlePageChange} = useForms()
   const num = likesPage ? countsLikes.length : itemsCount
   const pagesCount = Math.ceil(num / pageSize);
   const pages = _.range(1, pagesCount + 1);
@@ -28,7 +28,7 @@ const Pagination = ({
             <a
               className="page-link"
               onClick={() => {
-                onPageChange(page);
+                handlePageChange(page);
               }}
             >
               {page}
@@ -44,8 +44,6 @@ Pagination.propTypes = {
   countsLikes: PropTypes.array,
   itemsCount: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
 };
 
 export default Pagination;

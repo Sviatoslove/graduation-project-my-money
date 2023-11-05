@@ -17,7 +17,7 @@ const categoriesSlice = createSlice({
     categoriesReceived: (state, action) => {
       state.entities = action.payload;
       state.isLoading = false;
-      if(Object.keys(state.entities).length)state.dataLoaded = true;
+      if(Object.values(state.entities).length)state.dataLoaded = true;
     },
     categoriesRequestedFailed: (state, action) => {
       state.error = action.payload;
@@ -34,20 +34,15 @@ const categoriesSlice = createSlice({
       if(!Object.keys(state.entities).length) state.dataLoaded=false
     },
     categoriesIconsReceived: (state, action) => {
-      console.log('action:', action)
       state.categoriesIcons = action.payload;
       state.isLoading = false;
       state.categoriesIconsDataLoaded = true;
     },
     categoriesIconsUpdatedReceived: (state, action) => {
-        console.log('state.categoriesIcons:', state.categoriesIcons)
-        console.log('action:', action)
       state.categoriesIcons[action.payload._id] = {
         ...state.categoriesIcons[action.payload._id],
         ...action.payload,
       };
-      console.log(' state.categoriesIcons[action.payload._id]:',  state.categoriesIcons[action.payload._id])
-
     },
     categoriesIconsRequestedFailed: (state, action) => {
       state.error = action.payload;

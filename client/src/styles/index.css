@@ -164,6 +164,13 @@ code {
   transition: opacity 0.5s ease-in-out 0s;
 }
 
+.item-categories:hover {
+  z-index: 1;
+  box-shadow: 0px 3px 15px 2px rgba(255, 94, 0, 0.493),
+  0px 0px 20px 2px rgba(246, 247, 245, 0.5) inset !important;
+  transition: opacity 0.5s ease-in-out 0s;
+}
+
 .card-text {
   margin: 5px;
 }
@@ -236,6 +243,24 @@ code {
 .like {
   animation: disappearanceLike 0.5s ease-in-out 0s;
   animation-fill-mode: both;
+}
+
+.like-for-card {
+  animation: like-for-card 0.5s ease-in-out 0s;
+  animation-fill-mode: both;
+}
+
+@keyframes like-for-card {
+  from {
+    display: none;
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes appearanceLike {

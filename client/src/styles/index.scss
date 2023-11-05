@@ -41,6 +41,7 @@ $utilities: map-merge(
       values: (
         content: fit-content,
         mc: min-content,
+        maxc: max-content,
         100vw: 100vw,
         90vw: 90vw,
         50vw: 50vw,
@@ -63,8 +64,17 @@ $utilities: map-merge(
       property: max-width,
       class: mw,
       values: (
-        none: none,
+        250: 250px,
+        268: 268px,
+        300: 300px,
         1200: 1200px,
+      ),
+    ),
+    "min-width": (
+      property: min-width,
+      class: min-w,
+      values: (
+        210: 210px,
       ),
     ),
     "height": (
@@ -219,6 +229,7 @@ $utilities: map-merge(
       values: (
         110px: 110px,
         94px: 94px,
+        7: 7%,
         48: 48%,
       ),
     ),
@@ -227,6 +238,8 @@ $utilities: map-merge(
       class: start,
       values: (
         30px: 30px,
+        1: 1%,
+        7: 7%,
         24:24%,
       ),
     ),

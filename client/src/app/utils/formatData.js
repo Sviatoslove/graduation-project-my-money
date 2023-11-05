@@ -29,43 +29,45 @@ function formatDataAvatars(data) {
 
 const getArray = (count) => {
   return Array.from({ length: count }, (v, i) => i + 1);
-}
+};
 
 const formatDataForAvatarsFields = (count, data) => {
-  const array = getArray(count)
-  let newData =
-    typeof data === 'object' ? Object.values({ ...data }) : [...data];
-  const result = [];
+  if (data) {
+    const array = getArray(count);
+    let newData =
+      typeof data === 'object' ? Object.values({ ...data }) : [...data];
+    const result = [];
 
-  if(newData[0].like !== undefined) {
-    const sortLikeData = newData.reduce((acc,el)=>{
-      if(el.like) acc.unshift(el)
-      else acc = [...acc, el]
-      return acc
-    }, [])
-    console.log('sortLikeData:', sortLikeData)
-    newData = [...sortLikeData]
-    console.log('newData:', newData)
-  } 
+    if (newData[0].like !== undefined) {
+      const sortLikeData = newData.reduce((acc, el) => {
+        if (el.like) acc.unshift(el);
+        else acc = [...acc, el];
+        return acc;
+      }, []);
+      newData = [...sortLikeData];
+    }
 
-  for (let i = 0; i < newData.length+1; i++) {
-    const element = array.reduce((acc) => {
-      const newObj = { ...newData.splice(0, 1)[0], rate: i };
-      if(!newObj._id)  return acc;
-      acc = [...acc, newObj]
-      return acc;
-    }, []);
-    result.push(element);
+    for (let i = 0; i < newData.length + 1; i++) {
+      const element = array.reduce((acc) => {
+        const newObj = { ...newData.splice(0, 1)[0], rate: i };
+        if (!newObj._id) return acc;
+        acc = [...acc, newObj];
+        return acc;
+      }, []);
+      result.push(element);
+    }
+    return result;
   }
-  return result;
 };
 
 const getFindActiveIndex = (value, arr) => {
-  for (let i = 0; i < arr.length; i++) {
-    const el = arr[i];
-    for (let i = 0; i < el.length; i++) {
-      const obj = el[i];
-      if ((obj.imgSrc||obj.icon) === value) return obj.rate;
+  if (arr) {
+    for (let i = 0; i < arr.length; i++) {
+      const el = arr[i];
+      for (let i = 0; i < el.length; i++) {
+        const obj = el[i];
+        if ((obj.imgSrc || obj.icon) === value) return obj.rate;
+      }
     }
   }
 };
@@ -89,5 +91,5 @@ export {
   formatDataForAvatarsFields,
   getFindActiveIndex,
   formatDataCountsIcons,
-  getArray
+  getArray,
 };

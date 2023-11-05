@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../../components/common/form/TextField";
 import SelectedField from "../../components/common/form/SelectedField";
@@ -15,15 +14,15 @@ import currency from "../../mock/currency";
 import countsIconsMock from "../../mock/countsIcons";
 import Button from "../../components/common/buttons/Button";
 import { useForms } from "../../hooks/useForm";
-import { formatDataForAvatarsFields, formatDataCountsIcons } from "../../utils/formatData";
+import { formatDataCountsIcons } from "../../utils/formatData";
 
-const CountsForm = ({ counts, closeForm }) => {
+const CountsForm = () => {
   const dispatch = useDispatch();
-  const {show, idCurrentEssence} = useForms()
+  const {show, currentEssence, disAppearanceForm} = useForms()
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
-  const initialState = idCurrentEssence
-    ? counts[idCurrentEssence]
+  const initialState = currentEssence
+    ? currentEssence
     : {
         name: "",
         content: "",
@@ -46,12 +45,12 @@ const CountsForm = ({ counts, closeForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (idCurrentEssence) {
+    if (currentEssence) {
       dispatch(countUpdate(data));
     } else {
       dispatch(countCreate(data));
     }
-    closeForm();
+    disAppearanceForm();
   };
   
   const countsIcons = formatDataCountsIcons(countsIconsMock)
@@ -66,7 +65,7 @@ const CountsForm = ({ counts, closeForm }) => {
         >
           <form onSubmit={handleSubmit}>
             <h3 className="text-center">
-              {idCurrentEssence !== "" ? "Редактирование счёта" : "Создание счёта"}
+              {currentEssence !== "" ? "Редактирование счёта" : "Создание счёта"}
             </h3>
             <TextField
               label="Название счёта"
@@ -103,7 +102,8 @@ const CountsForm = ({ counts, closeForm }) => {
               name="icon"
               value={data.icon}
               onChange={handleChange}
-              options={formatDataForAvatarsFields(16, countsIcons)}
+              options={countsIcons}
+              count={16}
             />
             {/* {enterError && <p className="text-danger">{enterError}</p>} */}
             <Button
@@ -111,12 +111,12 @@ const CountsForm = ({ counts, closeForm }) => {
               classes="w-100 mx-auto"
               // disabled={isValid || enterError}
             >
-              {!idCurrentEssence ? "Создать" : "Обновить"}
+              {!currentEssence ? "Создать" : "Обновить"}
             </Button>
             <Button
               classes="w-100 mx-auto mt-2"
               bgColor="warning"
-              onClick={closeForm}
+              onClick={disAppearanceForm}
             >
               Назад
             </Button>
@@ -127,11 +127,6 @@ const CountsForm = ({ counts, closeForm }) => {
       )}
     </>
   );
-};
-
-CountsForm.propTypes = {
-  counts: PropTypes.object,
-  closeForm: PropTypes.func,
 };
 
 export default CountsForm;

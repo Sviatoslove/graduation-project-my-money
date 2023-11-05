@@ -5,7 +5,6 @@ import { useTables } from '../../../hooks/useTable'
 
 const TableBody = ({ columns }) => {
   const {operationCrop} = useTables()
-
   const renderContent = (item, column, idx) => {
     if (columns[column].component) {
       const component = columns[column].component

@@ -24,78 +24,121 @@ import {
 import CategoryCard from './CategoryCard';
 import StatusAll from '../../components/common/StatusAll';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
+import Pagination from '../../components/common/pagination';
+import { paginate } from '../../utils';
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
-  const { disAppearanceForm, transform, statusOperation, countsHandleToEdit } =
-    useForms();
+  const {
+    disAppearanceForm,
+    transform,
+    statusOperation,
+    essenceHandleToEdit,
+    currentPage,
+    handlePageChange,
+  } = useForms();
+
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
   );
 
   const categoriesIcons = useSelector(selectCategoriesIcons());
-  console.log('categoriesIcons:', categoriesIcons);
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categoriesIsLoading = useSelector(selectCategoriesIsLoading());
   const categories = useSelector(selectCategories());
-
-  const filteredCategories =
-    categories &&
-    Object.values(categories).filter(
-      (category) => category.status === statusOperation
-    );
+  const pageSize = 20;
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
 
+  const filterForLikes = (arr) => {
+    return arr.reduce((acc, item) => {
+      if (item.like) acc.unshift(item);
+      else acc = [...acc, item];
+      return acc;
+    }, []);
+  };
+
+  if (!categoriesIsLoading && categories) {
+    const arrCategories = Object.values(categories);
+
+    const categoriesIncrement =
+      categories && arrCategories.filter((el) => el.status === 'increment');
+
+    const categoriesDecrement =
+      categories && arrCategories.filter((el) => el.status === 'decrement');
+
+    const count =
+      statusOperation === 'increment'
+        ? categoriesIncrement.length
+        : categoriesDecrement.length;
+
+    const countsCrop = paginate(
+      statusOperation === 'increment'
+        ? filterForLikes(categoriesIncrement)
+        : filterForLikes(categoriesDecrement),
+      currentPage,
+      pageSize
+    );
+
+    return (
+      <Container classes={'shadow-custom br-10 p-3'}>
+        {!categoriesDataLoaded && (
+          <h1
+            className="scaleTransition position-absolute ws-nw top-48 start-24"
+            style={{ transform: transform }}
+          >
+            Добавьте свою первую категорию
+          </h1>
+        )}
+
+        <ContainerShow type={'add'}>
+          <CategoriesForm/>
+        </ContainerShow>
+
+        <StatusAll classes={'mt-3'} />
+
+        <ContainerScale classes={'flex-grow-1 mt-5'}>
+          <ContainerCards colsNumber={'5'} gap={'4'}>
+            {categoriesIcons ? (
+              countsCrop?.map((category) => (
+                <CategoryCard
+                  categoriesIcons={categoriesIcons}
+                  category={category}
+                  key={category._id}
+                />
+              ))
+            ) : (
+              <LoadingSpinners number={3} />
+            )}
+          </ContainerCards>
+        </ContainerScale>
+        <ContainerScale classes={'mt-auto footer-group d-flex mb-4'}>
+          <Pagination
+            itemsCount={count}
+            pageSize={pageSize}
+          />
+          <Button
+            bgColor="primary"
+            classes="shadow-lg ms-auto mt-2"
+            dataType="add"
+            onClick={(e)=>essenceHandleToEdit(e, {['iconsForCategories']:categoriesIcons})}
+            imgSrc={addIcon}
+            iconSize={'52px'}
+          />
+        </ContainerScale>
+      </Container>
+    );
+  }
+
   return (
-    <Container classes={'shadow-custom br-10 p-3'}>
-      {!categoriesDataLoaded && (
-        <h1
-          className="scaleTransition position-absolute ws-nw top-48 start-24"
-          style={{ transform: transform }}
-        >
-          Добавьте свою первую категорию
-        </h1>
-      )}
-
-      <ContainerShow type={'add'}>
-        <CategoriesForm
-          categoriesIcons={categoriesIcons}
-          status={statusOperation}
-          closeForm={disAppearanceForm}
-          categories={categories}
-        />
-      </ContainerShow>
-
-      <StatusAll classes={'mt-4'} />
-
-      <ContainerScale classes={'flex-grow-1 mt-5'}>
-        <ContainerCards colsNumber={'5'} gap={'4'}>
-       
-          {categoriesIcons ? filteredCategories?.map((category) => (
-            <CategoryCard
-              categoriesIcons={categoriesIcons}
-              onClick={countsHandleToEdit}
-              category={category}
-              key={category._id}
-            />
-          )): <LoadingSpinners number={3}/>}
-        </ContainerCards>
-      </ContainerScale>
-      <ContainerScale classes={'p-2 ms-auto'}>
-        <Button
-          bgColor="primary"
-          classes="shadow-lg"
-          dataType="add"
-          onClick={countsHandleToEdit}
-          imgSrc={addIcon}
-          iconSize={'52px'}
-        />
-      </ContainerScale>
-    </Container>
+    <LoadingSpinners
+      style={{ width: '56px', height: '56px' }}
+      classesSpinner=""
+      number={6}
+    />
   );
 };
 

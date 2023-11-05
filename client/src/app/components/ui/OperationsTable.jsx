@@ -6,13 +6,24 @@ import {
   loadCategories,
   selectCategories,
   selectCategoriesDataloaded,
+  selectCategoriesIcons,
+  selectCategoriesIconsDataloaded,
+  loadСategoriesIcons,
 } from '../../store/categoriesSlice';
 import LoadingSpinners from '../common/LoadingSpinners';
+import { Button } from '../common/buttons';
+import { useForms } from '../../hooks/useForm';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
+  const {essenceHandleToEdit} = useForms();
+
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
+  const categoriesIconsDataLoaded = useSelector(
+    selectCategoriesIconsDataloaded()
+  );
+  const categoriesIcons = useSelector(selectCategoriesIcons());
   const categorySettings = (id) => {
     return {
       ...categories[id],
@@ -25,12 +36,8 @@ const OperationsTable = () => {
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
+    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
-
-  if (!categoriesDataLoaded)
-    return (
-      <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
-    );
 
   const columns = {
     number: {
@@ -54,28 +61,41 @@ const OperationsTable = () => {
     },
     category: {
       name: 'Категория',
-      component: (operation) => (categories[operation.categoryId] ? 
-        <CategoryCard
-          table={'true'}
-          {...categorySettings(operation?.categoryId)}
-        /> : 'category not found'
-      ),
+      component: (operation) =>
+        categories[operation.categoryId] ? (
+          <Button dataType="edit" onClick={(e)=>essenceHandleToEdit(e, operation)} outline={true} classes={'bg-transparent border-0 p-0 br-50'}>
+            <CategoryCard
+              table={'true'}
+              category={categorySettings(operation?.categoryId)}
+              categoriesIcons={categoriesIcons}
+            />
+          </Button>
+        ) : (
+          'category not found'
+        ),
     },
     content: {
       name: 'Примечание',
-      component: (operation) => (categories[operation.categoryId] ?
-        <p className="w-80 mx-auto text-secondary">
-          {!categories[operation.categoryId].content &&
-            'Ничего примечательного здесь нет'}
-        </p>: 'category not found'
-      ),
+      component: (operation) =>
+        categories[operation.categoryId] ? (
+          <p className="w-80 mx-auto text-secondary">
+            {!categories[operation.categoryId].content &&
+              'Ничего примечательного здесь нет'}
+          </p>
+        ) : (
+          'category not found'
+        ),
     },
     balance: {
       path: 'balance',
       name: 'Cумма',
     },
   };
-
+  if (!categoriesDataLoaded) {
+    return (
+      <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
+    );
+  }
   return <Table columns={columns} />;
 };
 

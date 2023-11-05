@@ -8,11 +8,8 @@ import {
   selectAvatarsDataStatus,
 } from "../store/avatarsSlice";
 import { updateUser } from "../store/usersSlice";
-import { formatDataForAvatarsFields } from "../utils/formatData";
 
 const UserPageEdit = ({ user, onShow }) => {
-console.log('user:', user)
-
   const dispatch = useDispatch();
   const [data, setData] = useState(user);
   const [errors, setErrors] = useState({});
@@ -67,7 +64,8 @@ console.log('user:', user)
             name="avatar"
             value={user.avatar}
             onChange={handleChange}
-            options={formatDataForAvatarsFields(12, avatars)}
+            options={avatars}
+            count={12}
           />
           <RadioField
             options={[

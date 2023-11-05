@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CurrencyField,
@@ -18,9 +17,9 @@ import { translationCreate } from "../../store/translationsSlice";
 import LoadingBtn from "../../components/common/LoadingBtn";
 import { useForms } from "../../hooks/useForm";
 
-const TranslationsForm = ({ closeForm }) => {
+const TranslationsForm = () => {
   const dispatch = useDispatch();
-  const {show} = useForms()
+  const {show, disAppearanceForm} = useForms()
   const inputBalanceTo = useRef();
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
@@ -94,7 +93,7 @@ const TranslationsForm = ({ closeForm }) => {
     const newData = { ...data, balanceTo: balanceTo };
     dispatch(translationCreate(newData));
     dispatch(countsUpdateAfterTranslation(newData));
-    closeForm();
+    disAppearanceForm();
   };
 
   return (
@@ -194,17 +193,13 @@ const TranslationsForm = ({ closeForm }) => {
         <Button
           classes="w-100 mx-auto mt-2"
           bgColor="warning"
-          onClick={closeForm}
+          onClick={disAppearanceForm}
         >
           Назад
         </Button>
       </form>
     </div>
   );
-};
-
-TranslationsForm.propTypes = {
-  closeForm: PropTypes.func,
 };
 
 export default TranslationsForm;
