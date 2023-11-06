@@ -1,9 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import translationsService from "../services/translations.service";
-import { countsUpdateAfterDeleteTranslation } from "./countsSlice";
+import { createSlice } from '@reduxjs/toolkit';
+import translationsService from '../services/translations.service';
+import {
+  countsUpdateAfterDeleteTranslation,
+  countsUpdateAfterTranslation,
+} from './countsSlice';
 
 const translationsSlice = createSlice({
-  name: "translations",
+  name: 'translations',
   initialState: {
     entities: null,
     isLoading: true,
@@ -11,11 +14,11 @@ const translationsSlice = createSlice({
     dataLoaded: null,
   },
   reducers: {
-    translationsRequested: (state) => {
-      state.isLoading = true;
-    },
     translationsReceived: (state, action) => {
-      state.entities = action.payload;
+      const { payload } = action;
+      if (!Object.keys(action.payload).length) return;
+      if (!state.entities) state.entities = action.payload;
+      else state.entities = { ...state.entities, [payload._id]: payload };
       state.isLoading = false;
       state.dataLoaded = true;
     },
@@ -33,24 +36,22 @@ const translationsSlice = createSlice({
 const { reducer: translationsReducer, actions } = translationsSlice;
 
 const {
-  translationsRequested,
   translationsReceived,
   translationsRequestedFailed,
   translationsRemovedReceived,
 } = actions;
 
 export const translationCreate = (payload) => async (dispatch) => {
-  dispatch(translationsRequested());
   try {
     const { content } = await translationsService.create(payload);
-    dispatch(translationsReceived(content));
+    dispatch(translationsReceived(content['newTranslation']));
+    dispatch(countsUpdateAfterTranslation(content['counts']));
   } catch (error) {
     dispatch(translationsRequestedFailed(error.message));
   }
 };
 
 export const loadTranslations = () => async (dispatch) => {
-  dispatch(translationsRequested());
   try {
     const { content } = await translationsService.get();
     dispatch(translationsReceived(content));
@@ -60,11 +61,10 @@ export const loadTranslations = () => async (dispatch) => {
 };
 
 export const translationRemove = (payload) => async (dispatch) => {
-  dispatch(translationsRequested());
   try {
-    const {content} = await translationsService.remove(payload);
+    const { content } = await translationsService.remove(payload);
     dispatch(translationsRemovedReceived(payload));
-    dispatch(countsUpdateAfterDeleteTranslation(content));
+    dispatch(countsUpdateAfterDeleteTranslation(content['counts']));
   } catch (error) {
     dispatch(translationsRequestedFailed(error.message));
   }

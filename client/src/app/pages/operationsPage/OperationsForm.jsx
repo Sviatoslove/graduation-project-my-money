@@ -17,7 +17,7 @@ import { operationCreate, operationUpdate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 
 const OperationsForm = () => {
-  const { disAppearanceForm, statusOperation, currentEssence } = useForms();
+  const { disAppearanceForm, statusOperation } = useForms();
   const dispatch = useDispatch();
   const { show } = useForms();
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -30,16 +30,14 @@ const OperationsForm = () => {
 
   const [hour, minutes] = [new Date().getHours(), new Date().getMinutes()];
 
-  const initialState = currentEssence
-    ? currentEssence
-    : {
-        balance: 0,
-        categoryId: '',
-        content: '',
-        date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
-          minutes < 10 ? '0' + minutes : minutes
-        }`,
-      };
+  const initialState = {
+    balance: 0,
+    categoryId: '',
+    content: '',
+    date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
+      minutes < 10 ? '0' + minutes : minutes
+    }`,
+  };
   const [data, setData] = useState(initialState);
 
   useEffect(() => {
@@ -55,18 +53,14 @@ const OperationsForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentEssence) {
-      dispatch(operationUpdate(data));
-    } else {
-      dispatch(
-        operationCreate({
-          ...data,
-          status: statusOperation,
-          countId: localStorageService.getMasterCount(),
-          userId: localStorageService.getUserId(),
-        })
-      );
-    }
+    dispatch(
+      operationCreate({
+        ...data,
+        status: statusOperation,
+        countId: localStorageService.getMasterCount(),
+        userId: localStorageService.getUserId(),
+      })
+    );
     disAppearanceForm();
   };
 
@@ -79,11 +73,7 @@ const OperationsForm = () => {
           }
         >
           <form onSubmit={handleSubmit}>
-            <h3 className="text-center">
-              {currentEssence
-                ? 'Редактирование операции'
-                : 'Создание операции'}
-            </h3>
+            <h3 className="text-center">Создание операции</h3>
             <TextField
               label="Сумма"
               value={data.balance}
@@ -121,14 +111,13 @@ const OperationsForm = () => {
               classes="w-100 mx-auto mt-4"
               // disabled={isValid || enterError}
             >
-              {!currentEssence ? 'Создать' : 'Обновить'}
+              Создать
             </Button>
 
             <Button
               classes="w-100 mx-auto mt-2"
               bgColor="warning"
               onClick={disAppearanceForm}
-
             >
               Назад
             </Button>

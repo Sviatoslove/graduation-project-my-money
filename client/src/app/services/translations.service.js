@@ -8,7 +8,6 @@ const translationsService = {
     return data;
   },
   create: async (translation) => {
-    console.log("translation:", translation);
     const { data } = await httpService.post(translationsEndpoint, translation);
     return data;
   },

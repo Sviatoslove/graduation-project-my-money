@@ -29,50 +29,53 @@ router
       });
       //Получаем счёт из которого после вычитаем перевод
       const { fromCount, toCount, balanceFrom, balanceTo } = newTranslation;
+      let countFrom
       if (fromCount !== '0') {
-        const countFrom = await Count.findById(fromCount);
+        countFrom = await Count.findById(fromCount);
         countFrom.balance = Number(countFrom.balance) - Number(balanceFrom);
         await Count.findByIdAndUpdate(fromCount, countFrom);
       }
       const countTo = await Count.findById(toCount);
       countTo.balance = Number(countTo.balance) + Number(balanceTo);
       await Count.findByIdAndUpdate(toCount, countTo);
-
-      const listAllTranslation = await Translation.find();
-      const list = listAllTranslation.filter(
-        (translation) => String(translation.userId) === userId
-      );
-      res.status(201).send(list); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
-    } catch (e) {
-      res
-        .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
-    }
-  })
-  router.delete('/:translId', auth, async (req, res) => {
-    try {
-      const { translId } = req.params;
-      const removedTranslation = await Translation.findById(translId);
-      const { fromCount, toCount, balanceFrom, balanceTo, userId } = removedTranslation;
-      if (fromCount !== '0') {
-        const countFrom = await Count.findById(fromCount);
-        countFrom.balance = Number(countFrom.balance) + Number(balanceFrom);
-        await Count.findByIdAndUpdate(fromCount, countFrom);
-      }
-      const countTo = await Count.findById(toCount);
-      countTo.balance = Number(countTo.balance) - Number(balanceTo);
-      await Count.findByIdAndUpdate(toCount, countTo);
-      const counts = await Count.find()
-      const countsList = counts.filter(
-        (count) => String(count.userId) === String(userId)
-      );
-      await removedTranslation.deleteOne(); // ждём пока удалится коммент
-      return res.send(countsList); // можем вернуть null, т.к. на фронте мы ничего не ждём
+      const data = {
+        _id: 'noTransformData',
+        'newTranslation': newTranslation,
+        'counts': { 'countFrom': countFrom, 'countTo': countTo },
+      };
+      res.status(201).send(data); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
     } catch (e) {
       res
         .status(500)
         .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
     }
   });
+router.delete('/:translId', auth, async (req, res) => {
+  try {
+    const { translId } = req.params;
+    const removedTranslation = await Translation.findById(translId);
+    const { fromCount, toCount, balanceFrom, balanceTo } =
+      removedTranslation;
+      let countFrom
+    if (fromCount !== '0') {
+      countFrom = await Count.findById(fromCount);
+      countFrom.balance = Number(countFrom.balance) + Number(balanceFrom);
+      await Count.findByIdAndUpdate(fromCount, countFrom);
+    }
+    const countTo = await Count.findById(toCount);
+    countTo.balance = Number(countTo.balance) - Number(balanceTo);
+    await Count.findByIdAndUpdate(toCount, countTo);
+    await removedTranslation.deleteOne(); // ждём пока удалится коммент
+    const data = {
+      _id: 'translId',
+      'counts': { 'countFrom': countFrom, 'countTo': countTo },
+    };
+    return res.send(data); // можем вернуть null, т.к. на фронте мы ничего не ждём
+  } catch (e) {
+    res
+      .status(500)
+      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+  }
+});
 
 module.exports = router;

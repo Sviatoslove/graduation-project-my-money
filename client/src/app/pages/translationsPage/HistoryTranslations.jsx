@@ -30,6 +30,7 @@ const HistoryTranslations = () => {
   const isLoading = useSelector(selectTranslationsLoadedStatus());
   const translationsDataLoaded = useSelector(selectTranslationsDataLoaded());
   const translations = useSelector(selectTranslations());
+  console.log('translations:', translations)
   const countsLoaded = useSelector(selectCountsStatus());
 
   const counts = {
@@ -47,9 +48,9 @@ const HistoryTranslations = () => {
     if (!countsLoaded) dispatch(countsLoad());
   }, []);
 
-  const handleClick = (e) => {
+  const handleRemove = (e) => {
     const { target } = e;
-    const translId = target.closest("li").id;
+    const translId = target.closest("button").id;
     dispatch(translationRemove(translId));
   };
 
@@ -67,7 +68,6 @@ const HistoryTranslations = () => {
                 <li
                   className="list-group-item w-100 d-flex justify-content-between align-items-center"
                   key={idx}
-                  id={transl._id}
                 >
                   <div className="oper-data d-flex w-100 justify-content-between px-1 align-items-center">
                     <p className="ff-BS fs-5">{idx + 1}</p>
@@ -128,7 +128,8 @@ const HistoryTranslations = () => {
                     bgColor="secondary"
                     iconSize={"32px"}
                     imgSrc="https://img.icons8.com/arcade/32/delete-sign.png"
-                    onClick={handleClick}
+                    onClick={handleRemove}
+                    id={transl._id}
                   />
                 </li>
               );

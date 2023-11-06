@@ -1,43 +1,47 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Table from '../common/table/Table';
 import CategoryCard from '../../pages/categories/CategoryCard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  loadCategories,
-  selectCategories,
-  selectCategoriesDataloaded,
   selectCategoriesIcons,
   selectCategoriesIconsDataloaded,
   loadСategoriesIcons,
 } from '../../store/categoriesSlice';
 import LoadingSpinners from '../common/LoadingSpinners';
 import { Button } from '../common/buttons';
-import { useForms } from '../../hooks/useForm';
+import { operationRemove } from '../../store/operationsSlice';
+import { useTables } from '../../hooks/useTable';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
-  const {essenceHandleToEdit} = useForms();
+  const { categories } = useTables();
 
-  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
-  const categories = useSelector(selectCategories());
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
   );
   const categoriesIcons = useSelector(selectCategoriesIcons());
+
+  useEffect(() => {
+    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
+  }, []);
+
   const categorySettings = (id) => {
     return {
       ...categories[id],
       classesForIcon: 'fs-42px me-2',
+      classesForCol: 'w-content ms-auto',
       classesForWrapp: 'd-flex align-items-center px-4 w-300px',
       classesForCardBody: '',
       classesForName: 'mx-auto ',
     };
   };
 
-  useEffect(() => {
-    if (!categoriesDataLoaded) dispatch(loadCategories());
-    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
-  }, []);
+  const handleRemove = (e) => {
+    const { target } = e;
+    const operId = target.closest('button').id;
+    dispatch(operationRemove(operId));
+  };
 
   const columns = {
     number: {
@@ -63,13 +67,11 @@ const OperationsTable = () => {
       name: 'Категория',
       component: (operation) =>
         categories[operation.categoryId] ? (
-          <Button dataType="edit" onClick={(e)=>essenceHandleToEdit(e, operation)} outline={true} classes={'bg-transparent border-0 p-0 br-50'}>
-            <CategoryCard
-              table={'true'}
-              category={categorySettings(operation?.categoryId)}
-              categoriesIcons={categoriesIcons}
-            />
-          </Button>
+          <CategoryCard
+            table={'true'}
+            category={categorySettings(operation?.categoryId)}
+            categoriesIcons={categoriesIcons}
+          />
         ) : (
           'category not found'
         ),
@@ -90,13 +92,30 @@ const OperationsTable = () => {
       path: 'balance',
       name: 'Cумма',
     },
+    delete: {
+      name: '',
+      component: (operation) => (
+        <Button
+          outline={true}
+          bgColor="secondary"
+          iconSize={'32px'}
+          imgSrc="https://img.icons8.com/arcade/32/delete-sign.png"
+          onClick={handleRemove}
+          id={operation._id}
+        />
+      ),
+    },
   };
-  if (!categoriesDataLoaded) {
+  if (!categories) {
     return (
       <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
     );
   }
   return <Table columns={columns} />;
+};
+
+OperationsTable.propTypes = {
+  categories: PropTypes.object,
 };
 
 export default OperationsTable;

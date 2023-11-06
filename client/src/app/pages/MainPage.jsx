@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Container from '../components/common/Containers/Container';
@@ -27,27 +27,49 @@ import OperationsTable from '../components/ui/OperationsTable';
 import { useTables } from '../hooks/useTable';
 import localStorageService from '../services/localStorage.service';
 import Pagination from '../components/common/pagination';
+import { SelectedField } from '../components/common/form';
 
 const MainPage = () => {
-  const dispatch = useDispatch();
   const { essenceHandleToEdit } = useForms();
-  const { operations, count, pageSize, currentPage, handlePageChange } =
-    useTables();
+  const {
+    dataCategory,
+    operations,
+    count,
+    pageSize,
+    currentPage,
+    handlePageChange,
+    handleChange, categoriesDataLoaded,
+    filteredCategories
+  } = useTables();
 
   const user = useSelector(selectUser());
 
-  const categoriesData = localStorageService.getCategoriesData();
-
   return (
     <Container>
-      {user && user?.masterCount && (
-        <>
-          <MasterCount classes={'d-flex flex-column w-100 fs-4'} />
-          <StatusAll />
-        </>
-      )}
+      <Container newClasses='position-relative'>
+      <Container newClasses="position-absolute bottom-0 left-0">
+          <SelectedField
+            name="category"
+            type="categories"
+            label="Фильтр по категориям"
+            value={dataCategory.category}
+            options={filteredCategories}
+            onChange={handleChange}
+            defaultOption={!filteredCategories.length ? 'Нет категорий' : 'Не фильтровать'}
+            disabled={!filteredCategories.length ? true : false}
+          />
+      </Container>
+        {user && user?.masterCount && (
+          <>
+            <MasterCount classes={'d-flex flex-column w-100 fs-4'} />
+            <StatusAll />
+          </>
+        )}
+        </Container>
       <ContainerScale classes="wrapper-operation flex-grow-1">
-        {operations ? <OperationsTable /> : null}
+        {operations ? (
+          <OperationsTable/>
+        ) : null}
       </ContainerScale>
       <ContainerShow type={'add'}>
         <OperationsForm />
@@ -62,7 +84,7 @@ const MainPage = () => {
         <Button
           link={
             (!user?.masterCount && '/counts') ||
-            (!categoriesData && '/categories')
+            (!categoriesDataLoaded && '/categories')
           }
           bgColor="primary"
           classes="shadow-lg p-2 w-content ms-auto"

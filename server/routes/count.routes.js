@@ -53,14 +53,8 @@ router.delete('/:countId', auth, async (req, res) => {
     const { countId } = req.params; // получаем параметр commentId
     //const removedComment = await Comment.find({ _id: commentId }) или ===>>>
     const removedCount = await Count.findById(countId); // найдём комментарий который нужно удалить
-    if (removedCount.userId.toString() === req.user._id) {
-      // проверить, а можем ли мы удалять комментарий, т.к. его может удалять только тот пользователь который его оставлял
       await removedCount.deleteOne(); // ждём пока удалится коммент
       return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
-    } else {
-      // иначе отправляем ошибку авторизации
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
   } catch (e) {
     res
       .status(500)

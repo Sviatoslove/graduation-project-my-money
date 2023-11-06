@@ -92,7 +92,6 @@ const TranslationsForm = () => {
       balanceTo = data.balanceFrom;
     const newData = { ...data, balanceTo: balanceTo };
     dispatch(translationCreate(newData));
-    dispatch(countsUpdateAfterTranslation(newData));
     disAppearanceForm();
   };
 

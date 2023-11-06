@@ -11,6 +11,7 @@ const SelectedField = ({
   name,
   onChange,
   valueTwo,
+  disabled
 }) => {
   const optionsArray = Object.values(options)?.map((optionName) => ({
     name: optionName.name,
@@ -29,8 +30,9 @@ const SelectedField = ({
         onChange={onChange}
         name={name}
         id={name}
+        disabled={disabled}
       >
-        <option disabled value="">
+        <option disabled={defaultOption === 'Choose..' ? true : false} value="">
           {defaultOption}
         </option>
         {optionsArray?.map((option) => {
@@ -67,7 +69,7 @@ SelectedField.propTypes = {
   ]),
   value: PropTypes.string,
   valueTwo: PropTypes.string,
-
+  disabled: PropTypes.bool,
   defaultOption: PropTypes.string,
   error: PropTypes.string,
   name: PropTypes.string.isRequired,

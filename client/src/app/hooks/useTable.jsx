@@ -11,7 +11,11 @@ import { paginate } from '../utils';
 import LoadingSpinners from '../components/common/LoadingSpinners';
 import { selectIsLoggedIn } from '../store/usersSlice';
 import { useForms } from './useForm';
-import localStorageService from '../services/localStorage.service';
+import {
+  loadCategories,
+  selectCategories,
+  selectCategoriesDataloaded,
+} from '../store/categoriesSlice';
 
 const TablesContext = React.createContext();
 
@@ -19,15 +23,23 @@ const useTables = () => useContext(TablesContext);
 
 const TablesProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const {statusOperation} = useForms()
-  const isLoggedIn = useSelector(selectIsLoggedIn());
-  const operationsDataLoading = useSelector(selectOperationsDataLoaded());
-  const operations = useSelector(selectOperations());
+  const { statusOperation } = useForms();
+  let filteredCategories = []
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [masterCount, setMasterCount] = useState("");
+  const [masterCount, setMasterCount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState({ path: 'date', order: 'asc' });
+  const [dataCategory, setCategoryData] = useState({
+    category: '',
+  });
+
+  const isLoggedIn = useSelector(selectIsLoggedIn());
+  const operationsDataLoading = useSelector(selectOperationsDataLoaded());
+  const operations = useSelector(selectOperations());
+  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
+  const categories = useSelector(selectCategories());
 
   const pageSize = 10;
 
@@ -37,7 +49,16 @@ const TablesProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLoggedIn && !operationsDataLoading) dispatch(loadOperations());
+    if (isLoggedIn && !categoriesDataLoaded) dispatch(loadCategories());
   }, [isLoggedIn]);
+
+  const handleChange = ({ target }) => {
+    setCategoryData((state) => ({
+      ...state,
+      [target.name]: target.value,
+    }));
+    // setErrors(null)
+  };
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -63,23 +84,30 @@ const TablesProvider = ({ children }) => {
   };
 
   const filterOperations = (data) => {
-    if(data) {
-      const dataArr = Object.values(data)
+    if (data) {
+      const dataArr = Object.values(data);
       const filteredOper = searchQuery
-      ? dataArr.filter((operation) =>
-          operation.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : selectedCategory
-      ? dataArr.filter((operation) =>
-          (operation.category, selectedCategory._id) ? operation.category : ''
-        )
-      : dataArr;
-    return (
-      operations &&
-      filteredOper.filter((operation) => operation.status === statusOperation).filter(op=> op.countId === masterCount._id)
-    );
+        ? dataArr.filter((operation) =>
+            operation.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : dataArr;
+      return (
+        operations &&
+        filteredOper
+          .filter((op) => op.countId === masterCount._id)
+          .filter((operation) => {
+            if(operation.status === statusOperation){
+              filteredCategories.push(categories[operation.categoryId])
+              return operation
+            };
+          })
+          .filter((op) => {
+            if (dataCategory.category) {
+              if (dataCategory.category === op.categoryId) return op;
+            } else return op;
+          })
+      );
     }
-    
   };
 
   const filteredOperations = filterOperations(operations);
@@ -106,10 +134,19 @@ const TablesProvider = ({ children }) => {
         currentPage,
         handlePageChange,
         masterCount,
-        setMasterCount
+        setMasterCount,
+        dataCategory,
+        categories,
+        handleChange,
+        categoriesDataLoaded,
+        filteredCategories
       }}
     >
-      {children}
+      {operationsDataLoading && categoriesDataLoaded ? (
+        children
+      ) : (
+        <LoadingSpinners style={{ width: '56px', height: '56px' }} number={3} />
+      )}
     </TablesContext.Provider>
   );
 };

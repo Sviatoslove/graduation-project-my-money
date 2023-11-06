@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { operationRemove, operationUpdate } from '../store/operationsSlice';
+import { operationRemove } from '../store/operationsSlice';
 import { categoriesIconsUpdate, categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
 import { countRemove, countUpdate } from '../store/countsSlice';
 import { useDispatch } from 'react-redux';
@@ -41,7 +41,6 @@ const FormsProvider = ({ children }) => {
   };
 
   const handleClick = (e) => {
-    console.log('handleClick:')
     const { target } = e;
     const btnType = target.closest('button').dataset.type;
     if (btnType === 'add') {
@@ -53,7 +52,6 @@ const FormsProvider = ({ children }) => {
   };
 
   const essenceHandleToEdit = (e, currentEssence) => {
-    console.log('currentEssence:', currentEssence)
     const { target } = e
     const btn = target.closest('button')
     const btnType = btn.dataset.type;

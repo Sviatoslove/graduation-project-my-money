@@ -39,8 +39,8 @@ const countsSlice = createSlice({
       };
     },
     countsRemovedReceived: (state, action) => {
-      console.log('action:', action)
       delete state.entities[action.payload];
+      if (!Object.keys(state.entities).length) state.dataLoaded = false;
     },
     countsDataRequested: (state) => {
       state.isLoading = true;
@@ -82,27 +82,16 @@ const countsSlice = createSlice({
       state.entities = null;
       state.dataLoaded = false;
     },
-    countsUpdatedByTranslation: (state, action) => {
-      const { fromCount, toCount, balanceFrom, balanceTo } = action.payload;
-      if (fromCount !== "0") {
-        const countFrom = state.entities[fromCount];
-        countFrom.balance = Number(countFrom.balance) - Number(balanceFrom);
-      }
-      const countTo = state.entities[toCount];
-      countTo.balance = Number(countTo.balance) + Number(balanceTo);
+    countsUpdateByTranslation: (state, action) => {
+      state.entities[action.payload.countFrom._id] = {
+        ...state.entities[action.payload.countFrom._id],
+        ...action.payload.countFrom,
+      };
+      state.entities[action.payload.countTo._id] = {
+        ...state.entities[action.payload.countTo._id],
+        ...action.payload.countTo,
+      };
     },
-    countsUpdatedByOperation: (state, action) => {
-      const { countId, balance, status } = action.payload;
-      const count = state.entities[countId];
-      if (status === "increment")
-        count.balance = Number(count.balance) + Number(balance);
-      else count.balance = Number(count.balance) - Number(balance);
-    },
-
-
-    // masterCountReceived: (state, action) => {
-    //   state.masterCount = 
-    // }
   },
 });
 
@@ -124,8 +113,7 @@ const {
   currencyDataReceived,
   currencyDataRequestedFailed,
   countsDataRemoved,
-  countsUpdatedByTranslation,
-  countsUpdatedByOperation,
+  countsUpdateByTranslation
 } = actions;
 
 export const countCreate = (payload) => async (dispatch) => {
@@ -159,15 +147,15 @@ export const countUpdate = (payload) => async (dispatch) => {
 };
 
 export const countsUpdateAfterTranslation = (payload) => async (dispatch) => {
-  dispatch(countsUpdatedByTranslation(payload));
+  dispatch(countsUpdateByTranslation(payload));
 };
 
 export const countsUpdateAfterOperation = (payload) => async (dispatch) => {
-  dispatch(countsUpdatedByOperation(payload));
+  dispatch(countsUpdatedReceived(payload));
 };
 
 export const countsUpdateAfterDeleteTranslation = (payload) => async (dispatch) => {
-  dispatch(countsReceived(payload));
+  dispatch(countsUpdateByTranslation(payload));
 };
 
 export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {

@@ -1,6 +1,6 @@
-import { httpService } from "./http.service";
+import { httpService } from './http.service';
 
-const operationsEndpoint = "operations/";
+const operationsEndpoint = 'operations/';
 
 const operationsService = {
   get: async () => {
@@ -12,8 +12,8 @@ const operationsService = {
     return data;
   },
 
-  remove: async () => {
-    const { data } = await httpService.delete(operationsEndpoint);
+  remove: async (id) => {
+    const { data } = await httpService.delete(operationsEndpoint + id);
     return data;
   },
 };

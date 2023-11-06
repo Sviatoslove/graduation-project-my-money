@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import operationsService from '../services/operations.service';
-import { countsUpdateAfterOperation } from './countsSlice';
+import { countUpdate, countsUpdateAfterOperation } from './countsSlice';
 
 const operationsSlice = createSlice({
   name: 'operations',
@@ -30,7 +30,7 @@ const operationsSlice = createSlice({
       };
     },
     operationsRemovedReceived: (state, action) => {
-      delete state.entities[action.payload.countId];
+      delete state.entities[action.payload];
       if (!Object.keys(state.entities).length) state.dataLoaded = false;
     },
     operationsDataRemoved: (state) => {
@@ -53,8 +53,8 @@ const {
 export const operationCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.create(payload);
-    dispatch(operationsReceived(content));
-    dispatch(countsUpdateAfterOperation(content));
+    dispatch(operationsReceived(content['newOperation']));
+    dispatch(countsUpdateAfterOperation(content['count']));
   } catch (error) {
     dispatch(operationsRequestedFailed(error.message));
   }
@@ -80,8 +80,9 @@ export const operationUpdate = (payload) => async (dispatch) => {
 
 export const operationRemove = (payload) => async (dispatch) => {
   try {
-    await operationsService.remove(payload.countId);
+    const {content} = await operationsService.remove(payload);
     dispatch(operationsRemovedReceived(payload));
+    dispatch(countUpdate(content));
   } catch (error) {
     dispatch(operationsRequestedFailed(error.message));
   }

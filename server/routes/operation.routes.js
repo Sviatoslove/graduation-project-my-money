@@ -33,7 +33,12 @@ router
         if(status === 'increment') count.balance = Number(count.balance) + Number(balance);
         else if(status === 'decrement') count.balance = Number(count.balance) - Number(balance);
         await Count.findByIdAndUpdate(countId, count);
-      res.status(201).send(newOperation)
+        const data = {
+          _id: 'noTransformData',
+          'newOperation': newOperation,
+          'count': count,
+        };
+      res.status(201).send(data)
     } catch (e) {
       res
         .status(500)
@@ -44,8 +49,13 @@ router
     try {
       const { operId } = req.params;
       const removedOperation = await Operation.findById(operId);
+      const { countId, balance, status } = removedOperation;
+      const count = await Count.findById(countId);
+      if(status === 'increment') count.balance = Number(count.balance) - Number(balance);
+      else if(status === 'decrement') count.balance = Number(count.balance) + Number(balance);
+      await Count.findByIdAndUpdate(countId, count);
       await removedOperation.deleteOne(); // ждём пока удалится коммент
-      return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
+      return res.send(count); // можем вернуть null, т.к. на фронте мы ничего не ждём
     } catch (e) {
       res
         .status(500)

@@ -12,6 +12,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
     iconColor,
     bgColor,
     textColor,
+    classesForCol,
     classesForIcon,
     classesForWrapp,
     classesForCardBody,
@@ -19,7 +20,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
   } = category;
   const { essenceHandleToEdit } = useForms();
   return (
-    <div className="col">
+    <div className={"col " + classesForCol}>
       <div
         className={`${
           classesForWrapp ? classesForWrapp : 'card'
