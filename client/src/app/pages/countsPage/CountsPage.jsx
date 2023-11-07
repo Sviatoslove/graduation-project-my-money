@@ -29,8 +29,8 @@ import { useForms } from '../../hooks/useForm';
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const { essenceHandleToEdit, disAppearanceForm, currentPage,
-    handlePageChange, setCurrentPage } = useForms();
+  const { essenceHandleToEdit, currentPage, setCurrentPage, handlePageChange } =
+    useForms();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -56,8 +56,8 @@ const CountsPage = () => {
   }, [counts]);
 
   const handleClick = () => {
-    setCurrentPage(1)
-  }
+    setCurrentPage(1);
+  };
 
   if (countsDataLoaded) {
     const arrCounts = Object.values(counts);
@@ -78,9 +78,7 @@ const CountsPage = () => {
         </ContainerShow>
         {!count && (
           <ContainerScale classes={'my-auto mx-auto'}>
-            <h1 className="">
-              Добавьте свой первый счёт
-            </h1>
+            <h1 className="">Добавьте свой первый счёт</h1>
           </ContainerScale>
         )}
 
@@ -100,9 +98,7 @@ const CountsPage = () => {
           </ContainerCards>
         </ContainerScale>
 
-        <ContainerScale
-          classes={`mt-auto footer-group d-flex mb-4`}
-        >
+        <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
           <Pagination
             likesPage={likesPage}
             countsLikes={countsLikes}
@@ -113,7 +109,7 @@ const CountsPage = () => {
           />
 
           <div
-            className="btn-group mt-2 w-content ms-auto"
+            className="btn-group mt-2 w-content ms-auto me-3"
             role="group"
             aria-label="Button group"
           >

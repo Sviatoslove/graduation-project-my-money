@@ -15,7 +15,7 @@ import { useTables } from '../../hooks/useTable';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
-  const { categories } = useTables();
+  const { categories, operationCrop } = useTables();
 
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
@@ -30,7 +30,7 @@ const OperationsTable = () => {
     return {
       ...categories[id],
       classesForIcon: 'fs-42px me-2',
-      classesForCol: 'w-content ms-auto',
+      classesForCol: 'w-content mx-auto',
       classesForWrapp: 'd-flex align-items-center px-4 w-300px',
       classesForCardBody: '',
       classesForName: 'mx-auto ',
@@ -78,15 +78,13 @@ const OperationsTable = () => {
     },
     content: {
       name: 'Примечание',
-      component: (operation) =>
-        categories[operation.categoryId] ? (
-          <p className="w-80 mx-auto text-secondary">
-            {!categories[operation.categoryId].content &&
-              'Ничего примечательного здесь нет'}
+      component: (operation) => 
+          <p className={`w-80 mx-auto text-${!operation.content ? 'body-tertiary' : 'dark'}`}>
+            {!operation.content
+              ? 'Ничего примечательного'
+              : <strong>{operation.content}</strong> }
           </p>
-        ) : (
-          'category not found'
-        ),
+      
     },
     balance: {
       path: 'balance',
@@ -111,7 +109,7 @@ const OperationsTable = () => {
       <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
     );
   }
-  return <Table columns={columns} />;
+  return <Table columns={columns} data={operationCrop} />;
 };
 
 OperationsTable.propTypes = {

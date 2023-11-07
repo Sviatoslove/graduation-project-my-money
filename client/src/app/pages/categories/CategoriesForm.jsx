@@ -12,12 +12,14 @@ import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 
 const CategoriesForm = () => {
   const dispatch = useDispatch();
-  const { show, disAppearanceForm, statusOperation, currentEssence } =
-    useForms();
+  const {
+    show,
+    disAppearanceForm,
+    statusOperation,
+    currentEssence,
+  } = useForms();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
-  console.log('categoriesIcons:', categoriesIcons)
-  console.log('currentEssence[categor]:', currentEssence['category'])
 
   const initialState = currentEssence['category']
     ? currentEssence['category']
@@ -43,7 +45,7 @@ const CategoriesForm = () => {
     const icon = Object.values(categoriesIcons).find(
       (icon) => icon.icon === data.icon
     );
-    if (currentEssence) {
+    if (currentEssence['category']) {
       dispatch(categoriesUpdate(data));
     } else {
       dispatch(
@@ -64,12 +66,12 @@ const CategoriesForm = () => {
       {/* { ( */}
       <div
         className={
-          'rounded-3 w-516px mh-866px shadow-lg py-3 px-5 wrapper-form ' + show
+          'rounded-3 w-700px mh-989px shadow-lg py-3 px-5 wrapper-form ' + show
         }
       >
         <form onSubmit={handleSubmit}>
           <h3 className="text-center">
-            {currentEssence !== ''
+            {currentEssence['category']
               ? 'Редактирование категории'
               : 'Создание категории'}
           </h3>
@@ -96,8 +98,9 @@ const CategoriesForm = () => {
             valueBgColor={data.bgColor}
             value={data.icon}
             options={categoriesIcons}
-            count={10}
+            count={40}
             onChange={handleChange}
+            classesInputGroup={'mh-352px'}
           />
           <AvatarsField
             label={'Выбери цвет иконки'}
@@ -132,7 +135,7 @@ const CategoriesForm = () => {
             classes="w-100 mx-auto mt-4"
             // disabled={isValid || enterError}
           >
-            {!currentEssence ? 'Создать' : 'Обновить'}
+            {!currentEssence['category'] ? 'Создать' : 'Обновить'}
           </Button>
           <Button
             classes="w-100 mx-auto mt-2"

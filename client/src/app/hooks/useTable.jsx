@@ -24,7 +24,7 @@ const useTables = () => useContext(TablesContext);
 const TablesProvider = ({ children }) => {
   const dispatch = useDispatch();
   const { statusOperation } = useForms();
-  let filteredCategories = []
+  let filteredCategories = [];
 
   const [currentPage, setCurrentPage] = useState(1);
   const [masterCount, setMasterCount] = useState('');
@@ -40,8 +40,6 @@ const TablesProvider = ({ children }) => {
   const operations = useSelector(selectOperations());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
-
-  const pageSize = 10;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -88,7 +86,7 @@ const TablesProvider = ({ children }) => {
       const dataArr = Object.values(data);
       const filteredOper = searchQuery
         ? dataArr.filter((operation) =>
-            operation.name.toLowerCase().includes(searchQuery.toLowerCase())
+            operation.content.toLowerCase().includes(searchQuery.toLowerCase())
           )
         : dataArr;
       return (
@@ -96,10 +94,10 @@ const TablesProvider = ({ children }) => {
         filteredOper
           .filter((op) => op.countId === masterCount._id)
           .filter((operation) => {
-            if(operation.status === statusOperation){
-              filteredCategories.push(categories[operation.categoryId])
-              return operation
-            };
+            if (operation.status === statusOperation) {
+              filteredCategories.push(categories[operation?.categoryId]);
+              return operation;
+            }
           })
           .filter((op) => {
             if (dataCategory.category) {
@@ -118,6 +116,8 @@ const TablesProvider = ({ children }) => {
     [sortBy.path],
     [sortBy.order]
   );
+
+  const pageSize = 11;
 
   const operationCrop = paginate(sortedOperations, currentPage, pageSize);
 
@@ -139,14 +139,19 @@ const TablesProvider = ({ children }) => {
         categories,
         handleChange,
         categoriesDataLoaded,
-        filteredCategories
+        filteredCategories,
+        isLoggedIn,
+        searchQuery,
+        handleSearchChange,
+        setSearchQuery
       }}
     >
-      {operationsDataLoading && categoriesDataLoaded ? (
+      {/* {!isLoggedIn || operationsDataLoading && categoriesDataLoaded ? (
         children
       ) : (
         <LoadingSpinners style={{ width: '56px', height: '56px' }} number={3} />
-      )}
+      )} */}
+      {children}
     </TablesContext.Provider>
   );
 };

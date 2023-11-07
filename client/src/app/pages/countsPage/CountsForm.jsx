@@ -65,7 +65,7 @@ const CountsForm = () => {
         >
           <form onSubmit={handleSubmit}>
             <h3 className="text-center">
-              {currentEssence !== "" ? "Редактирование счёта" : "Создание счёта"}
+              {currentEssence ? "Редактирование счёта" : "Создание счёта"}
             </h3>
             <TextField
               label="Название счёта"

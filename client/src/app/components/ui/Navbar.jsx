@@ -24,10 +24,10 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className="navbar navbar-dark bg-primary position-absolut shadow-lg"
+        className="navbar navbar-dark bg-primary shadow-lg"
         style={{
           height: "70px",
-          maxWidth: "1200px",
+          maxWidth: "1230px",
           width: "100%",
           margin: "0 auto",
           borderTopLeftRadius: "3px",

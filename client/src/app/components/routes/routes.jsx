@@ -91,7 +91,11 @@ const routes = (isLoggedIn, location) => {
       path: "categories",
       pathname: location.pathname,
       display: isLoggedIn,
-      element: <CategoriesPage />,
+      element: isLoggedIn ? (
+        <CategoriesPage />
+      ) : (
+        <Navigate to="/auth/login" state={{ referrer: location }} />
+      ),
     },
     {
       name: "Регулярные платежи",

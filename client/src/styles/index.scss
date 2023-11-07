@@ -68,6 +68,7 @@ $utilities: map-merge(
         268: 268px,
         300: 300px,
         1200: 1200px,
+        1230: 1230px,
       ),
     ),
     "min-width": (
@@ -83,6 +84,7 @@ $utilities: map-merge(
       values: (
         content: fit-content,
         mc: min-content,
+        maxc: max-content,
         i:inherit,
         100vh: 100vh,
         100: 100%,
@@ -103,7 +105,9 @@ $utilities: map-merge(
         94vh: 94vh,
         86vh: 86vh,
         105px: 105px,
+        352px: 352px,
         866px: 866px,
+        989px: 989px,
       ),
     ),
     "margin": (
@@ -240,6 +244,34 @@ $utilities: map-merge(
       values: (
         30px: 30px,
         1: 1%,
+        5: 5%,
+        6: 6%,
+        7: 7%,
+        24:24%,
+      ),
+    ),
+    "right": (
+      property: right,
+      class: end,
+      values: (
+        30px: 30px,
+        1: 1%,
+        2: 2%,
+        5: 5%,
+        6: 6%,
+        7: 7%,
+        24:24%,
+      ),
+    ),
+    "bottom": (
+      property: bottom,
+      class: bottom,
+      values: (
+        30px: 30px,
+        1: 1%,
+        2: 2%,
+        5: 5%,
+        6: 6%,
         7: 7%,
         24:24%,
       ),

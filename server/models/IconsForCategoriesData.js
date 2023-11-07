@@ -7,8 +7,6 @@ const schema = new Schema(
       required: true,
     },
     dataType: String,
-    like:Boolean
-
   },
   {
     timestamps: true,

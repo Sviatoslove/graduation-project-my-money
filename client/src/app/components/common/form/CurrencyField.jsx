@@ -14,10 +14,16 @@ const CurrencyField = ({
   icon,
   handleClick,
   inputBalanceToCount,
+  balance
 }) => {
+  console.log('balance:', balance)
+
   const cleanInput = (e) => {
     const { target } = e;
-    if (target.type === "number" && target.value === "0") target.value = "";
+    if (target.type === "number" && target.value === "0") {
+    if(balance)target.placeholder = `${balance} максимальная сумма перевода`
+    target.value = "";
+  }
     if (target.type === "text") target.blur();
   };
 
@@ -72,6 +78,7 @@ CurrencyField.propTypes = {
   handleClick: PropTypes.func,
   error: PropTypes.string,
   type: PropTypes.string,
+  balance: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 };
 
 export default CurrencyField;

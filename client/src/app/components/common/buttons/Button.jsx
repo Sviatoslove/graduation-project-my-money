@@ -65,11 +65,11 @@ const Button = ({
           )}
           {icon && (
             <i
-              className={`${icon} text-${iconColor} mx-auto`}
+              className={`${icon} text-${iconColor} mx-auto p-0` }
               style={{ fontSize: iconSize }}
             />
           )}
-          <small className="mx-auto">{children}</small>
+          <strong className="mx-auto mt-0">{children}</strong>
         </button>
       ) : (
         <Link
@@ -98,7 +98,7 @@ Button.defaultProps = {
   id: '',
   link: '',
   type: 'button',
-  iconSize: '52px',
+  iconSize: '56px',
   zIndex: 1,
   disabled: false,
 };

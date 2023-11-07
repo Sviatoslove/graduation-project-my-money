@@ -13,7 +13,8 @@ const AvatarsField = ({
   valueBgColor,
   options,
   onChange,
-  count
+  count,
+  classesInputGroup
 }) => {
   const formatOptions = formatDataForAvatarsFields(count, options)
   const [index, setIndex] = useState(getFindActiveIndex(value, formatOptions)||0);
@@ -64,13 +65,13 @@ const AvatarsField = ({
           name: name,
           outline: item.color ? false : true,
           bgColor: valueBgColor ? valueBgColor : item.color,
-          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor}`,
+          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor} px-2 py-0`,
           textColor: valueTextColor,
           iconColor: valueIconColor,
           width: item.color ? '16px' : '',
-          height: item.color ? '24px' : '105px',
-          children: nameCategory && nameCategory.slice(0, 4),
-        
+          height: item.color ? '24px' : '80px',
+          children: nameCategory && nameCategory.slice(0, 2),
+          iconSize:'36px'
         };
       }
       if (item.dataType === 'category') {
@@ -79,7 +80,7 @@ const AvatarsField = ({
           ...settingsBtn,
           name: name,
           dataValue: item._id,
-          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center`,
+          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center h-content`,
           children: item.name.slice(0,8),
         };
       }
@@ -91,7 +92,7 @@ const AvatarsField = ({
   return (
     <div className="mb-1">
       <label htmlFor={name}>{label}</label>
-      <div className="input-group mt-2 justify-content-center">
+      <div className={"input-group mt-2 justify-content-center " + classesInputGroup}>
         {drawingAvatars(index)}
       </div>
       {formatOptions.length > 1 && (
@@ -133,6 +134,7 @@ AvatarsField.propTypes = {
   error: PropTypes.string,
   value: PropTypes.string,
   count: PropTypes.number,
+  classesInputGroup: PropTypes.string,
 };
 
 export default AvatarsField;

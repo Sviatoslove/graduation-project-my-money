@@ -30,7 +30,6 @@ import { paginate } from '../../utils';
 const CategoriesPage = () => {
   const dispatch = useDispatch();
   const {
-    disAppearanceForm,
     transform,
     statusOperation,
     essenceHandleToEdit,
@@ -119,10 +118,12 @@ const CategoriesPage = () => {
           <Pagination
             itemsCount={count}
             pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
           />
           <Button
             bgColor="primary"
-            classes="shadow-lg ms-auto mt-2"
+            classes="shadow-lg ms-auto mt-2 me-3"
             dataType="add"
             onClick={(e)=>essenceHandleToEdit(e, {['iconsForCategories']:categoriesIcons})}
             imgSrc={addIcon}

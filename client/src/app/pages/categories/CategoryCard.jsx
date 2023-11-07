@@ -17,7 +17,9 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
     classesForWrapp,
     classesForCardBody,
     classesForName,
+    like
   } = category;
+
   const { essenceHandleToEdit } = useForms();
   return (
     <div className={"col " + classesForCol}>
@@ -26,9 +28,9 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
           classesForWrapp ? classesForWrapp : 'card'
         } h-100 bg-${bgColor} br-50 item-categories position-relative min-w-210 w-maxc mw-300 shadow-lg`}
       >
-        {!table && category.like && (
+        {!table && like && (
           <i
-            className={`bi bi-heart-fill text-${iconColor} position-absolute top-7 start-7 translate-end fs-2`}
+            className={`bi bi-heart-fill text-${iconColor} position-absolute top-7 start-7 translate-end fs-2 like-for-card`}
           />
         )}
         <div className="wrapper-icon-category d-flex">
@@ -61,11 +63,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
             classesGroup="h-i px-2"
             func={[
               (e) =>
-                essenceHandleToEdit(e, {
-                  [category.dataType]: category,
-                  [categoriesIcons[category.iconId].dataType]:
-                    categoriesIcons[category.iconId],
-                }),
+                essenceHandleToEdit(e, category),
                 (e) =>
                 essenceHandleToEdit(e, {
                   [category.dataType]: category,
@@ -75,7 +73,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
             ]}
             icon={[
               'bi bi-heart' +
-                (categoriesIcons[category.iconId]?.like ? '-fill' : ''),
+                (category?.like ? '-fill' : ''),
               'bi bi-gear',
               'bi bi-trash',
             ]}

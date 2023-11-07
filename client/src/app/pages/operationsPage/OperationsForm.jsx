@@ -13,7 +13,7 @@ import {
 import { useForms } from '../../hooks/useForm';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import { operationCreate, operationUpdate } from '../../store/operationsSlice';
+import { operationCreate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 
 const OperationsForm = () => {
@@ -87,7 +87,9 @@ const OperationsForm = () => {
               value={data.categoryId}
               options={filteredCategories}
               onChange={handleChange}
-              count={12}
+              classesInputGroup={'mh-352px'}
+              count={32}
+              iconSize="56px"
             />
             <TextField
               label="Комментарий"

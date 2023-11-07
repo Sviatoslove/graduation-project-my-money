@@ -40,7 +40,7 @@ const UserPageEdit = ({ user, onShow }) => {
 
   if (avatarsDataStatus) {
     return (
-      <div className="d-flex align-items-center just justify-content-around">
+      <div className="d-flex align-items-center justify-content-around">
         <form onSubmit={handleSubmit} style={{ width: "520px" }}>
           <div className="d-flex justify-content-between">
             <TextField

@@ -131,6 +131,7 @@ const TranslationsForm = () => {
             name="balanceFrom"
             type="number"
             label="Сумма для перевода"
+            balance={data.fromCount !== "0" && counts[data.fromCount].balance}
             value={
               data.fromCount !== "0" &&
               counts[data.fromCount].balance < data.balanceFrom

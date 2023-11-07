@@ -2,7 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { operationRemove } from '../store/operationsSlice';
-import { categoriesIconsUpdate, categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
+import {
+  categoriesIconsUpdate,
+  categoriesRemove,
+  categoriesUpdate,
+} from '../store/categoriesSlice';
 import { countRemove, countUpdate } from '../store/countsSlice';
 import { useDispatch } from 'react-redux';
 
@@ -11,8 +15,8 @@ const FormsContext = React.createContext();
 const useForms = () => useContext(FormsContext);
 
 const FormsProvider = ({ children }) => {
-  const dispatch = useDispatch()
-  const location = useLocation()
+  const dispatch = useDispatch();
+  const location = useLocation();
   const [show, setShow] = useState('');
   const [add, setAdd] = useState(false);
   const [typeForm, setTypeForm] = useState(false);
@@ -20,7 +24,6 @@ const FormsProvider = ({ children }) => {
   const [currentEssence, setCurrentEssence] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
@@ -30,10 +33,10 @@ const FormsProvider = ({ children }) => {
     setShow('show');
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setShow('');
-    setAdd(false)
-  },[location.pathname])
+    setAdd(false);
+  }, [location.pathname]);
 
   const disAppearanceForm = () => {
     setShow('');
@@ -46,17 +49,17 @@ const FormsProvider = ({ children }) => {
     if (btnType === 'add') {
       appearanceForm();
     } else {
-      setCurrentPage(1)
+      setCurrentPage(1);
       setStatusOperation(btnType);
     }
   };
 
   const essenceHandleToEdit = (e, currentEssence) => {
-    const { target } = e
-    const btn = target.closest('button')
-    const btnType = btn.dataset.type;
-    const essence = btn.dataset.essence;
-    const idEssence = btn.id;
+    const { target } = e;
+    const btn = target.closest('button');
+    const btnType = btn?.dataset.type;
+    const essence = btn?.dataset.essence;
+    const idEssence = btn?.id;
     switch (btnType) {
       case 'add':
         setCurrentEssence(currentEssence);
@@ -69,20 +72,17 @@ const FormsProvider = ({ children }) => {
         appearanceForm();
         break;
       case 'like':
-        let editedEssence
-        if(essence === 'category') {
-          editedEssence = Object.values(currentEssence).reduce((acc, item)=> acc={...acc, [item.dataType]:{...item, like: item.like ? !item.like : true}}, {})
-          dispatch(categoriesUpdate(editedEssence['category']))
-          dispatch(categoriesIconsUpdate(editedEssence['iconsForCategories']))
-        } else {
-          editedEssence = { ...currentEssence, like: currentEssence.like ? !currentEssence.like : true };
-          if(essence === 'count') dispatch(countUpdate(editedEssence));
-        }
+        const editedEssence = {
+          ...currentEssence,
+          like: currentEssence.like ? !currentEssence.like : true,
+        };
+        if (essence === 'category') dispatch(categoriesUpdate(editedEssence));
+        if (essence === 'count') dispatch(countUpdate(editedEssence));
         break;
       case 'remove':
-        if(essence === 'count') dispatch(countRemove(idEssence));
-        if(essence === 'operation') dispatch(operationRemove(idEssence));
-        if(essence === 'category') dispatch(categoriesRemove(idEssence));
+        if (essence === 'count') dispatch(countRemove(idEssence));
+        if (essence === 'operation') dispatch(operationRemove(idEssence));
+        if (essence === 'category') dispatch(categoriesRemove(idEssence));
         break;
       case 'translationsAdd':
         setTypeForm(btnType);
@@ -105,8 +105,11 @@ const FormsProvider = ({ children }) => {
         statusOperation,
         typeForm,
         currentEssence,
-        essenceHandleToEdit, currentPage, setCurrentPage,
-        handlePageChange
+        essenceHandleToEdit,
+        currentPage,
+        setCurrentPage,
+        handlePageChange,
+        setCurrentEssence,
       }}
     >
       {children}

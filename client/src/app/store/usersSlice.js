@@ -134,11 +134,6 @@ export const updateUser = (payload) => async (dispatch) => {
   }
 };
 
-export const updateUserByCount = (payload) => async (dispatch) => {
-  console.log("payload:", payload);
-  // dispatch(userUpdateSuccessed(payload))
-};
-
 export const selectUser = () => (state) => state.users.entities;
 
 export const selectIsLoggedIn = () => (state) => state.users.isLoggedIn;

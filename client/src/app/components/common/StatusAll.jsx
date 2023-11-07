@@ -6,11 +6,11 @@ const StatusAll = ({classes}) => {
   const {statusOperation, handleClick} = useForms()
 
   return (
-    <ul className={"nav nav-tabs nav-tabs justify-content-evenly border-primary ff-roboto " + classes}>
-      <li className="nav-item border-4">
+    <ul className={"nav nav-tabs nav-tabs justify-content-evenly border-primary border-2 ff-roboto " + classes}>
+      <li className="nav-item border-5 bbc-tr">
         <button
           className={
-            'nav-link border-primary bbc-tr ' +
+            'nav-link border-primary bbc-tr border-2 ' +
             (statusOperation === 'decrement' ? 'active' : 'border-0')
           }
           aria-current="true"

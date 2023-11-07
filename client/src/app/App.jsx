@@ -25,6 +25,7 @@ function App() {
             classes={
               'w-content shadow-custom position-absolute top-94px start-30px'
             }
+            zIndex={2}
           />
         )}
         <FormsProvider>

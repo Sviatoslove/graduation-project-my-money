@@ -19,12 +19,12 @@ const SelectedField = ({
   }));
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 d-flex flex-column text-center">
       <label htmlFor={name} className="form-label">
-        {label}
+       <strong>{label}</strong> 
       </label>
       <select
-        className="form-select"
+        className="form-select-lg"
         // className={getInputClasses('form-select', error)}
         value={value}
         onChange={onChange}

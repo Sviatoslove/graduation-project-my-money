@@ -7,9 +7,10 @@ const Pagination = ({
   itemsCount,
   pageSize,
   countsLikes,
-  likesPage
+  likesPage,
+  currentPage,
+  onPageChange
 }) => {
-  const {currentPage, handlePageChange} = useForms()
   const num = likesPage ? countsLikes.length : itemsCount
   const pagesCount = Math.ceil(num / pageSize);
   const pages = _.range(1, pagesCount + 1);
@@ -28,7 +29,7 @@ const Pagination = ({
             <a
               className="page-link"
               onClick={() => {
-                handlePageChange(page);
+                onPageChange(page);
               }}
             >
               {page}
@@ -44,6 +45,9 @@ Pagination.propTypes = {
   countsLikes: PropTypes.array,
   itemsCount: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func,
+
 };
 
 export default Pagination;

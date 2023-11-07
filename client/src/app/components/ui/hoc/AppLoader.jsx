@@ -16,7 +16,9 @@ const AppLoader = ({ children }) => {
   const usersLoadingStatus = useSelector(selectUserLoadingStatus());
   const user = useSelector(selectUser())
   const masterCount = user?.masterCount
+
   if(masterCount) localStorageService.setMasterCount(masterCount)
+
   useEffect(() => {
     if (isLoggedIn) dispatch(loadUser());
   }, []);

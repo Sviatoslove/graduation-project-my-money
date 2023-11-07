@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Badge = ({
   name,
@@ -14,15 +14,17 @@ const Badge = ({
   return (
     <>
       {balance || balance === 0 ? (
-        <p
-          className={`justify-content-center badge bg-${color} ${textColor} ${classes}`}
+        <span
+          className={`justify-content-center badge bg-${color} ${textColor} ${classes} d-flex align-items-center`}
         >
-          {balance}
+          <span>{balance}</span>
           <img src={imgSrc} alt="img" style={{ width: iconSize }} />
-        </p>
+        </span>
       ) : (
-        <h3 className="m-0">
-          <span className={`badge bg-${color} ${textColor} ${classes}`}>
+        <h3 className={"m-0"}>
+          <span
+            className={`badge bg-${color} ${textColor} ${classes} d-flex align-items-center justify-content-center`}
+          >
             {imgSrc && (
               <img
                 className="me-2"
@@ -31,7 +33,7 @@ const Badge = ({
                 style={{ width: iconSize }}
               />
             )}
-            {text ? text : name}
+            <span>{text ? text : name}</span>
           </span>
         </h3>
       )}
