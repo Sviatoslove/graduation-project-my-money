@@ -4,22 +4,14 @@ import { useSelector } from 'react-redux';
 import UserAvatar from '../components/common/UserAvatar';
 import displayDate from '../utils/displayDate';
 import UserPageEdit from './UserPageEdit';
-import getFlickeringShadows from '../utils/getFlickeringShadows';
 
 const UserPage = () => {
   const [show, setShow] = useState('');
   const user = useSelector(selectUser());
 
-  const handleToEdit = ({ target }) => {
+  const handleToEdit = () => {
     show ? setShow('') : setShow('show');
-    const elem = target.closest('.user-edit');
-    getFlickeringShadows( elem,
-      'box-shadow',
-      '0px 0px 10px 2px rgba(255, 153, 0,'
-    );
   };
-
-  useEffect(()=>{})
 
   return (
     <div

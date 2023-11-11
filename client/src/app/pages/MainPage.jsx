@@ -16,6 +16,7 @@ import Pagination from '../components/common/pagination';
 import { SelectedField } from '../components/common/form';
 import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
+import ProgressBar from '../components/ui/ProgressBar';
 
 const MainPage = () => {
   const { essenceHandleToEdit } = useForms();
@@ -39,6 +40,9 @@ const MainPage = () => {
   return (
     <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>
       <Container newClasses="position-relative">
+        <ContainerScale>
+          <ProgressBar/>
+        </ContainerScale>
         {isLoggedIn && (
           <>
             <Container newClasses="position-absolute bottom-0 start-5">
@@ -61,7 +65,7 @@ const MainPage = () => {
               />
             </Container>
             <Container newClasses="position-absolute bottom-7 end-0">
-              <SearchInput onChange={handleSearchChange} value={searchQuery}/>
+              <SearchInput onChange={handleSearchChange} value={searchQuery} />
             </Container>
           </>
         )}
