@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import { useForms } from "../../hooks/useForm";
+import { useForms } from "../../hooks/useForms";
 
 const Pagination = ({
   itemsCount,

@@ -4,10 +4,9 @@ import { useParams } from 'react-router-dom';
 import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import likesIcon from '../../../assets/icons/heart-fill.svg';
 import {
-  countRemove,
-  countUpdate,
-  countsLoad,
+  loadCounts,
   selectCounts,
+  selectCountsLoadingStatus,
   selectCountsStatus,
 } from '../../store/countsSlice';
 import {
@@ -24,7 +23,9 @@ import CountCard from './CountCard';
 import Button from '../../components/common/buttons/Button';
 import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
+import localStorageService from '../../services/localStorage.service';
+import { selectUser, updateUser } from '../../store/usersSlice';
 
 const CountsPage = () => {
   const dispatch = useDispatch();
@@ -38,10 +39,13 @@ const CountsPage = () => {
   const counts = useSelector(selectCounts());
 
   const countsDataLoaded = useSelector(selectCountsStatus());
+  const countsIsLoading= useSelector(selectCountsLoadingStatus());
+  const user = useSelector(selectUser());
+
   const pageSize = 6;
 
   useEffect(() => {
-    if (!countsDataLoaded) dispatch(countsLoad());
+    if (!countsDataLoaded) dispatch(loadCounts());
   }, []);
 
   useEffect(() => {
@@ -53,14 +57,18 @@ const CountsPage = () => {
       setLikes(count);
       setLikesButton(count);
     }
+    if(!countsDataLoaded) {
+      localStorageService.removeMasterCount()
+      dispatch(updateUser({...user, masterCount: ''}))
+    }
   }, [counts]);
 
   const handleClick = () => {
     setCurrentPage(1);
   };
 
-  if (countsDataLoaded) {
-    const arrCounts = Object.values(counts);
+  if (!countsIsLoading) {
+    const arrCounts = counts ? Object.values(counts) : [];
     const count = arrCounts.length;
     let countsLikes;
     if (likesPage) countsLikes = arrCounts.filter((count) => count.like);
@@ -88,11 +96,11 @@ const CountsPage = () => {
           ) : null}
 
           <ContainerCards colsNumber={'3'} gap={'4'}>
-            {countsCrop.map((count) => (
+            {countsCrop.map((count, idx) => (
               <CountCard
                 count={count}
                 onChange={essenceHandleToEdit}
-                key={count._id}
+                key={count._id + idx}
               />
             ))}
           </ContainerCards>

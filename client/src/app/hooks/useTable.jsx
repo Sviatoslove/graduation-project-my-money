@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { paginate } from '../utils';
 import LoadingSpinners from '../components/common/LoadingSpinners';
 import { selectIsLoggedIn } from '../store/usersSlice';
-import { useForms } from './useForm';
+import { useForms } from './useForms';
 import {
   loadCategories,
   selectCategories,
@@ -81,25 +81,40 @@ const TablesProvider = ({ children }) => {
     setSelectedCategory();
   };
 
- if(isLoggedIn&&!categories) return <LoadingSpinners number={3}/>
+  if (isLoggedIn && !categories && categories !== null)
+    return <LoadingSpinners number={3} />;
 
   const filterOperations = (data) => {
     if (data) {
       const dataArr = Object.values(data);
       const filteredOper = searchQuery
-        ? dataArr.filter((operation) =>{
-          const ddMmYyyyArr = operation.date.split('T')[0].split('-')
+        ? dataArr.filter((operation) => {
+            const ddMmYyyyArr = operation.date.split('T')[0].split('-');
             // фильтрация в поиске по году
-            if(!isNaN(Number(searchQuery)) && !searchQuery.includes('.')) return ddMmYyyyArr[0] === searchQuery
+            if (!isNaN(Number(searchQuery)) && !searchQuery.includes('.'))
+              return ddMmYyyyArr[0] === searchQuery;
             // фильтрация в поиске по месяцу и году
-            if(searchQuery.includes('.') && searchQuery.split('.').length === 2) return ddMmYyyyArr.slice(0, 2).reverse().join('.') === searchQuery
+            if (
+              searchQuery.includes('.') &&
+              searchQuery.split('.').length === 2
+            )
+              return (
+                ddMmYyyyArr.slice(0, 2).reverse().join('.') === searchQuery
+              );
             // фильтрация в поиске по месяцу и году и числу
-            if(searchQuery.includes('.') && searchQuery.split('.').length === 3) return ddMmYyyyArr.reverse().join('.') === searchQuery
-           return operation.content.toLowerCase().includes(searchQuery.toLowerCase())
+            if (
+              searchQuery.includes('.') &&
+              searchQuery.split('.').length === 3
+            )
+              return ddMmYyyyArr.reverse().join('.') === searchQuery;
+            return operation.content
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
           })
         : dataArr;
       return (
         operations &&
+        categories &&
         filteredOper
           .filter((op) => op.countId === masterCount._id)
           .filter((operation) => {
@@ -126,7 +141,7 @@ const TablesProvider = ({ children }) => {
     [sortBy.order]
   );
 
-  const pageSize = 11;
+  const pageSize = 10;
 
   const operationCrop = paginate(sortedOperations, currentPage, pageSize);
 
@@ -152,14 +167,10 @@ const TablesProvider = ({ children }) => {
         isLoggedIn,
         searchQuery,
         handleSearchChange,
-        setSearchQuery
+        setSearchQuery,
+        filteredOperations,
       }}
     >
-      {/* {!isLoggedIn || operationsDataLoading && categoriesDataLoaded ? (
-        children
-      ) : (
-        <LoadingSpinners style={{ width: '56px', height: '56px' }} number={3} />
-      )} */}
       {children}
     </TablesContext.Provider>
   );

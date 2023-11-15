@@ -9,7 +9,7 @@ import Button from '../components/common/buttons/Button';
 import addIcon from '../../assets/icons/patch-plus-fill.svg';
 import { ContainerScale, ContainerShow } from '../components/common/Containers';
 import OperationsForm from './operationsPage/OperationsForm';
-import { useForms } from '../hooks/useForm';
+import { useForms } from '../hooks/useForms';
 import OperationsTable from '../components/ui/OperationsTable';
 import { useTables } from '../hooks/useTable';
 import Pagination from '../components/common/pagination';
@@ -17,6 +17,7 @@ import { SelectedField } from '../components/common/form';
 import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
 import ProgressBar from '../components/ui/ProgressBar';
+import localStorageService from '../services/localStorage.service';
 
 const MainPage = () => {
   const { essenceHandleToEdit } = useForms();
@@ -30,7 +31,6 @@ const MainPage = () => {
     handleChange,
     categoriesDataLoaded,
     filteredCategories,
-    isLoggedIn,
     searchQuery,
     handleSearchChange,
   } = useTables();
@@ -40,10 +40,9 @@ const MainPage = () => {
   return (
     <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>
       <Container newClasses="position-relative">
-        <ContainerScale>
-          <ProgressBar/>
-        </ContainerScale>
-        {isLoggedIn && (
+        <ProgressBar />
+
+        {user && user?.masterCount && (
           <>
             <Container newClasses="position-absolute bottom-0 start-5">
               <SelectedField
@@ -67,11 +66,6 @@ const MainPage = () => {
             <Container newClasses="position-absolute bottom-7 end-0">
               <SearchInput onChange={handleSearchChange} value={searchQuery} />
             </Container>
-          </>
-        )}
-
-        {user && user?.masterCount && (
-          <>
             <MasterCount
               classes={'d-flex flex-column fs-4 w-content mx-auto'}
             />
@@ -82,7 +76,8 @@ const MainPage = () => {
       <ContainerScale classes="wrapper-operation flex-grow-1">
         {operations ? <OperationsTable /> : null}
       </ContainerScale>
-      <ContainerShow type={'add'}>
+
+      <ContainerShow type={'add'} classes={'position-relative'}>
         <OperationsForm />
       </ContainerShow>
       <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
@@ -94,7 +89,7 @@ const MainPage = () => {
         />
         <Button
           link={
-            (!user?.masterCount && '/counts') ||
+            (!localStorageService.getMasterCount() && '/counts') ||
             (!categoriesDataLoaded && '/categories')
           }
           bgColor="primary"

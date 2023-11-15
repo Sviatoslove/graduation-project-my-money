@@ -10,14 +10,13 @@ import "./styles/index.scss";
 import "./styles/customBtns.scss";
 import App from "./app/App";
 import createStore from "./app/store/createStore";
-import history from "./app/utils/history";
 
 const store = createStore();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <BrowserRouter history={history}>
+    <BrowserRouter>
       {/* <React.StrictMode> */}
       <App />
       {/* </React.StrictMode> */}

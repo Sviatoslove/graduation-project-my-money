@@ -10,14 +10,14 @@ import {
   loadCategories,
   selectCategories,
 } from '../../store/categoriesSlice';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import { operationCreate } from '../../store/operationsSlice';
+import { operationCreate, operationUpdate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 
 const OperationsForm = () => {
-  const { disAppearanceForm, statusOperation } = useForms();
+  const { disAppearanceForm, statusOperation, currentEssence, setToast } = useForms();
   const dispatch = useDispatch();
   const { show } = useForms();
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -30,14 +30,16 @@ const OperationsForm = () => {
 
   const [hour, minutes] = [new Date().getHours(), new Date().getMinutes()];
 
-  const initialState = {
-    balance: 0,
-    categoryId: '',
-    content: '',
-    date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
-      minutes < 10 ? '0' + minutes : minutes
-    }`,
-  };
+  const initialState = currentEssence
+    ? { ...currentEssence, prevBalance: currentEssence.balance }
+    : {
+        balance: 0,
+        categoryId: '',
+        content: '',
+        date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
+          minutes < 10 ? '0' + minutes : minutes
+        }`,
+      };
   const [data, setData] = useState(initialState);
 
   useEffect(() => {
@@ -53,14 +55,18 @@ const OperationsForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      operationCreate({
-        ...data,
-        status: statusOperation,
-        countId: localStorageService.getMasterCount(),
-        userId: localStorageService.getUserId(),
-      })
-    );
+    if (currentEssence) {
+      dispatch(operationUpdate(data));
+    } else {
+      dispatch(
+        operationCreate({
+          ...data,
+          status: statusOperation,
+          countId: localStorageService.getMasterCount(),
+          userId: localStorageService.getUserId(),
+        })
+      );
+    }
     disAppearanceForm();
   };
 
@@ -69,11 +75,13 @@ const OperationsForm = () => {
       {categoriesDataLoaded ? (
         <div
           className={
-            'rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
+            'top-60 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
           }
         >
           <form onSubmit={handleSubmit}>
-            <h3 className="text-center">Создание операции</h3>
+            <h3 className="text-center">
+              {currentEssence ? 'Редактирование операции' : 'Создание операции'}
+            </h3>
             <TextField
               label="Сумма"
               value={data.balance}
@@ -113,7 +121,7 @@ const OperationsForm = () => {
               classes="w-100 mx-auto mt-4"
               // disabled={isValid || enterError}
             >
-              Создать
+              {currentEssence ? 'Обновить' : 'Создать'}
             </Button>
 
             <Button

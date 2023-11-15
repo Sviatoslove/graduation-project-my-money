@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { operationRemove } from '../store/operationsSlice';
 import {
-  categoriesIconsUpdate,
   categoriesRemove,
   categoriesUpdate,
 } from '../store/categoriesSlice';
-import { countRemove, countUpdate } from '../store/countsSlice';
-import { useDispatch } from 'react-redux';
+import { countRemove, countUpdate, selectErrorCounts } from '../store/countsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearError, selectAuthError } from '../store/usersSlice';
 
 const FormsContext = React.createContext();
 
@@ -17,15 +16,31 @@ const useForms = () => useContext(FormsContext);
 const FormsProvider = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { type } = useParams();
+  const [formType, setFormType] = useState(
+    type === "register" ? type : "login",
+  );
   const [show, setShow] = useState('');
   const [add, setAdd] = useState(false);
+  const [toast, setToast] = useState('');
   const [typeForm, setTypeForm] = useState(false);
   const [statusOperation, setStatusOperation] = useState('decrement');
   const [currentEssence, setCurrentEssence] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const loginError = useSelector(selectAuthError());
+  const errorRegister = useSelector(selectAuthError());
+  const errorCounts = useSelector(selectErrorCounts());
+
+
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
+  };
+
+  const toggleFormType = () => {
+    setFormType((state) => (state === "register" ? "login" : "register"));
+    dispatch(clearError())
+    if(toast.show === 'show') setToast(state=> ({...state, show:'hide'}))
   };
 
   const appearanceForm = () => {
@@ -110,18 +125,16 @@ const FormsProvider = ({ children }) => {
         setCurrentPage,
         handlePageChange,
         setCurrentEssence,
+        toast,
+        setToast,
+        formType,
+        toggleFormType,
+        loginError, errorRegister, errorCounts
       }}
     >
       {children}
     </FormsContext.Provider>
   );
-};
-
-FormsProvider.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
 };
 
 export { FormsProvider, useForms };

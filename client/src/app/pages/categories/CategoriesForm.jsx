@@ -7,7 +7,7 @@ import {
   categoriesUpdate,
   categoriesCreate,
 } from '../../store/categoriesSlice';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 
 const CategoriesForm = () => {
@@ -20,6 +20,7 @@ const CategoriesForm = () => {
   } = useForms();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
+  console.log('categoriesIcons:', categoriesIcons)
 
   const initialState = currentEssence['category']
     ? currentEssence['category']

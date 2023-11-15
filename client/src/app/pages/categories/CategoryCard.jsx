@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BtnsGroup } from '../../components/common/buttons';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
 
 const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
   const {
@@ -67,14 +67,14 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
                 (e) =>
                 essenceHandleToEdit(e, {
                   [category.dataType]: category,
-                  [categoriesIcons[category.iconId].dataType]: categoriesIcons,
+                  [categoriesIcons[category.iconId]?.dataType]: categoriesIcons,
                 }),
               essenceHandleToEdit,
             ]}
             icon={[
               'bi bi-heart' +
                 (category?.like ? '-fill' : ''),
-              'bi bi-gear',
+              'bi bi-pencil-square',
               'bi bi-trash',
             ]}
             iconColor={bgColor}

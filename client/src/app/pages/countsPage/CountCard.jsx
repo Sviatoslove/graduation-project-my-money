@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { displayDate } from '../../utils';
-import Button from '../../components/common/buttons/Button';
 import currency from '../../mock/currency';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -13,6 +12,7 @@ import Badge from '../../components/common/Badge';
 import { BtnsGroup } from '../../components/common/buttons';
 
 const CountCard = ({ count, onChange }) => {
+  console.log('count.currency:', count.currency)
   const dispatch = useDispatch();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
@@ -80,13 +80,13 @@ const CountCard = ({ count, onChange }) => {
         <BtnsGroup
           count={3}
           id={count._id}
-          dataType={['edit', 'like', 'remove']}
+          dataType={[ 'like', 'edit', 'remove']}
           dataEssence={'count'}
           classes="btn-sm"
           func={(e) => onChange(e, count)}
           icon={[
-            'bi bi-gear',
             'bi bi-heart' + (count.like ? '-fill' : ''),
+            'bi bi-pencil-square',
             'bi bi-trash',
           ]}
           bgColor="light"

@@ -1,14 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import countsService from "../services/counts.service";
-import countsDataService from "../services/countsData.service";
-import countsIconsDataService from "../services/countsIconsData.service";
-import currencyDataService from "../services/currencyData.service";
+import { createSlice } from '@reduxjs/toolkit';
+import countsService from '../services/counts.service';
+import countsDataService from '../services/countsData.service';
+import countsIconsDataService from '../services/countsIconsData.service';
+import currencyDataService from '../services/currencyData.service';
 
 const countsSlice = createSlice({
-  name: "counts",
+  name: 'counts',
   initialState: {
     entities: null,
-    isLoading: false,
+    isLoading: true,
     error: null,
     dataLoaded: null,
     countsData: null,
@@ -17,14 +17,27 @@ const countsSlice = createSlice({
     countsIconsDataLoaded: null,
     currencyDataLoaded: null,
     currencyData: null,
-    masterCount:null
+    masterCount: null,
   },
   reducers: {
-    countsRequested: (state) => {
-      state.isLoading = true;
-    },
     countsReceived: (state, action) => {
-      state.entities = action.payload;
+      const { payload } = action;
+      if (!Object.keys(payload).length) {
+        state.isLoading = false;
+        return;
+      }
+      state.entities = payload;
+      state.isLoading = false;
+      state.dataLoaded = true;
+    },
+    countAdded: (state, action) => {
+      const { payload } = action;
+      if (!Object.keys(payload).length) {
+        state.isLoading = false;
+        return;
+      }
+      if (!state.entities) state.entities = { [payload._id]: payload };
+      else state.entities = { ...state.entities, [payload._id]: payload };
       state.isLoading = false;
       state.dataLoaded = true;
     },
@@ -40,10 +53,10 @@ const countsSlice = createSlice({
     },
     countsRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
-      if (!Object.keys(state.entities).length) state.dataLoaded = false;
-    },
-    countsDataRequested: (state) => {
-      state.isLoading = true;
+      if (!Object.keys(state.entities).length) {
+        state.entities = null;
+        state.dataLoaded = false;
+      }
     },
     countsDataReceived: (state, action) => {
       state.countsData = action.payload;
@@ -54,9 +67,6 @@ const countsSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    countsIconsDataRequested: (state) => {
-      state.isLoading = true;
-    },
     countsIconsDataReceived: (state, action) => {
       state.countsIconsData = action.payload;
       state.isLoading = false;
@@ -65,9 +75,6 @@ const countsSlice = createSlice({
     countsIconsDataRequestedFailed: (state, action) => {
       state.error = action.payload;
       state.isLoading = false;
-    },
-    currencyDataRequested: (state) => {
-      state.isLoading = true;
     },
     currencyDataReceived: (state, action) => {
       state.currencyData = action.payload;
@@ -92,42 +99,42 @@ const countsSlice = createSlice({
         ...action.payload.countTo,
       };
     },
+    clearError: (state, action) => {
+      if(action.payload === '') state.error = action.payload
+      else state.error = null;
+    }
   },
 });
 
 const { reducer: countsReducer, actions } = countsSlice;
 
 const {
-  countsRequested,
   countsReceived,
+  countAdded,
   countsRequestedFailed,
   countsUpdatedReceived,
   countsRemovedReceived,
-  countsDataRequested,
   countsDataReceived,
   countsDataRequestedFailed,
-  countsIconsDataRequested,
   countsIconsDataReceived,
   countsIconsDataRequestedFailed,
-  currencyDataRequested,
   currencyDataReceived,
   currencyDataRequestedFailed,
   countsDataRemoved,
-  countsUpdateByTranslation
+  countsUpdateByTranslation,
+  clearError
 } = actions;
 
 export const countCreate = (payload) => async (dispatch) => {
-  dispatch(countsRequested());
   try {
     const { content } = await countsService.create(payload);
-    dispatch(countsReceived(content));
+    dispatch(countAdded(content));
   } catch (error) {
     dispatch(countsRequestedFailed(error.message));
   }
 };
 
-export const countsLoad = () => async (dispatch) => {
-  dispatch(countsRequested());
+export const loadCounts = () => async (dispatch) => {
   try {
     const { content } = await countsService.get();
     dispatch(countsReceived(content));
@@ -137,7 +144,6 @@ export const countsLoad = () => async (dispatch) => {
 };
 
 export const countUpdate = (payload) => async (dispatch) => {
-  dispatch(countsRequested());
   try {
     const { content } = await countsService.update(payload);
     dispatch(countsUpdatedReceived(content));
@@ -154,16 +160,16 @@ export const countsUpdateAfterOperation = (payload) => async (dispatch) => {
   dispatch(countsUpdatedReceived(payload));
 };
 
-export const countsUpdateAfterDeleteTranslation = (payload) => async (dispatch) => {
-  dispatch(countsUpdateByTranslation(payload));
-};
+export const countsUpdateAfterDeleteTranslation =
+  (payload) => async (dispatch) => {
+    dispatch(countsUpdateByTranslation(payload));
+  };
 
 export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
   dispatch(countsReceived(payload));
 };
 
 export const countRemove = (payload) => async (dispatch) => {
-  dispatch(countsRequested());
   try {
     await countsService.remove(payload);
     dispatch(countsRemovedReceived(payload));
@@ -177,7 +183,6 @@ export const countsDestroyed = () => async (dispatch) => {
 };
 
 export const loadCountsData = () => async (dispatch) => {
-  dispatch(countsDataRequested());
   try {
     const { content } = await countsDataService.get();
     dispatch(countsDataReceived(content));
@@ -187,7 +192,6 @@ export const loadCountsData = () => async (dispatch) => {
 };
 
 export const loadCountsIconsData = () => async (dispatch) => {
-  dispatch(countsIconsDataRequested());
   try {
     const { content } = await countsIconsDataService.get();
     dispatch(countsIconsDataReceived(content));
@@ -197,13 +201,16 @@ export const loadCountsIconsData = () => async (dispatch) => {
 };
 
 export const loadcurrencyData = () => async (dispatch) => {
-  dispatch(currencyDataRequested());
   try {
     const { content } = await currencyDataService.get();
     dispatch(currencyDataReceived(content));
   } catch (error) {
     dispatch(currencyDataRequestedFailed(error.message));
   }
+};
+
+export const clearErrorCounts = (data) => async (dispatch) => {
+    dispatch(clearError(data));
 };
 
 export const selectCounts = () => (state) => state.counts.entities;
@@ -215,6 +222,7 @@ export const selectCurrencyData = () => (state) => state.counts.currencyData;
 export const selectCountsLoadingStatus = () => (state) =>
   state.counts.isLoading;
 export const selectCountsStatus = () => (state) => state.counts.dataLoaded;
+export const selectErrorCounts = () => (state) => state.counts.error;
 export const selectCountsDataStatus = () => (state) =>
   state.counts.countsDataLoaded;
 export const selectCurrencyDataStatus = () => (state) =>

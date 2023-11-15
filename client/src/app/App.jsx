@@ -7,9 +7,10 @@ import { selectIsLoggedIn } from './store/usersSlice';
 import { useLocation, useRoutes } from 'react-router-dom';
 import routes from './components/routes/routes';
 import ContainerApp from './components/common/Containers/ContainerApp';
-import { FormsProvider } from './hooks/useForm';
+import { FormsProvider } from './hooks/useForms';
 import BackBtn from './components/common/buttons/BackBtn';
 import { TablesProvider } from './hooks/useTable';
+import Toast from './components/common/Toast';
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn());
@@ -32,6 +33,7 @@ function App() {
           <TablesProvider>
             <Navbar />
             {elements}
+            <Toast/>
           </TablesProvider>
         </FormsProvider>
       </ContainerApp>

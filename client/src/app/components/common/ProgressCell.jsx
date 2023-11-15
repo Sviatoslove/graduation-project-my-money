@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const ProgressCell = ({ value, name, color, icon, iconColor, iconSize }) => {
   return (
     <div
-      className="progress"
+      className="progress progress-cell-percentage"
       role="progressbar"
       aria-label={name}
       aria-valuenow={value}
@@ -18,14 +18,7 @@ const ProgressCell = ({ value, name, color, icon, iconColor, iconSize }) => {
         {!name ? (
           <strong>У вас ещё не было расходов/доходов в этом месяце</strong>
         ) : (
-          <div className={'d-flex align-items-center w-content mx-auto progress-cell-percentage-wrap'}>
-            <i
-              className={`${icon} text-${iconColor} position-absolute top-50 start-50 translate-middle`}
-              style={{ fontSize: iconSize, zIndex: 5 }}
-            />
-            <div className="progress-cell-wall"></div>
-            <strong className="progress-cell-percentage position-absolute top-50 start-50 translate-middle">{value + '%'}</strong>
-          </div>
+            <strong className="w-content mx-auto">{value>=2 ? ((value.includes('.') ? value.split('.')[0] : value) + '%') : ''}</strong>
         )}
       </div>
     </div>
@@ -36,7 +29,6 @@ ProgressCell.defaultProps = {
   value: '100',
   color: 'secondary',
   name: '',
-  iconSize: '28px',
 };
 
 ProgressCell.propTypes = {

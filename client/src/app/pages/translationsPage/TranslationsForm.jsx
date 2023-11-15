@@ -15,7 +15,7 @@ import currency from "../../mock/currency";
 import getExchangeRates from "../../utils/getExchangeRates";
 import { translationCreate } from "../../store/translationsSlice";
 import LoadingBtn from "../../components/common/LoadingBtn";
-import { useForms } from "../../hooks/useForm";
+import { useForms } from "../../hooks/useForms";
 
 const TranslationsForm = () => {
   const dispatch = useDispatch();

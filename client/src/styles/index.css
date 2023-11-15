@@ -343,30 +343,56 @@ code {
   }
 }
 
-.progress-cell-percentage-wrap{
-  animation: percentageAnim 3s ease 0s 1000;
+.toast-container.show {
+  animation: toastShow 1s ease-in-out 0s;
+  top: 10%;
+  animation-fill-mode: both;
 }
 
-.progress-cell-percentage {
-  z-index: 5;
+.toast-container.hide {
+  animation: toastHide 1s ease-in-out 0s;
+  top: 10%;
+  animation-fill-mode: both;
 }
 
-.progress-cell-wall {
-  background-color: goldenrod;
-  width: 36px;
-  height: 36px;
-  border-radius: 50px;
-  z-index: 4;
+.toast.hide {
+  display: block !important;
+  animation: toastHide 0s ease-in-out 0.5s;
 }
 
-@keyframes percentageAnim {
+@keyframes toastShow {
   0% {
-    transform: scale3d(1, 1, 1);
-  }
-  50% {
-    transform: scale3d(-1, 1, 1);
+    display: none;
+    opacity: 0;
+    right: 150%;
   }
   100% {
-    transform: scale3d(1, 1, 1);
+    display: block;
+    opacity: 1;
+    right:2%
   }
+}
+
+@keyframes toastHide {
+  0% {
+    display: block;
+    opacity: 1;
+    right:2%;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    right: 150%;
+  }
+}
+
+.list-group-userPage > .list-group-item > .d-flex {
+  text-decoration: none !important;
+  color: black;
+}
+
+.list-group-userPage li {
+  flex-flow: row wrap;
+    justify-content: space-around;
+
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import currency from '../../mock/currency';
 import {
-  countsLoad,
+  loadCounts,
   loadCountsData,
   selectCounts,
   selectCountsData,
@@ -19,17 +19,17 @@ import { useTables } from '../../hooks/useTable';
 const MasterCount = ({ classes }) => {
   const dispatch = useDispatch();
   const { masterCount, setMasterCount } = useTables();
+  console.log('masterCount:', masterCount)
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector(selectUser());
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
   const countsLoaded = useSelector(selectCountsStatus());
   const counts = useSelector(selectCounts());
-  // console.log('counts:', counts)
 
   useEffect(() => {
     if (!countsDataLoaded) dispatch(loadCountsData());
-    if (!countsLoaded) dispatch(countsLoad());
+    if (!countsLoaded) dispatch(loadCounts());
   }, []);
 
   useEffect(() => {
@@ -103,8 +103,8 @@ const MasterCount = ({ classes }) => {
               </li>
               <hr className="m-0" />
               <div className="d-flex align-content-start justify-content-center flex-wrap">
-                {Object.values(counts).map((count) => (
-                  <li key={count._id}>
+                {Object.values(counts).map((count, idx) => (
+                  <li key={count._id + idx}>
                     <button
                       className={'p-1 m-0 dropdown-item'}
                       type="button"

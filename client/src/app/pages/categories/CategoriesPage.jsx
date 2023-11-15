@@ -14,7 +14,7 @@ import {
   selectCategoriesIcons,
 } from '../../store/categoriesSlice';
 import Button from '../../components/common/buttons/Button';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
 import CategoriesForm from './CategoriesForm';
 import {
   ContainerCards,
@@ -60,14 +60,12 @@ const CategoriesPage = () => {
     }, []);
   };
 
-  if (!categoriesIsLoading && categories) {
-    const arrCategories = Object.values(categories);
+  if (!categoriesIsLoading) {
+    const arrCategories = categories ? Object.values(categories):[];
 
-    const categoriesIncrement =
-      categories && arrCategories.filter((el) => el.status === 'increment');
+    const categoriesIncrement = arrCategories.filter((el) => el.status === 'increment');
 
-    const categoriesDecrement =
-      categories && arrCategories.filter((el) => el.status === 'decrement');
+    const categoriesDecrement = arrCategories.filter((el) => el.status === 'decrement');
 
     const count =
       statusOperation === 'increment'

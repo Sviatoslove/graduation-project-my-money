@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import Container from "../components/common/Containers/Container";
 import { LoginForm, RegisterForm } from "../components/ui";
+import { useForms } from "../hooks/useForms";
 
 const LoginPage = () => {
-  const { type } = useParams();
-  const [formType, setFormType] = useState(
-    type === "register" ? type : "login",
-  );
-
-  const toggleFormType = () => {
-    setFormType((state) => (state === "register" ? "login" : "register"));
-  };
-
+const {formType, toggleFormType} = useForms()
   return (
     <>
       {formType === "register" ? (

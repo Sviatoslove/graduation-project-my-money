@@ -14,8 +14,10 @@ const AvatarsField = ({
   options,
   onChange,
   count,
-  classesInputGroup
+  classesInputGroup, error
 }) => {
+  console.log('error:', error)
+
   const formatOptions = formatDataForAvatarsFields(count, options)
   const [index, setIndex] = useState(getFindActiveIndex(value, formatOptions)||0);
   const [showClassesIncBt, setShowClassesIncBt] = useState(index === formatOptions.length?'-fill': '');
@@ -68,7 +70,7 @@ const AvatarsField = ({
           classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor} px-2 py-0`,
           textColor: valueTextColor,
           iconColor: valueIconColor,
-          width: item.color ? '16px' : '',
+          width: item.color ? '24px' : '',
           height: item.color ? '24px' : '80px',
           children: nameCategory && nameCategory.slice(0, 2),
           iconSize:'36px'
@@ -115,6 +117,7 @@ const AvatarsField = ({
           </button>
         </div>
       )}
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };
@@ -124,6 +127,7 @@ AvatarsField.defaultProps = {
 };
 
 AvatarsField.propTypes = {
+  error: PropTypes.string,
   nameCategory: PropTypes.string,
   valueBgColor: PropTypes.string,
   valueTextColor: PropTypes.string,

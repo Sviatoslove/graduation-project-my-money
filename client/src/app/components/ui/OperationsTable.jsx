@@ -12,10 +12,12 @@ import LoadingSpinners from '../common/LoadingSpinners';
 import { Button } from '../common/buttons';
 import { operationRemove } from '../../store/operationsSlice';
 import { useTables } from '../../hooks/useTable';
+import { useForms } from '../../hooks/useForms';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
   const { categories, operationCrop } = useTables();
+  const { essenceHandleToEdit } = useForms();
 
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
@@ -67,24 +69,38 @@ const OperationsTable = () => {
       name: 'Категория',
       component: (operation) =>
         categories[operation.categoryId] ? (
-          <CategoryCard
-            table={'true'}
-            category={categorySettings(operation?.categoryId)}
-            categoriesIcons={categoriesIcons}
-          />
+          <Button
+            outline={true}
+            classes={'p-0 br-50 border-0'}
+            dataType={'edit'}
+            dataEssence={'operation'}
+            onClick={(e)=> essenceHandleToEdit(e, operation)}
+          >
+            <CategoryCard
+              table={'true'}
+              category={categorySettings(operation?.categoryId)}
+              categoriesIcons={categoriesIcons}
+            />
+          </Button>
         ) : (
           'category not found'
         ),
     },
     content: {
       name: 'Примечание',
-      component: (operation) => 
-          <p className={`w-80 mx-auto text-${!operation.content ? 'body-tertiary' : 'dark'}`}>
-            {!operation.content
-              ? 'Ничего примечательного'
-              : <strong>{operation.content}</strong> }
-          </p>
-      
+      component: (operation) => (
+        <p
+          className={`w-80 mx-auto text-${
+            !operation.content ? 'body-tertiary' : 'dark'
+          }`}
+        >
+          {!operation.content ? (
+            'Ничего примечательного'
+          ) : (
+            <strong>{operation.content}</strong>
+          )}
+        </p>
+      ),
     },
     balance: {
       path: 'balance',

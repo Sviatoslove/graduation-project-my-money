@@ -4,13 +4,14 @@ import ProgressCell from '../common/ProgressCell';
 import _ from 'lodash';
 
 const ProgressBar = () => {
-  const { categories, operationCrop } = useTables();
-  console.log('categories:', categories)
-  const categoriesIds = operationCrop.map(operation=> operation.categoryId)
+  const { categories, filteredOperations } = useTables();
+
+  const categoriesIds = filteredOperations?.map(operation => operation.categoryId)
   const currentCategoriesIds = _.uniqWith(
     categoriesIds,
     (first, second) => first === second
     )
+
   function getProgressBarValue(arr, essence, id) {
     if (arr.length) {
       const getTotalBalance = (array) =>
@@ -19,18 +20,18 @@ const ProgressBar = () => {
       const totalValue = getTotalBalance(arr);
       const filteredEssence = arr.filter((item) => item[essence] === id);
       const rateValue = getTotalBalance(filteredEssence);
-      return ((rateValue * 100) / totalValue).toFixed()
+      return ((rateValue * 100) / totalValue).toFixed(2)
     }
   }
 
   return (
-    <div className="progress-stacked mb-3" style={{ height: '50px' }}>
-      {categories ? (
+    <div className={"progress-stacked mb-3"} style={{ height: '50px' }}>
+      {filteredOperations && filteredOperations.length !== 0 && categories ? (
         currentCategoriesIds.map((id) => (
           <ProgressCell
             key={id}
             value={getProgressBarValue(
-              operationCrop,
+              filteredOperations,
               'categoryId',
               id
             )}

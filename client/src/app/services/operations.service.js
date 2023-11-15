@@ -11,7 +11,10 @@ const operationsService = {
     const { data } = await httpService.post(operationsEndpoint, operation);
     return data;
   },
-
+  update: async (operation) => {
+    const { data } = await httpService.patch(operationsEndpoint, operation);
+    return data;
+  },
   remove: async (id) => {
     const { data } = await httpService.delete(operationsEndpoint + id);
     return data;

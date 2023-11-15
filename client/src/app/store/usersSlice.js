@@ -2,7 +2,8 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import localStorageService from "../services/localStorage.service";
 import authService from "../services/auth.service";
 import userService from "../services/user.service";
-// import { generetaAuthError } from '../utils/generateAuthError'
+import errorCatcher from "../utils/errorCatcher";
+import { useForms } from "../hooks/useForms";
 
 const initialState = localStorageService.getAccessToken()
   ? {
@@ -54,8 +55,9 @@ const usersSlice = createSlice({
     userUpdateSuccessed: (state, action) => {
       state.entities = action.payload;
     },
-    authRequested: (state) => {
-      state.error = null;
+    authRequested: (state, action) => {
+      if(action.payload === '') state.error = action.payload
+      else state.error = null;
     },
   },
 });
@@ -78,40 +80,36 @@ const userUpdateRequested = createAction("users/userUpdateRequested");
 export const logIn =
   ({ payload, path }) =>
   async (dispatch) => {
-    const { email, password } = payload;
+    const { email, password, stayOn } = payload;
     const { navigate, redirect } = path;
     dispatch(authRequested());
     try {
       const data = await authService.logIn({ email, password });
       dispatch(authRequestSuccess({ userId: data.userId }));
-      localStorageService.setTokens(data);
+      localStorageService.setTokens({...data, stayOn});
       navigate(redirect);
     } catch (error) {
-      const { code, message } = error.response.data.error;
-      if (code === 400) {
-        console.log("code:", code);
-        //   const errorMessage = generetaAuthError(message)
-        //   dispatch(authRequestFailed(errorMessage))
-        // } else {
-        //   dispatch(authRequestFailed(error.message))
-      }
+      errorCatcher(error, dispatch, authRequestFailed)
     }
   };
 
-export const signUp = (payload) => async (dispatch) => {
+export const signUp = ({payload, path}) => async (dispatch) => {
+  const { navigate, redirect } = path;
   dispatch(authRequested());
   try {
     const data = await authService.register(payload);
     localStorageService.setTokens(data);
     dispatch(authRequestSuccess({ userId: data.userId }));
+    navigate(redirect);
   } catch (error) {
-    dispatch(authRequestFailed(error.message));
+    errorCatcher(error, dispatch, authRequestFailed)
   }
 };
 
 export const logOut = () => (dispatch) => {
-  localStorageService.removeAuthData();
   dispatch(userLoggedOut());
+  if(localStorageService.getStayOn() === 'true') return
+  localStorageService.removeAuthData();
 };
 
 export const loadUser = () => async (dispatch) => {
@@ -133,6 +131,10 @@ export const updateUser = (payload) => async (dispatch) => {
     dispatch(userUpdateFailed(error.message));
   }
 };
+
+export const clearError = (data) => async (dispatch) => {
+  dispatch(authRequested(data))
+}
 
 export const selectUser = () => (state) => state.users.entities;
 

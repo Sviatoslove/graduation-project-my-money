@@ -1,88 +1,68 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import TextField from "../common/form/TextField";
-import RadioField from "../common/form/RadioField";
-import CheckboxField from "../common/form/CheckboxField";
-import { selectAuthError, selectUser, signUp } from "../../store/usersSlice";
-import { useNavigate } from "react-router-dom";
+import TextField from '../common/form/TextField';
+import RadioField from '../common/form/RadioField';
+import CheckboxField from '../common/form/CheckboxField';
+import { clearError, signUp } from '../../store/usersSlice';
+import { validatorConfigRegister } from '../../utils/validator';
+import { useForms } from '../../hooks/useForms';
+import { useAuth } from '../../hooks/useAuth';
 
 const RegisterForm = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [data, setData] = useState({
-    email: "",
-    name: "",
-    password: "",
-    sex: "male",
-    license: false,
-  });
-  const [errors, setErrors] = useState({});
-  const errorRegister = useSelector(selectAuthError());
-  const user = useSelector(selectUser());
+  const { errorRegister, setToast } = useForms();
 
-  // useEffect(() => {
-  //   setErrors(errorRegister)
-  // }, [errorRegister]);
+  const { register, handleSubmit, errors } = useAuth(
+    {
+      defaultState: {
+        email: '',
+        name: '',
+        password: '',
+        sex: 'male',
+        license: false,
+      },
+      errors: validatorConfigRegister,
+    },
+    errorRegister,
+    clearError
+  );
 
-  const handleChange = ({ target }) => {
-    setData((state) => ({ ...state, [target.name]: target.value }));
-    // setErrors(null)
-  };
+  useEffect(() => {
+    if (errorRegister)
+      setToast({
+        title: 'Сообщение от сервера',
+        content: errorRegister,
+        error: true,
+        show: 'show',
+      });
+    if (!errorRegister && errorRegister !== null)
+      setToast((state) => ({ ...state, show: 'hide' }));
+  }, [errorRegister]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // const isVal = validate()
-    // if (isVal) return
-    dispatch(signUp(data));
-    navigate("/");
+  const onSubmit = (data, path) => {
+    if (errors.isValid) return;
+    dispatch(signUp({ payload: data.defaultState, path }));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Электронная почта"
-        value={data.email}
-        name="email"
-        onChange={handleChange}
-        error={errors.email}
-      />
-      <TextField
-        label="Имя"
-        value={data.name}
-        name="name"
-        onChange={handleChange}
-        error={errors.name}
-      />
-      <TextField
-        label="Пароль"
-        value={data.password}
-        name="password"
-        type="password"
-        onChange={handleChange}
-        error={errors.password}
-      />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <TextField label="Электронная почта" {...register('email')} />
+      <TextField label="Имя" {...register('name')} />
+      <TextField label="Пароль" type="password" {...register('password')} />
       <RadioField
         options={[
-          { label: "Male", value: "male" },
-          { label: "Female", value: "female" },
+          { label: 'Male', value: 'male' },
+          { label: 'Female', value: 'female' },
         ]}
-        name="sex"
-        value={data.sex}
-        onChange={handleChange}
+        {...register('sex')}
       />
-      <CheckboxField
-        name="license"
-        value={data.license}
-        onChange={handleChange}
-        error={errors.license}
-      >
+      <CheckboxField {...register('license')}>
         Согласен с <a href="">лицензионным соглашением</a>
       </CheckboxField>
-      {/* {errorRegister && <p className='text-danger'>{errorRegister}</p>} */}
       <button
         type="submit"
-        // disabled={isValid}
+        disabled={errors.isValid}
         className="btn btn-primary w-100 mx-auto"
       >
         Войти

@@ -3,7 +3,6 @@ import generateAuthError from './generateAuthError';
 import getCountLike from './getCountLike';
 import getInputClasses from './getInputClasses';
 import getTitleNavbar from './getTitleNavbar';
-import history from './history';
 import paginate from './paginate';
 
 export {
@@ -12,6 +11,5 @@ export {
   getCountLike,
   getInputClasses,
   getTitleNavbar,
-  history,
   paginate,
 };

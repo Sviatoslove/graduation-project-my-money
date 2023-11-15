@@ -10,7 +10,7 @@ const localStorageService = {
   setTokens({
     expiresIn = 3600,
     refreshToken,
-    stayOn = false,
+    stayOn,
     accessToken,
     userId,
   }) {

@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import categoriesService from "../services/categories.service";
-import categoriesIconsService from "../services/categoriesIcons.service";
-import localStorageService from "../services/localStorage.service";
+import { createSlice } from '@reduxjs/toolkit';
+import categoriesService from '../services/categories.service';
+import categoriesIconsService from '../services/categoriesIcons.service';
+import localStorageService from '../services/localStorage.service';
 
 const categoriesSlice = createSlice({
-  name: "categories",
+  name: 'categories',
   initialState: {
     entities: null,
     isLoading: true,
@@ -15,10 +15,22 @@ const categoriesSlice = createSlice({
   },
   reducers: {
     categoriesReceived: (state, action) => {
-      state.entities = action.payload;
+      const { payload } = action;
+      if (!Object.keys(payload).length) return;
+      state.entities = payload;
       state.isLoading = false;
-      // state.dataLoaded = true;
-      if(Object.values(state.entities).length)state.dataLoaded = true;
+      state.dataLoaded = true;
+    },
+    categoryAdded: (state, action) => {
+      const { payload } = action;
+      if (!Object.keys(payload).length) {
+        state.isLoading = false;
+        return;
+      }
+      if (!state.entities) state.entities = {[payload._id]: payload };
+      else state.entities = { ...state.entities,  [payload._id]: payload };
+      state.isLoading = false;
+      state.dataLoaded = true;
     },
     categoriesRequestedFailed: (state, action) => {
       state.error = action.payload;
@@ -32,7 +44,10 @@ const categoriesSlice = createSlice({
     },
     categoriesRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
-      if(!Object.keys(state.entities).length) state.dataLoaded=false
+      if (!Object.keys(state.entities).length) {
+        state.entities=null
+        state.dataLoaded = false
+      };
     },
     categoriesIconsReceived: (state, action) => {
       state.categoriesIcons = action.payload;
@@ -60,20 +75,21 @@ const { reducer: categoriesReducer, actions } = categoriesSlice;
 
 const {
   categoriesReceived,
+  categoryAdded,
   categoriesRequestedFailed,
   categoriesUpdatedReceived,
   categoriesRemovedReceived,
   categoriesDataRemoved,
   categoriesIconsReceived,
   categoriesIconsRequestedFailed,
-  categoriesIconsUpdatedReceived
+  categoriesIconsUpdatedReceived,
 } = actions;
 
 export const categoriesCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await categoriesService.create(payload);
-    dispatch(categoriesReceived(content));
-    localStorageService.setCategoriesData('true')
+    dispatch(categoryAdded(content));
+    localStorageService.setCategoriesData('true');
   } catch (error) {
     dispatch(categoriesRequestedFailed(error.message));
   }
@@ -108,7 +124,7 @@ export const categoriesRemove = (payload) => async (dispatch) => {
 
 export const categoriesDestroyed = () => async (dispatch) => {
   dispatch(categoriesDataRemoved());
-  localStorageService.removeCategoriesData()
+  localStorageService.removeCategoriesData();
 };
 
 export const loadСategoriesIcons = () => async (dispatch) => {
@@ -129,12 +145,15 @@ export const categoriesIconsUpdate = (payload) => async (dispatch) => {
   }
 };
 
-export const selectCategoriesDataloaded = () => (state) => state.categories.dataLoaded;
-export const selectCategoriesIsLoading = () => (state) => state.categories.isLoading;
+export const selectCategoriesDataloaded = () => (state) =>
+  state.categories.dataLoaded;
+export const selectCategoriesIsLoading = () => (state) =>
+  state.categories.isLoading;
 export const selectCategories = () => (state) => state.categories.entities;
 
 export const selectCategoriesIconsDataloaded = () => (state) =>
   state.categories.categoriesIconsDataLoaded;
-export const selectCategoriesIcons = () => (state) => state.categories.categoriesIcons;
+export const selectCategoriesIcons = () => (state) =>
+  state.categories.categoriesIcons;
 
 export default categoriesReducer;

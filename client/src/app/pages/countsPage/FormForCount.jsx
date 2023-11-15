@@ -1,7 +1,7 @@
 import React from 'react';
 import CountsForm from './CountsForm';
 import TranslationsForm from '../translationsPage/TranslationsForm';
-import { useForms } from '../../hooks/useForm';
+import { useForms } from '../../hooks/useForms';
 
 const FormForCount = () => {
   const { typeForm } = useForms();

@@ -52,7 +52,12 @@ router.post('/signUp', [
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   },
 ]);
@@ -107,45 +112,61 @@ router.post('/signInWithPassword', [
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   },
 ]);
 
 router.post('/token', async (req, res) => {
   try {
-
-    const {refresh_token:refreshToken} = req.body // получаю refresh_token из запроса и помещаю его в переменную refreshToken
+    const { refresh_token: refreshToken } = req.body; // получаю refresh_token из запроса и помещаю его в переменную refreshToken
 
     // проверить корректный ли это refreshToken, как минимум сравнить его с секретным ключом из config
 
-    const data = tokenService.validateRefresh(refreshToken) // делаем это через метод tokenService - са, validateRefresh, который необходимо создать в tokenService, он возвращает нам результат сравнения. В data у нас  будет объект с данными включая userId 
+    const data = tokenService.validateRefresh(refreshToken); // делаем это через метод tokenService - са, validateRefresh, который необходимо создать в tokenService, он возвращает нам результат сравнения. В data у нас  будет объект с данными включая userId
 
     // получить из БД сам токен с помощью метода findToken который мы написали в tokenService'е
 
-    const dbToken = await tokenService.findToken(refreshToken)
+    const dbToken = await tokenService.findToken(refreshToken);
 
-    if(isTokenInvalid(data, dbToken)) {// функция проверки на корректоность данных введённых для авторизации, если пользователь не авторизован отправляем соответственное сообщение
-      return res.status(401).json({message: 'Unauthorized'})
+    if (isTokenInvalid(data, dbToken)) {
+      // функция проверки на корректоность данных введённых для авторизации, если пользователь не авторизован отправляем соответственное сообщение
+      return res
+        .status(401)
+        .json({
+          error: {
+            message: 'Пользователь не авторизован. Авторизуйтесь, пожалуйста.',
+            code: 401,
+          },
+        });
     }
 
-    // если if не выполнился то тогда обновляем все токены 
-    const tokens = await tokenService.generate({_id: data._id})
+    // если if не выполнился то тогда обновляем все токены
+    const tokens = await tokenService.generate({ _id: data._id });
     // обновляем их в БД
-    await tokenService.save(data._id, tokens.refreshToken)
+    await tokenService.save(data._id, tokens.refreshToken);
 
-    res.status(200).send({...tokens, userId: data._id })
-
+    res.status(200).send({ ...tokens, userId: data._id });
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          code: 500,
+        },
+      });
   }
 });
 
 // функция проверки на корректоность данных введённых для авторизации
 function isTokenInvalid(data, dbToken) {
-  return !data || !dbToken || data._id !== dbToken?.user?.toString()
+  return !data || !dbToken || data._id !== dbToken?.user?.toString();
 }
 
 module.exports = router;

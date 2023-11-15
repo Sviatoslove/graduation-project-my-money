@@ -23,10 +23,7 @@ router
         ...req.body, // здесь у нас прилетают все необходимые данные
         userId: req.user._id, // добавляем здесь id, т.к. у нас в модели коммента есть userId
       });
-
-      const listAll = await Category.find();
-      const list = listAll.filter((category) => String(category.userId) === req.user._id);
-      res.status(201).send(list); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(newCategory); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
     } catch (e) {
       res
         .status(500)

@@ -13,9 +13,16 @@ const operationsSlice = createSlice({
   reducers: {
     operationsReceived: (state, action) => {
       const { payload } = action;
-      if (!Object.keys(action.payload).length) return;
-      if (!state.entities) state.entities = action.payload;
-      else state.entities = { ...state.entities, [payload._id]:payload };
+      if (!Object.keys(payload).length) return;
+      state.entities = payload;
+      state.isLoading = false;
+      state.dataLoaded = true;
+    },
+    operationAdded: (state, action) => {
+      const { payload } = action;
+      if (!Object.keys(payload).length) return;
+      if (!state.entities) state.entities = {[payload._id]: payload};
+      else state.entities = { ...state.entities, [payload._id]: payload };
       state.isLoading = false;
       state.dataLoaded = true;
     },
@@ -44,6 +51,7 @@ const { reducer: operationsReducer, actions } = operationsSlice;
 
 const {
   operationsReceived,
+  operationAdded,
   operationsRequestedFailed,
   operationsUpdatedReceived,
   operationsRemovedReceived,
@@ -53,7 +61,7 @@ const {
 export const operationCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.create(payload);
-    dispatch(operationsReceived(content['newOperation']));
+    dispatch(operationAdded(content['newOperation']));
     dispatch(countsUpdateAfterOperation(content['count']));
   } catch (error) {
     dispatch(operationsRequestedFailed(error.message));
@@ -72,7 +80,8 @@ export const loadOperations = () => async (dispatch) => {
 export const operationUpdate = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.update(payload);
-    dispatch(operationsUpdatedReceived(content));
+    dispatch(operationsUpdatedReceived(content['operation']));
+    dispatch(countUpdate(content['count']));
   } catch (error) {
     dispatch(operationsRequestedFailed(error.message));
   }
@@ -80,7 +89,7 @@ export const operationUpdate = (payload) => async (dispatch) => {
 
 export const operationRemove = (payload) => async (dispatch) => {
   try {
-    const {content} = await operationsService.remove(payload);
+    const { content } = await operationsService.remove(payload);
     dispatch(operationsRemovedReceived(payload));
     dispatch(countUpdate(content));
   } catch (error) {

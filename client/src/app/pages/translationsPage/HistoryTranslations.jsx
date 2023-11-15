@@ -11,7 +11,7 @@ import {
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { displayDate, paginate } from '../../utils';
 import {
-  countsLoad,
+  loadCounts,
   loadCountsData,
   selectCounts,
   selectCountsData,
@@ -48,7 +48,7 @@ const HistoryTranslations = () => {
   useEffect(() => {
     if (!translationsDataLoaded) dispatch(loadTranslations());
     if (!countsDataLoaded) dispatch(loadCountsData());
-    if (!countsLoaded) dispatch(countsLoad());
+    if (!countsLoaded) dispatch(loadCounts());
   }, []);
 
   const handleRemove = (e) => {

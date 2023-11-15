@@ -25,10 +25,7 @@ router
         like: false,
         balance: 0,
       });
-
-      const listAll = await Count.find();
-      const list = listAll.filter((count) => String(count.userId) === req.user._id);
-      res.status(201).send(list); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(newCount); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
     } catch (e) {
       res
         .status(500)

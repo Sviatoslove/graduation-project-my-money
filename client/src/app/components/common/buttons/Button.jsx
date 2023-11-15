@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useForms } from '../../../hooks/useForm';
+import { useForms } from '../../../hooks/useForms';
 
 const Button = ({
   imgSrc,

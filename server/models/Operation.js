@@ -9,6 +9,7 @@ const schema = new Schema(
     content: String,
     date: String,
     status: String,
+    prevBalance: Number
   },
   {
     timestamps: true,
