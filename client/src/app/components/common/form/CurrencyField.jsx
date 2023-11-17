@@ -16,8 +16,6 @@ const CurrencyField = ({
   inputBalanceToCount,
   balance
 }) => {
-  console.log('balance:', balance)
-
   const cleanInput = (e) => {
     const { target } = e;
     if (target.type === "number" && target.value === "0") {
@@ -54,7 +52,7 @@ const CurrencyField = ({
             />
           )}
         </div>
-        {error && <div className="invalid-feedback">{error}</div>}
+        {error && <div className="invalid-feedback d-block">{error}</div>}
       </div>
     </div>
   );

@@ -11,23 +11,26 @@ router
       const listAll = await Operation.find();
       const list = listAll.filter(
         (operation) => String(operation.userId) === req.user._id
-      ); //получаем список всех комментариев
-      res.send(list); // отправили их на клиента с статус кодом 200
+      );
+      res.send(list);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Операции не загружены. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   })
   .post(auth, async (req, res) => {
     try {
       const userId = req.user._id;
       const newOperation = await Operation.create({
-        // ждём пока создадим комментарий
-        ...req.body, // здесь у нас прилетают все необходимые данные
-        userId: userId, // добавляем здесь id, т.к. у нас в модели коммента есть userId
+        ...req.body,
+        userId: userId,
       });
-      //Получаем счёт из которого после вычитаем перевод
       const { countId, balance, status } = newOperation;
       const count = await Count.findById(countId);
       if (status === 'increment')
@@ -44,7 +47,12 @@ router
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Операция не создана. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   })
   .patch(auth, async (req, res) => {
@@ -56,22 +64,28 @@ router
           new: true,
         }
       );
-      const { countId, balance, prevBalance} = updatedOperation
+      const { countId, balance, prevBalance } = updatedOperation;
       const currentCount = await Count.findById(countId);
-      const interest = balance - prevBalance 
-      currentCount.balance += interest
+      const interest = balance - prevBalance;
+      currentCount.balance += interest;
       const editedCount = await Count.findByIdAndUpdate(countId, currentCount, {
         new: true,
-      })
+      });
       const data = {
         _id: 'noTransformData',
-        operation: updatedOperation, count:editedCount
+        operation: updatedOperation,
+        count: editedCount,
       };
       res.send(data);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Операция не обновлена. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   });
 router.delete('/:operId', auth, async (req, res) => {
@@ -85,12 +99,17 @@ router.delete('/:operId', auth, async (req, res) => {
     else if (status === 'decrement')
       count.balance = Number(count.balance) + Number(balance);
     await Count.findByIdAndUpdate(countId, count);
-    await removedOperation.deleteOne(); // ждём пока удалится коммент
-    return res.send(count); // можем вернуть null, т.к. на фронте мы ничего не ждём
+    await removedOperation.deleteOne();
+    return res.send(count);
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка. Операция не удалена. Попробуйте позже.',
+          code: 500,
+        },
+      });
   }
 });
 

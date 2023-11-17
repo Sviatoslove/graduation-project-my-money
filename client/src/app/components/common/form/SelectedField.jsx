@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { getInputClasses } from "../../../utils";
 // import { formatDataForFields, getInputClasses } from '../../../utils'
 
 const SelectedField = ({
@@ -19,20 +20,19 @@ const SelectedField = ({
   }));
 
   return (
-    <div className="mb-4 d-flex flex-column text-center">
+    <div className="mb-2 d-flex flex-column">
       <label htmlFor={name} className="form-label">
-       <strong>{label}</strong> 
+       {label} 
       </label>
       <select
-        className="form-select-lg"
-        // className={getInputClasses('form-select', error)}
+        className={"form-select-lg " + getInputClasses('form-select', error)}
         value={value}
         onChange={onChange}
         name={name}
         id={name}
         disabled={disabled}
       >
-        <option disabled={defaultOption === 'Choose..' ? true : false} value="">
+        <option disabled={defaultOption === 'Choose...' ? true : false} value="">
           {defaultOption}
         </option>
         {optionsArray?.map((option) => {

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import { useForms } from "../../hooks/useForms";
 
 const Pagination = ({
   itemsCount,
@@ -15,25 +14,34 @@ const Pagination = ({
   const pagesCount = Math.ceil(num / pageSize);
   const pages = _.range(1, pagesCount + 1);
 
+  const slicePages = ()=> {
+    if(pagesCount > 6) {
+      if(currentPage < pagesCount/2) pages.splice(currentPage + 2, pagesCount-5, '...' )
+      else if(currentPage >= pagesCount/2) pages.splice(2, currentPage-2,'...', currentPage-1,currentPage )
+    }
+    return pages
+  }
+
   if (pagesCount <= 1 || isNaN(pagesCount) || (countsLikes && countsLikes.length < pageSize))
     return null;
   return (
     <nav className="pagination-counts align-self-end ms-5 me-auto">
       <ul className="pagination">
-        {pages.map((page) => (
+        {slicePages().map((page, idx) => (
           <li
             role="button"
-            key={page}
+            key={idx}
             className={"page-item " + (page === currentPage ? "active" : "")}
           >
-            <a
+            <button
               className="page-link"
               onClick={() => {
-                onPageChange(page);
+              onPageChange(page);
               }}
+              disabled={page === '...'}
             >
               {page}
-            </a>
+            </button>
           </li>
         ))}
       </ul>
@@ -45,7 +53,7 @@ Pagination.propTypes = {
   countsLikes: PropTypes.array,
   itemsCount: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
+  currentPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPageChange: PropTypes.func,
 
 };

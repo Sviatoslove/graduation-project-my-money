@@ -1,6 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
-const auth = require('../middleware/auth.middleware')
+const auth = require('../middleware/auth.middleware');
 
 const router = express.Router({ mergeParams: true });
 
@@ -22,19 +22,29 @@ router.patch('/:userId', auth, async (req, res) => {
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          code: 50,
+        },
+      });
   }
 });
 
 router.get('/', auth, async (req, res) => {
   try {
-    const userId = req.user._id
-    const list = await User.findOne({_id: userId}); // нашли всех юзеров в БД
+    const userId = req.user._id;
+    const list = await User.findOne({ _id: userId }); // нашли всех юзеров в БД
     res.send(list); // отправили их на клиента с статус кодом 200(он указывается по умолчанию, если необходимо отправить данные с другим кодом, то необходимо его указать, например, res.status(400).send())
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          code: 50,
+        },
+      });
   }
 });
 

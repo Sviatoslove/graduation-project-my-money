@@ -16,7 +16,6 @@ const AvatarsField = ({
   count,
   classesInputGroup, error
 }) => {
-  console.log('error:', error)
 
   const formatOptions = formatDataForAvatarsFields(count, options)
   const [index, setIndex] = useState(getFindActiveIndex(value, formatOptions)||0);
@@ -96,6 +95,7 @@ const AvatarsField = ({
       <label htmlFor={name}>{label}</label>
       <div className={"input-group mt-2 justify-content-center " + classesInputGroup}>
         {drawingAvatars(index)}
+        {error && <div className="invalid-feedback p-2 d-block">{error}</div>}
       </div>
       {formatOptions.length > 1 && (
         <div className="text-center mt-2">
@@ -117,7 +117,6 @@ const AvatarsField = ({
           </button>
         </div>
       )}
-      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };

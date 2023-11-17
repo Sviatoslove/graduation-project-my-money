@@ -19,7 +19,6 @@ import { useTables } from '../../hooks/useTable';
 const MasterCount = ({ classes }) => {
   const dispatch = useDispatch();
   const { masterCount, setMasterCount } = useTables();
-  console.log('masterCount:', masterCount)
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector(selectUser());
   const countsDataLoaded = useSelector(selectCountsDataStatus());

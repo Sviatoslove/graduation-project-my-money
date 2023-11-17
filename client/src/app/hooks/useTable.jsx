@@ -28,7 +28,6 @@ const TablesProvider = ({ children }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [masterCount, setMasterCount] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState({ path: 'date', order: 'desc' });
   const [dataCategory, setCategoryData] = useState({
@@ -43,7 +42,7 @@ const TablesProvider = ({ children }) => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, searchQuery]);
+  }, [dataCategory, searchQuery]);
 
   useEffect(() => {
     if (isLoggedIn && !operationsDataLoading) dispatch(loadOperations());
@@ -62,13 +61,7 @@ const TablesProvider = ({ children }) => {
     setCurrentPage(pageIndex);
   };
 
-  const handleCategoriesSelect = (item) => {
-    if (setSearchQuery) setSearchQuery('');
-    setSelectedCategory(item);
-  };
-
   const handleSearchChange = ({ target }) => {
-    if (setSelectedCategory) setSelectedCategory();
     setSearchQuery(target.value);
   };
 
@@ -78,7 +71,10 @@ const TablesProvider = ({ children }) => {
 
   const clearFilter = () => {
     if (setSearchQuery) setSearchQuery('');
-    setSelectedCategory();
+    if (dataCategory) setCategoryData({
+      category: '',
+    });
+    
   };
 
   if (isLoggedIn && !categories && categories !== null)
@@ -89,27 +85,17 @@ const TablesProvider = ({ children }) => {
       const dataArr = Object.values(data);
       const filteredOper = searchQuery
         ? dataArr.filter((operation) => {
-            const ddMmYyyyArr = operation.date.split('T')[0].split('-');
-            // фильтрация в поиске по году
-            if (!isNaN(Number(searchQuery)) && !searchQuery.includes('.'))
-              return ddMmYyyyArr[0] === searchQuery;
-            // фильтрация в поиске по месяцу и году
-            if (
-              searchQuery.includes('.') &&
-              searchQuery.split('.').length === 2
-            )
-              return (
-                ddMmYyyyArr.slice(0, 2).reverse().join('.') === searchQuery
-              );
-            // фильтрация в поиске по месяцу и году и числу
-            if (
-              searchQuery.includes('.') &&
-              searchQuery.split('.').length === 3
-            )
-              return ddMmYyyyArr.reverse().join('.') === searchQuery;
+            const ddMmYyyyArr = operation.date
+              .split('T')[0]
+              .split('-')
+              .reverse()
+              .join('.');
+            if (!isNaN(Number(searchQuery))) {
+              return ddMmYyyyArr.includes(searchQuery.trim());
+            }
             return operation.content
               .toLowerCase()
-              .includes(searchQuery.toLowerCase());
+              .includes(searchQuery.toLowerCase().trim());
           })
         : dataArr;
       return (
@@ -133,6 +119,7 @@ const TablesProvider = ({ children }) => {
   };
 
   const filteredOperations = filterOperations(operations);
+  console.log('filteredOperations:', filteredOperations)
   const count = filteredOperations?.length;
 
   const sortedOperations = _.orderBy(
@@ -148,7 +135,6 @@ const TablesProvider = ({ children }) => {
   return (
     <TablesContext.Provider
       value={{
-        selectedCategory,
         handleSort,
         sortBy,
         operations,
@@ -168,7 +154,7 @@ const TablesProvider = ({ children }) => {
         searchQuery,
         handleSearchChange,
         setSearchQuery,
-        filteredOperations,
+        filteredOperations,clearFilter
       }}
     >
       {children}

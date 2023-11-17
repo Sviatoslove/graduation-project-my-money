@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useForms } from './useForms';
 
-const useAuth = (state, error, clearError) => {
-  const dispatch = useDispatch()
+const useAuth = (state, error, valueConverted) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [data, setData] = useState(state);
-  const errors = { isValid: false };
+  const { setError } = useForms();
+  const errors = { fields: {}, isValid: false };
 
   const register = (field) => ({
     value: data.defaultState[field],
     name: field,
-    error: errors[field],
+    error: errors.fields[field],
     onChange: ({ target }) => {
-      if(error) dispatch(clearError(''));
+      if (error) {
+        setError('');
+      }
       return setData((state) => ({
         ...state,
         defaultState: { ...state.defaultState, [field]: target.value },
@@ -47,18 +49,28 @@ const useAuth = (state, error, clearError) => {
         break;
       }
       case 'min': {
-        errors.isValid = value.length < data.errors[fieldName][validateMethod].length;
+        errors.isValid =
+          value.length < data.errors[fieldName][validateMethod].length;
+        break;
+      }
+      case 'minBalance': {
+        if (valueConverted)
+          errors.isValid =
+            valueConverted < data.errors[fieldName][validateMethod].value;
+        else
+          errors.isValid = value < data.errors[fieldName][validateMethod].value;
         break;
       }
       default:
         break;
     }
-    if (errors.isValid && !errors[fieldName]) errors[fieldName] = data.errors[fieldName][validateMethod].message;
+    if (errors.isValid && !errors.fields[fieldName])
+      errors.fields[fieldName] = data.errors[fieldName][validateMethod].message;
   };
 
   for (const [fieldName, value] of Object.entries(data.defaultState)) {
     for (const validateMethod in data.errors[fieldName]) {
-      validate(validateMethod, fieldName, value)
+      validate(validateMethod, fieldName, value);
     }
   }
 

@@ -1,6 +1,6 @@
-import { httpService } from "./http.service";
+import { httpService } from './http.service';
 
-const countsEndpoint = "count/";
+const countsEndpoint = 'count/';
 
 const countsService = {
   get: async () => {

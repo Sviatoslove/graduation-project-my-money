@@ -3,12 +3,14 @@ import countsService from '../services/counts.service';
 import countsDataService from '../services/countsData.service';
 import countsIconsDataService from '../services/countsIconsData.service';
 import currencyDataService from '../services/currencyData.service';
+import errorCatcher from '../utils/errorCatcher';
 
 const countsSlice = createSlice({
   name: 'counts',
   initialState: {
     entities: null,
     isLoading: true,
+    successNetwork: null,
     error: null,
     dataLoaded: null,
     countsData: null,
@@ -20,6 +22,10 @@ const countsSlice = createSlice({
     masterCount: null,
   },
   reducers: {
+    countsRequested: (state) => {
+      state.isLoading = true;
+      state.successNetwork = null;
+    },
     countsReceived: (state, action) => {
       const { payload } = action;
       if (!Object.keys(payload).length) {
@@ -32,14 +38,15 @@ const countsSlice = createSlice({
     },
     countAdded: (state, action) => {
       const { payload } = action;
-      if (!Object.keys(payload).length) {
-        state.isLoading = false;
-        return;
-      }
       if (!state.entities) state.entities = { [payload._id]: payload };
-      else state.entities = { ...state.entities, [payload._id]: payload };
+      else
+        state.entities = {
+          ...state.entities,
+          [payload._id]: payload,
+        };
       state.isLoading = false;
       state.dataLoaded = true;
+      state.successNetwork = 'Счёт успешно создан';
     },
     countsRequestedFailed: (state, action) => {
       state.error = action.payload;
@@ -50,6 +57,7 @@ const countsSlice = createSlice({
         ...state.entities[action.payload._id],
         ...action.payload,
       };
+      state.successNetwork = 'Счёт успешно обновлён';
     },
     countsRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
@@ -90,25 +98,30 @@ const countsSlice = createSlice({
       state.dataLoaded = false;
     },
     countsUpdateByTranslation: (state, action) => {
-      state.entities[action.payload.countFrom._id] = {
-        ...state.entities[action.payload.countFrom._id],
-        ...action.payload.countFrom,
-      };
+      if (action.payload.countFrom) {
+        state.entities[action.payload.countFrom._id] = {
+          ...state.entities[action.payload.countFrom._id],
+          ...action.payload.countFrom,
+        };
+      }
       state.entities[action.payload.countTo._id] = {
         ...state.entities[action.payload.countTo._id],
         ...action.payload.countTo,
       };
     },
-    clearError: (state, action) => {
-      if(action.payload === '') state.error = action.payload
-      else state.error = null;
-    }
+    clearError: (state) => {
+      state.error = null;
+    },
+    resetSuccessNetwork: (state) => {
+      state.successNetwork = null;
+    },
   },
 });
 
 const { reducer: countsReducer, actions } = countsSlice;
 
 const {
+  countsRequested,
   countsReceived,
   countAdded,
   countsRequestedFailed,
@@ -122,15 +135,17 @@ const {
   currencyDataRequestedFailed,
   countsDataRemoved,
   countsUpdateByTranslation,
-  clearError
+  clearError,
+  resetSuccessNetwork,
 } = actions;
 
 export const countCreate = (payload) => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await countsService.create(payload);
     dispatch(countAdded(content));
   } catch (error) {
-    dispatch(countsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsRequestedFailed);
   }
 };
 
@@ -139,7 +154,7 @@ export const loadCounts = () => async (dispatch) => {
     const { content } = await countsService.get();
     dispatch(countsReceived(content));
   } catch (error) {
-    dispatch(countsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsRequestedFailed);
   }
 };
 
@@ -148,7 +163,7 @@ export const countUpdate = (payload) => async (dispatch) => {
     const { content } = await countsService.update(payload);
     dispatch(countsUpdatedReceived(content));
   } catch (error) {
-    dispatch(countsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsRequestedFailed);
   }
 };
 
@@ -174,7 +189,7 @@ export const countRemove = (payload) => async (dispatch) => {
     await countsService.remove(payload);
     dispatch(countsRemovedReceived(payload));
   } catch (error) {
-    dispatch(countsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsRequestedFailed);
   }
 };
 
@@ -187,7 +202,7 @@ export const loadCountsData = () => async (dispatch) => {
     const { content } = await countsDataService.get();
     dispatch(countsDataReceived(content));
   } catch (error) {
-    dispatch(countsDataRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsDataRequestedFailed);
   }
 };
 
@@ -196,7 +211,7 @@ export const loadCountsIconsData = () => async (dispatch) => {
     const { content } = await countsIconsDataService.get();
     dispatch(countsIconsDataReceived(content));
   } catch (error) {
-    dispatch(countsIconsDataRequestedFailed(error.message));
+    errorCatcher(error, dispatch, countsIconsDataRequestedFailed);
   }
 };
 
@@ -205,12 +220,16 @@ export const loadcurrencyData = () => async (dispatch) => {
     const { content } = await currencyDataService.get();
     dispatch(currencyDataReceived(content));
   } catch (error) {
-    dispatch(currencyDataRequestedFailed(error.message));
+    errorCatcher(error, dispatch, currencyDataRequestedFailed);
   }
 };
 
 export const clearErrorCounts = (data) => async (dispatch) => {
-    dispatch(clearError(data));
+  dispatch(clearError(data));
+};
+
+export const clearSuccessNetworkCounts = (data) => async (dispatch) => {
+  dispatch(resetSuccessNetwork(data));
 };
 
 export const selectCounts = () => (state) => state.counts.entities;
@@ -229,5 +248,7 @@ export const selectCurrencyDataStatus = () => (state) =>
   state.counts.currencyDataLoaded;
 export const selectCountsIconsDataStatus = () => (state) =>
   state.counts.countsIconsDataLoaded;
+export const selectSuccessNetworkCounts = () => (state) =>
+  state.counts.successNetwork;
 
 export default countsReducer;

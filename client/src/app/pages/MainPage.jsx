@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import Container from '../components/common/Containers/Container';
@@ -18,9 +18,11 @@ import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
 import ProgressBar from '../components/ui/ProgressBar';
 import localStorageService from '../services/localStorage.service';
+import { selectErrorOperations } from '../store/operationsSlice';
 
 const MainPage = () => {
-  const { essenceHandleToEdit } = useForms();
+  const { essenceHandleToEdit, setError, setSettingsToast } = useForms();
+  const errorOperations = useSelector(selectErrorOperations());
   const {
     dataCategory,
     operations,
@@ -37,11 +39,19 @@ const MainPage = () => {
 
   const user = useSelector(selectUser());
 
+  useEffect(() => {
+    if (errorOperations) {
+      setError(errorOperations);
+      setSettingsToast({
+        typeForm: 'operations',
+      });
+    }
+  }, [errorOperations]);
+
   return (
     <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>
       <Container newClasses="position-relative">
         <ProgressBar />
-
         {user && user?.masterCount && (
           <>
             <Container newClasses="position-absolute bottom-0 start-5">

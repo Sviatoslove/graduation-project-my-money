@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import TextField from '../common/form/TextField';
 import RadioField from '../common/form/RadioField';
 import CheckboxField from '../common/form/CheckboxField';
-import { clearError, signUp } from '../../store/usersSlice';
+import {
+  selectAuthError,
+  signUp,
+} from '../../store/usersSlice';
 import { validatorConfigRegister } from '../../utils/validator';
 import { useForms } from '../../hooks/useForms';
 import { useAuth } from '../../hooks/useAuth';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const { errorRegister, setToast } = useForms();
+  const { setSettingsToast, setError } = useForms();
 
+  const errorRegister = useSelector(selectAuthError());
   const { register, handleSubmit, errors } = useAuth(
     {
       defaultState: {
@@ -24,20 +28,14 @@ const RegisterForm = () => {
       },
       errors: validatorConfigRegister,
     },
-    errorRegister,
-    clearError
+    errorRegister
   );
 
   useEffect(() => {
-    if (errorRegister)
-      setToast({
-        title: 'Сообщение от сервера',
-        content: errorRegister,
-        error: true,
-        show: 'show',
-      });
-    if (!errorRegister && errorRegister !== null)
-      setToast((state) => ({ ...state, show: 'hide' }));
+    if (errorRegister) {
+      setError(errorRegister);
+      setSettingsToast({  typeForm: 'auth' });
+    }
   }, [errorRegister]);
 
   const onSubmit = (data, path) => {
@@ -62,7 +60,7 @@ const RegisterForm = () => {
       </CheckboxField>
       <button
         type="submit"
-        disabled={errors.isValid}
+        disabled={Object.keys(errors.fields).length || errorRegister}
         className="btn btn-primary w-100 mx-auto"
       >
         Войти

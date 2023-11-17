@@ -12,11 +12,10 @@ import Badge from '../../components/common/Badge';
 import { BtnsGroup } from '../../components/common/buttons';
 
 const CountCard = ({ count, onChange }) => {
-  console.log('count.currency:', count.currency)
   const dispatch = useDispatch();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
-
+  
   useEffect(() => {
     if (!countsDataLoaded) dispatch(loadCountsData());
   }, []);
@@ -68,7 +67,7 @@ const CountCard = ({ count, onChange }) => {
                 <p className="fw-bold ls-1 fs-4 align-items-center d-flex">
                   {count.balance}{' '}
                   <img
-                    src={currency[count.currency].icon}
+                    src={currency[count.currency]?.icon}
                     alt="img"
                     style={{ width: '40px' }}
                   />

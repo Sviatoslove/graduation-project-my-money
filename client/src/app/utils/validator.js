@@ -78,52 +78,39 @@ export const validatorConfigCounts = {
   },
 }
 
-// export default function validator(data, config) {
-//   const errors = {}
-//   const validate = (validateMethod, data, config) => {
-//     let statusValidate
-//     switch (validateMethod) {
-//       case 'isRequired': {
-//         if (typeof data === 'boolean') statusValidate = !data
-//         else if (Array.isArray(data)) statusValidate = data.length === 0
-//         else statusValidate = data.trim() === ''
-//         break
-//       }
-//       case 'isEmail': {
-//         const emailRegExp = /^\S+@\S+\.\S+$/g
-//         statusValidate = !emailRegExp.test(data)
-//         break
-//       }
-//       case 'isUpperSymbol': {
-//         const upperRegExp = /[A-Z]+/g
-//         statusValidate = !upperRegExp.test(data)
-//         break
-//       }
-//       case 'isContainDigit': {
-//         const digitRegExp = /\d+/g
-//         statusValidate = !digitRegExp.test(data)
-//         break
-//       }
-//       case 'min': {
-//         statusValidate = data.length < config.value
-//         break
-//       }
-//       default:
-//         break
-//     }
-//     if (statusValidate) return config.message
-//   }
-//   for (const fieldName in data) {
-//     for (const validateMethod in config[fieldName]) {
-//       const error = validate(
-//         validateMethod,
-//         data[fieldName],
-//         config[fieldName][validateMethod]
-//       )
-//       if (error && !errors[fieldName]) {
-//         errors[fieldName] = error
-//       }
-//     }
-//   }
-//   return errors
-// }
+export const validatorConfigOperations = {
+  balance: {
+    minBalance: {
+      message: 'Недопустимое значение суммы операции, она должна быть больше 0',
+      value:1
+    },
+    isContainDigit: {
+      message: 'Недопустимое значение суммы операции, введите число, пожалуйста',
+    },
+  },
+  categoryId: {
+    isRequired: {
+      message: 'Чтобы продолжить выберите Категорию',
+    },
+  },
+}
+
+export const validatorConfigTranslations = {
+  toCount: {
+    isRequired: {
+      message: 'Выберите счёт на который хотите сделать перевод',
+    },
+  },
+  balanceFrom: {
+    minBalance: {
+      message: 'Сумма операции должна быть больше 0',
+      value:1
+    },
+  },
+  balanceTo: {
+    minBalance: {
+      message: 'Сумма операции должна быть больше 0',
+      value:1
+    },
+  },
+}

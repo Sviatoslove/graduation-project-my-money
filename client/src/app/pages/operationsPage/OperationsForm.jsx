@@ -4,8 +4,6 @@ import TextField from '../../components/common/form/TextField';
 import AvatarsField from '../../components/common/form/AvatarsField';
 import Button from '../../components/common/buttons/Button';
 import {
-  categoriesUpdate,
-  categoriesCreate,
   selectCategoriesDataloaded,
   loadCategories,
   selectCategories,
@@ -13,13 +11,34 @@ import {
 import { useForms } from '../../hooks/useForms';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import { operationCreate, operationUpdate } from '../../store/operationsSlice';
+import {
+  operationCreate,
+  operationUpdate,
+  selectErrorOperations,
+  selectSuccessNetworkOperations,
+} from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
+import { useAuth } from '../../hooks/useAuth';
+import Badge from '../../components/common/Badge';
+import { validatorConfigOperations } from '../../utils/validator';
+
+let categoryId;
 
 const OperationsForm = () => {
-  const { disAppearanceForm, statusOperation, currentEssence, setToast } = useForms();
+  const {
+    disAppearanceForm,
+    statusOperation,
+    currentEssence,
+    show,
+    setError,
+    setSuccessToast,
+    setSettingsToast,
+  } = useForms();
   const dispatch = useDispatch();
-  const { show } = useForms();
+  const successNetworkOperations = useSelector(
+    selectSuccessNetworkOperations()
+  );
+  const errorOperations = useSelector(selectErrorOperations());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
   const filteredCategories =
@@ -40,27 +59,53 @@ const OperationsForm = () => {
           minutes < 10 ? '0' + minutes : minutes
         }`,
       };
-  const [data, setData] = useState(initialState);
+  const { register, data, handleSubmit, errors } = useAuth(
+    {
+      defaultState: initialState,
+      errors: validatorConfigOperations,
+    },
+    errorOperations
+  );
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
   }, []);
 
-  const [errors] = useState({});
+  useEffect(() => {
+    if (errorOperations) {
+      setError(errorOperations);
+      setSettingsToast({
+        typeForm: 'operations',
+      });
+    }
+    if (successNetworkOperations) {
+      setSuccessToast(successNetworkOperations);
+      setSettingsToast({
+        badge: (
+          <Badge
+            key={categories[categoryId]._id}
+            icon={categories[categoryId].icon}
+            iconSize="fs-1 "
+            color={categories[categoryId].bgColor}
+            iconColor={categories[categoryId].iconColor}
+            classes="br-50 text-center me-2 mb-1"
+          />
+        ),
+        iconSize: '56px',
+        timeOut: true,
+        typeForm: 'operations',
+      });
+    }
+  }, [errorOperations, successNetworkOperations]);
 
-  const handleChange = ({ target }) => {
-    setData((state) => ({ ...state, [target.name]: target.value }));
-    // setErrors(null)
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    categoryId = data.defaultState.categoryId;
     if (currentEssence) {
-      dispatch(operationUpdate(data));
+      dispatch(operationUpdate(data.defaultState));
     } else {
       dispatch(
         operationCreate({
-          ...data,
+          ...data.defaultState,
           status: statusOperation,
           countId: localStorageService.getMasterCount(),
           userId: localStorageService.getUserId(),
@@ -78,48 +123,29 @@ const OperationsForm = () => {
             'top-60 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
           }
         >
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <h3 className="text-center">
               {currentEssence ? 'Редактирование операции' : 'Создание операции'}
             </h3>
-            <TextField
-              label="Сумма"
-              value={data.balance}
-              name="balance"
-              onChange={handleChange}
-              error={errors.balance}
-            />
+            <TextField label="Сумма" {...register('balance')} />
             <AvatarsField
               label="Выбери категорию"
-              name="categoryId"
-              value={data.categoryId}
               options={filteredCategories}
-              onChange={handleChange}
               classesInputGroup={'mh-352px'}
               count={32}
               iconSize="56px"
+              {...register('categoryId')}
             />
+            <TextField label="Комментарий" {...register('content')} />
             <TextField
-              label="Комментарий"
-              value={data.content}
-              name="content"
-              onChange={handleChange}
-              error={errors.content}
-            />
-            <TextField
-              name="date"
-              type="datetime-local"
               label="Дата"
-              value={data.date}
-              onChange={handleChange}
-              // error={errors.date}
+              type="datetime-local"
+              {...register('date')}
             />
-
-            {/* {enterError && <p className="text-danger">{enterError}</p>} */}
             <Button
               type="submit"
               classes="w-100 mx-auto mt-4"
-              // disabled={isValid || enterError}
+              disabled={!!Object.keys(errors.fields).length || errorOperations}
             >
               {currentEssence ? 'Обновить' : 'Создать'}
             </Button>

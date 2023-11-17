@@ -191,7 +191,6 @@ const UserPage = () => {
             style={{ fontSize: '32px' }}
           ></i>
         </button>
-        {/* {add && } */}
         <UserPageEdit user={user} onShow={setShow} />
       </div>
     </div>

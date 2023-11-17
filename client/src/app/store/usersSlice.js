@@ -3,7 +3,6 @@ import localStorageService from "../services/localStorage.service";
 import authService from "../services/auth.service";
 import userService from "../services/user.service";
 import errorCatcher from "../utils/errorCatcher";
-import { useForms } from "../hooks/useForms";
 
 const initialState = localStorageService.getAccessToken()
   ? {
@@ -13,6 +12,7 @@ const initialState = localStorageService.getAccessToken()
       auth: { userId: localStorageService.getUserId() },
       isLoggedIn: true,
       dataLoaded: false,
+      successNetwork:false
     }
   : {
       entities: null,
@@ -55,9 +55,8 @@ const usersSlice = createSlice({
     userUpdateSuccessed: (state, action) => {
       state.entities = action.payload;
     },
-    authRequested: (state, action) => {
-      if(action.payload === '') state.error = action.payload
-      else state.error = null;
+    authRequested: (state) => {
+      state.error = null;
     },
   },
 });
@@ -132,7 +131,7 @@ export const updateUser = (payload) => async (dispatch) => {
   }
 };
 
-export const clearError = (data) => async (dispatch) => {
+export const clearErrorAuth = (data) => async (dispatch) => {
   dispatch(authRequested(data))
 }
 

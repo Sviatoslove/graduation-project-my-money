@@ -11,25 +11,28 @@ router
       const listAll = await Translation.find();
       const list = listAll.filter(
         (translation) => String(translation.userId) === req.user._id
-      ); //получаем список всех комментариев
-      res.send(list); // отправили их на клиента с статус кодом 200
+      );
+      res.send(list);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Переводы не загружены. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   })
   .post(auth, async (req, res) => {
     try {
       const userId = req.user._id;
       const newTranslation = await Translation.create({
-        // ждём пока создадим комментарий
-        ...req.body, // здесь у нас прилетают все необходимые данные
-        userId: userId, // добавляем здесь id, т.к. у нас в модели коммента есть userId
+        ...req.body,
+        userId: userId,
       });
-      //Получаем счёт из которого после вычитаем перевод
       const { fromCount, toCount, balanceFrom, balanceTo } = newTranslation;
-      let countFrom
+      let countFrom;
       if (fromCount !== '0') {
         countFrom = await Count.findById(fromCount);
         countFrom.balance = Number(countFrom.balance) - Number(balanceFrom);
@@ -40,23 +43,27 @@ router
       await Count.findByIdAndUpdate(toCount, countTo);
       const data = {
         _id: 'noTransformData',
-        'newTranslation': newTranslation,
-        'counts': { 'countFrom': countFrom, 'countTo': countTo },
+        newTranslation: newTranslation,
+        counts: { countFrom: countFrom, countTo: countTo },
       };
-      res.status(201).send(data); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(data);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Перевод не создан. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   });
 router.delete('/:translId', auth, async (req, res) => {
   try {
     const { translId } = req.params;
     const removedTranslation = await Translation.findById(translId);
-    const { fromCount, toCount, balanceFrom, balanceTo } =
-      removedTranslation;
-      let countFrom
+    const { fromCount, toCount, balanceFrom, balanceTo } = removedTranslation;
+    let countFrom;
     if (fromCount !== '0') {
       countFrom = await Count.findById(fromCount);
       countFrom.balance = Number(countFrom.balance) + Number(balanceFrom);
@@ -68,13 +75,18 @@ router.delete('/:translId', auth, async (req, res) => {
     await removedTranslation.deleteOne(); // ждём пока удалится коммент
     const data = {
       _id: 'translId',
-      'counts': { 'countFrom': countFrom, 'countTo': countTo },
+      counts: { countFrom: countFrom, countTo: countTo },
     };
     return res.send(data); // можем вернуть null, т.к. на фронте мы ничего не ждём
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка.  Перевод не удалён. Попробуйте позже.',
+          code: 500,
+        },
+      });
   }
 });
 

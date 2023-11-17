@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { operationRemove } from '../store/operationsSlice';
+import { clearErrorOperations, clearSuccessNetworkOperations, operationRemove } from '../store/operationsSlice';
+import { categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
 import {
-  categoriesRemove,
-  categoriesUpdate,
-} from '../store/categoriesSlice';
-import { countRemove, countUpdate, selectErrorCounts } from '../store/countsSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearError, selectAuthError } from '../store/usersSlice';
+  clearErrorCounts,
+  clearSuccessNetworkCounts,
+  countRemove,
+  countUpdate,
+} from '../store/countsSlice';
+import { useDispatch } from 'react-redux';
+import { clearErrorAuth, clearSuccessNetworkAuth } from '../store/usersSlice';
+import { clearErrorTranslations, clearSuccessNetworkTranslations } from '../store/translationsSlice';
 
 const FormsContext = React.createContext();
 
@@ -18,7 +21,7 @@ const FormsProvider = ({ children }) => {
   const location = useLocation();
   const { type } = useParams();
   const [formType, setFormType] = useState(
-    type === "register" ? type : "login",
+    type === 'register' ? type : 'login'
   );
   const [show, setShow] = useState('');
   const [add, setAdd] = useState(false);
@@ -27,20 +30,75 @@ const FormsProvider = ({ children }) => {
   const [statusOperation, setStatusOperation] = useState('decrement');
   const [currentEssence, setCurrentEssence] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
+  const [successToast, setSuccessToast] = useState(null);
+  const [settingsToast, setSettingsToast] = useState(null);
 
-  const loginError = useSelector(selectAuthError());
-  const errorRegister = useSelector(selectAuthError());
-  const errorCounts = useSelector(selectErrorCounts());
+  const startClearFunc = () => {
+    if (error === '') setError(null);
+    if (successToast === '') setSuccessToast(null);
+    switch (settingsToast?.typeForm) {
+      case 'auth': {
+        if (error!==null) dispatch(clearErrorAuth());
+        break;
+      }
+      case 'counts': {
+        if (error!==null) dispatch(clearErrorCounts());
+        else dispatch(clearSuccessNetworkCounts());
+        break;
+      }
+      case 'operations': {
+        if (error!==null) dispatch(clearErrorOperations());
+        else dispatch(clearSuccessNetworkOperations());
+        break;
+      }
+      case 'translations': {
+        if (error!==null) dispatch(clearErrorTranslations());
+        else dispatch(clearSuccessNetworkTranslations());
+        break;
+      }
+    }
+  };
 
+  useEffect(() => {
+    if (error || successToast) {
+      setToast({
+        title: 'Сообщение от сервера',
+        content: error ? error : successToast,
+        error: Boolean(error),
+        show: 'show',
+        ...settingsToast,
+      });
+      if (settingsToast?.typeForm !== 'auth') {
+        setTimeout(() => {
+          setToast((state) => ({ ...state, show: 'hide' }));
+          setSuccessToast('');
+          setError('');
+          setSettingsToast(null);
+          startClearFunc();
+        }, 3000);
+      }
+    }
+    if (
+      (!error && error !== null) ||
+      (!successToast && successToast !== null)
+    ) {
+      setToast((state) => ({ ...state, show: 'hide' }));
+      setTimeout(() => {
+        startClearFunc();
+      }, 600);
+    }
+  }, [error, successToast]);
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
 
   const toggleFormType = () => {
-    setFormType((state) => (state === "register" ? "login" : "register"));
-    dispatch(clearError())
-    if(toast.show === 'show') setToast(state=> ({...state, show:'hide'}))
+    setFormType((state) => (state === 'register' ? 'login' : 'register'));
+    dispatch(clearErrorAuth());
+    if (toast.show === 'show')
+      setToast((state) => ({ ...state, show: 'hide' }));
   };
 
   const appearanceForm = () => {
@@ -106,7 +164,7 @@ const FormsProvider = ({ children }) => {
     }
   };
 
-  const transform = show ? 'scale(0)' : '';
+  const transform = show ? 'scale(0)' : 'scale(1)';
 
   return (
     <FormsContext.Provider
@@ -129,7 +187,10 @@ const FormsProvider = ({ children }) => {
         setToast,
         formType,
         toggleFormType,
-        loginError, errorRegister, errorCounts
+        setError,
+        setSettingsToast,
+        settingsToast,
+        setSuccessToast,
       }}
     >
       {children}

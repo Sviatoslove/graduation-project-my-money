@@ -3,6 +3,8 @@ import Container from '../../components/common/Containers/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   loadTranslations,
+  selectErrorTranslations,
+  selectSuccessNetworkTranslations,
   selectTranslations,
   selectTranslationsDataLoaded,
   selectTranslationsLoadedStatus,
@@ -24,17 +26,23 @@ import { Button } from '../../components/common/buttons';
 import Table from '../../components/common/table/Table';
 import { useTables } from '../../hooks/useTable';
 import Pagination from '../../components/common/pagination';
+import { useForms } from '../../hooks/useForms';
+import _ from 'lodash';
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
-  const { currentPage, handlePageChange } = useTables();
+  const { currentPage, handlePageChange, sortBy } = useTables();
+  const { setSettingsToast, setError, setSuccessToast } = useForms();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsLoaded = useSelector(selectCountsStatus());
   const countsData = useSelector(selectCountsData());
-  const isLoading = useSelector(selectTranslationsLoadedStatus());
   const translationsDataLoaded = useSelector(selectTranslationsDataLoaded());
   const translations = useSelector(selectTranslations());
   const pageSize = 12;
+  const errorTranslations = useSelector(selectErrorTranslations());
+  const successNetworkTranslations = useSelector(
+    selectSuccessNetworkTranslations()
+  );
 
   const counts = {
     0: {
@@ -51,6 +59,23 @@ const HistoryTranslations = () => {
     if (!countsLoaded) dispatch(loadCounts());
   }, []);
 
+  useEffect(() => {
+    if (errorTranslations) {
+      setError(errorTranslations);
+      setSettingsToast({
+        typeForm: 'translations',
+      });
+    }
+    if (successNetworkTranslations) {
+      setSuccessToast(successNetworkTranslations);
+      setSettingsToast({
+        iconSize: '56px',
+        timeOut: true,
+        typeForm: 'translations',
+      });
+    }
+  }, [successNetworkTranslations, errorTranslations]);
+
   const handleRemove = (e) => {
     const { target } = e;
     const translId = target.closest('button').id;
@@ -65,7 +90,8 @@ const HistoryTranslations = () => {
         name: 'Номер',
         component: (translation, idx) => idx + 1,
       },
-      time: {
+      date: {
+        path: 'date',
         name: 'Дата',
         component: (translation) => displayDate(translation.createdAt),
       },
@@ -75,7 +101,7 @@ const HistoryTranslations = () => {
           const countFrom = counts[translation?.fromCount];
           return translation.fromCount ? (
             <Badge
-              classes={'fs-3 h-i'}
+              classes={'fs-6 h-i'}
               text={countFrom?.name}
               imgSrc={countFrom?.icon}
               {...countsData[countFrom?.type]}
@@ -102,7 +128,7 @@ const HistoryTranslations = () => {
           const countTo = counts[translation?.toCount];
           return translation.toCount ? (
             <Badge
-              classes={'fs-3 h-i'}
+              classes={'fs-6 h-i'}
               text={countTo?.name}
               imgSrc={countTo?.icon}
               {...countsData[countTo?.type]}
@@ -120,7 +146,7 @@ const HistoryTranslations = () => {
           const countTo = counts[translation?.toCount];
           return translation.fromCount ? (
             <Badge
-              classes={'fs-3 h-i'}
+              classes={'fs-6 h-i'}
               balance={translation.balanceFrom}
               imgSrc={
                 translation.fromCount === '0'
@@ -151,7 +177,7 @@ const HistoryTranslations = () => {
           const countTo = counts[translation.toCount];
           return translation.toCount ? (
             <Badge
-              classes={'fs-3 h-i'}
+              classes={'fs-6 h-i'}
               balance={translation.balanceTo}
               imgSrc={currency[countTo?.currency]?.icon}
               iconSize={'36px'}
@@ -177,8 +203,14 @@ const HistoryTranslations = () => {
       },
     };
 
-    const translationsCrop = paginate(
+    const sortedTranslations = _.orderBy(
       Object.values(translations),
+      [sortBy.path],
+      [sortBy.order]
+    );
+
+    const translationsCrop = paginate(
+      sortedTranslations,
       currentPage,
       pageSize
     );

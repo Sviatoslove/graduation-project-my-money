@@ -1,34 +1,32 @@
 import React, { useEffect } from 'react';
 import TextField from '../common/form/TextField';
 import CheckboxField from '../common/form/CheckboxField';
-import { useDispatch } from 'react-redux';
-import { clearError, logIn } from '../../store/usersSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  logIn,
+  selectAuthError,
+} from '../../store/usersSlice';
 import { useAuth } from '../../hooks/useAuth';
 import { useForms } from '../../hooks/useForms';
 import { validatorConfigLogin } from '../../utils/validator';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { setToast, loginError } = useForms();
+  const { setError, setSettingsToast, timeOut } = useForms();
+  const loginError = useSelector(selectAuthError());
   const { register, handleSubmit, errors } = useAuth(
     {
       defaultState: { email: '', password: '', stayOn: false },
       errors: validatorConfigLogin,
     },
     loginError,
-    clearError
   );
 
   useEffect(() => {
-    if (loginError)
-      setToast({
-        title: 'Сообщение от сервера',
-        content: loginError,
-        error: true,
-        show: 'show',
-      });
-    if (!loginError && loginError !== null)
-      setToast((state) => ({ ...state, show: 'hide' }));
+    if (loginError) {
+      setError(loginError);
+      setSettingsToast({ typeForm: 'auth', timeOut:true });
+    }
   }, [loginError]);
 
   const onSubmit = (data, path) => {
@@ -45,7 +43,7 @@ const LoginForm = () => {
       </CheckboxField>
       <button
         type="submit"
-        disabled={errors.isValid || loginError}
+        disabled={Object.keys(errors.fields).length || loginError}
         className="btn btn-primary w-100 mx-auto"
       >
         Войти

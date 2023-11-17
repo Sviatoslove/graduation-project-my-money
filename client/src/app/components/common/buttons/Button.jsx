@@ -123,7 +123,7 @@ Button.propTypes = {
   type: PropTypes.string,
   iconSize: PropTypes.string,
   zIndex: PropTypes.number,
-  disabled: PropTypes.bool,
+  disabled: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onClick: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

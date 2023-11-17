@@ -8,6 +8,7 @@ import {
   selectCounts,
   selectCountsLoadingStatus,
   selectCountsStatus,
+  selectErrorCounts,
 } from '../../store/countsSlice';
 import {
   Container,
@@ -24,14 +25,18 @@ import Button from '../../components/common/buttons/Button';
 import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useForms } from '../../hooks/useForms';
-import localStorageService from '../../services/localStorage.service';
-import { selectUser, updateUser } from '../../store/usersSlice';
 
 const CountsPage = () => {
   const dispatch = useDispatch();
   const { likesPage } = useParams();
-  const { essenceHandleToEdit, currentPage, setCurrentPage, handlePageChange } =
-    useForms();
+  const {
+    essenceHandleToEdit,
+    currentPage,
+    setCurrentPage,
+    handlePageChange,
+    setError,
+    setSettingsToast,
+  } = useForms();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -39,8 +44,8 @@ const CountsPage = () => {
   const counts = useSelector(selectCounts());
 
   const countsDataLoaded = useSelector(selectCountsStatus());
-  const countsIsLoading= useSelector(selectCountsLoadingStatus());
-  const user = useSelector(selectUser());
+  const countsIsLoading = useSelector(selectCountsLoadingStatus());
+  const errorCounts = useSelector(selectErrorCounts());
 
   const pageSize = 6;
 
@@ -57,11 +62,16 @@ const CountsPage = () => {
       setLikes(count);
       setLikesButton(count);
     }
-    if(!countsDataLoaded) {
-      localStorageService.removeMasterCount()
-      dispatch(updateUser({...user, masterCount: ''}))
-    }
   }, [counts]);
+
+  useEffect(() => {
+    if (errorCounts) {
+      setError(errorCounts);
+      setSettingsToast({
+        typeForm: 'counts',
+      });
+    }
+  }, [errorCounts]);
 
   const handleClick = () => {
     setCurrentPage(1);
@@ -90,7 +100,7 @@ const CountsPage = () => {
           </ContainerScale>
         )}
 
-        <ContainerScale>
+        <ContainerScale classes="brrrr">
           {count ? (
             <Translations onChange={essenceHandleToEdit} counts={counts} />
           ) : null}

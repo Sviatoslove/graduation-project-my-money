@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../../components/common/form/TextField';
 import SelectedField from '../../components/common/form/SelectedField';
 import {
-  clearErrorCounts,
   countCreate,
   countUpdate,
   loadCountsData,
   selectCountsData,
   selectCountsDataStatus,
+  selectErrorCounts,
+  selectSuccessNetworkCounts,
 } from '../../store/countsSlice';
 import AvatarsField from '../../components/common/form/AvatarsField';
 import currency from '../../mock/currency';
@@ -19,11 +20,22 @@ import { formatDataCountsIcons } from '../../utils/formatData';
 import { useAuth } from '../../hooks/useAuth';
 import { validatorConfigCounts } from '../../utils/validator';
 
+let icon;
+
 const CountsForm = () => {
   const dispatch = useDispatch();
-  const { show, currentEssence, disAppearanceForm, errorCounts } = useForms();
+  const {
+    show,
+    currentEssence,
+    disAppearanceForm,
+    setSettingsToast,
+    setError,
+    setSuccessToast,
+  } = useForms();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
+  const countsSuccessNetwork = useSelector(selectSuccessNetworkCounts());
+  const errorCounts = useSelector(selectErrorCounts());
 
   const initialState = currentEssence
     ? currentEssence
@@ -35,26 +47,44 @@ const CountsForm = () => {
         icon: '',
       };
 
-  const { register, handleSubmit, errors } = useAuth(
+  const { register, data, handleSubmit, errors } = useAuth(
     {
       defaultState: initialState,
       errors: validatorConfigCounts,
     },
-    errorCounts,
-    clearErrorCounts
+    errorCounts
   );
 
   useEffect(() => {
     if (!countsDataLoaded) dispatch(loadCountsData());
   }, []);
 
-  const onSubmit = (data) => {
-    if (currentEssence) {
-      dispatch(countUpdate(data));
-    } else {
-      dispatch(countCreate(data));
+  useEffect(() => {
+    if (errorCounts) {
+      setError(errorCounts);
+      setSettingsToast({
+        typeForm: 'counts',
+      });
     }
+    if (countsSuccessNetwork) {
+      setSuccessToast(countsSuccessNetwork);
+      setSettingsToast({
+        imgSrc: icon,
+        iconSize: '56px',
+        timeOut: true,
+        typeForm: 'counts',
+      });
+    }
+  }, [errorCounts, countsSuccessNetwork]);
+
+  const onSubmit = (data) => {
+    icon = data.defaultState.icon;
     disAppearanceForm();
+    if (currentEssence) {
+      dispatch(countUpdate(data.defaultState));
+    } else {
+      dispatch(countCreate(data.defaultState));
+    }
   };
 
   const countsIcons = formatDataCountsIcons(countsIconsMock);
@@ -88,7 +118,7 @@ const CountsForm = () => {
             <Button
               type="submit"
               classes="w-100 mx-auto"
-              disabled={errors.isValid || errorCounts}
+              disabled={!!Object.keys(errors.fields).length || errorCounts}
             >
               {!currentEssence ? 'Создать' : 'Обновить'}
             </Button>

@@ -8,58 +8,80 @@ router
   .get(auth, async (req, res) => {
     try {
       const listAll = await Category.find();
-      const list = listAll.filter((category) => String(category.userId) === req.user._id);; //получаем список всех комментариев
-      res.send(list); // отправили их на клиента с статус кодом 200
+      const list = listAll.filter(
+        (category) => String(category.userId) === req.user._id
+      ); 
+      res.send(list);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   })
   .post(auth, async (req, res) => {
     try {
       const newCategory = await Category.create({
-        // ждём пока создадим комментарий
-        ...req.body, // здесь у нас прилетают все необходимые данные
-        userId: req.user._id, // добавляем здесь id, т.к. у нас в модели коммента есть userId
+        ...req.body,
+        userId: req.user._id,
       });
-      res.status(201).send(newCategory); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(newCategory);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Попробуйте позже.',
+            code: 500,
+          },
+        });
     }
   })
   .patch(auth, async (req, res) => {
-  try {
-      const updatedCategory = await Category.findByIdAndUpdate(req.body._id, req.body, {
-        new: true, // этот флаг означает, что мы получаем обновлённые данные только после того, как они обновятся в БД, чтобы в этой константе на клиента не ушли старые данные
-      });
+    try {
+      const updatedCategory = await Category.findByIdAndUpdate(
+        req.body._id,
+        req.body,
+        {
+          new: true,
+        }
+      );
       res.send(updatedCategory);
-  } catch (e) {
-    res
-      .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
-  }
-});
+    } catch (e) {
+      res
+        .status(500)
+        .json({
+          error: {
+            message: 'На сервере произошла ошибка. Попробуйте позже.',
+            code: 500,
+          },
+        });
+    }
+  });
 
 router.delete('/:categoryId', auth, async (req, res) => {
   try {
-    const { categoryId } = req.params; // получаем параметр commentId
-    //const removedComment = await Comment.find({ _id: commentId }) или ===>>>
-    const removedCategory = await Category.findById(categoryId); // найдём комментарий который нужно удалить
+    const { categoryId } = req.params; 
+    const removedCategory = await Category.findById(categoryId); удалить
     if (removedCategory.userId.toString() === req.user._id) {
-      // проверить, а можем ли мы удалять комментарий, т.к. его может удалять только тот пользователь который его оставлял
-      await removedCategory.deleteOne(); // ждём пока удалится коммент
-      return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
+      await removedCategory.deleteOne(); 
+      return res.send(null);
     } else {
-      // иначе отправляем ошибку авторизации
       return res.status(401).json({ message: 'Unauthorized' });
     }
   } catch (e) {
     res
       .status(500)
-      .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+      .json({
+        error: {
+          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          code: 500,
+        },
+      });
   }
 });
 
