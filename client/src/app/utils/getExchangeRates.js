@@ -13,7 +13,6 @@ export default async function getExchangeRates(
     });
     try {
       const { data } = await currencyServie.get();
-      console.log("data:", data);
       return data;
     } catch (error) {
       console.error("Ошибка! " + error);

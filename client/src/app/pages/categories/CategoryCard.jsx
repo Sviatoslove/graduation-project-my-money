@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BtnsGroup } from '../../components/common/buttons';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 
 const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
   const {
@@ -20,7 +20,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
     like
   } = category;
 
-  const { essenceHandleToEdit } = useForms();
+  const { essenceHandleToEdit } = useSettings();
   return (
     <div className={"col " + classesForCol}>
       <div
@@ -69,7 +69,8 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
                   [category.dataType]: category,
                   [categoriesIcons[category.iconId]?.dataType]: categoriesIcons,
                 }),
-              essenceHandleToEdit,
+                (e) =>
+                essenceHandleToEdit(e, category),
             ]}
             icon={[
               'bi bi-heart' +

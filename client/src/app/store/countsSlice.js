@@ -19,7 +19,6 @@ const countsSlice = createSlice({
     countsIconsDataLoaded: null,
     currencyDataLoaded: null,
     currencyData: null,
-    masterCount: null,
   },
   reducers: {
     countsRequested: (state) => {
@@ -57,14 +56,17 @@ const countsSlice = createSlice({
         ...state.entities[action.payload._id],
         ...action.payload,
       };
+    },
+    countsUpdatedsuccessNetworkReceived: (state) => {
       state.successNetwork = 'Счёт успешно обновлён';
     },
     countsRemovedReceived: (state, action) => {
-      delete state.entities[action.payload];
+      delete state.entities[action.payload.payload];
       if (!Object.keys(state.entities).length) {
         state.entities = null;
         state.dataLoaded = false;
       }
+      state.successNetwork = { type: 'remove',content:`Счёт успешно удалён. Вместе с ним удалено: операций в количестве: ${action.payload.content.deletedOperations} шт; переводов в количестве: ${action.payload.content.deletedTranslations} шт.`};
     },
     countsDataReceived: (state, action) => {
       state.countsData = action.payload;
@@ -137,6 +139,7 @@ const {
   countsUpdateByTranslation,
   clearError,
   resetSuccessNetwork,
+  countsUpdatedsuccessNetworkReceived
 } = actions;
 
 export const countCreate = (payload) => async (dispatch) => {
@@ -186,8 +189,8 @@ export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
 
 export const countRemove = (payload) => async (dispatch) => {
   try {
-    await countsService.remove(payload);
-    dispatch(countsRemovedReceived(payload));
+    const { content } = await countsService.remove(payload);
+    dispatch(countsRemovedReceived({payload, content}));
   } catch (error) {
     errorCatcher(error, dispatch, countsRequestedFailed);
   }
@@ -222,6 +225,10 @@ export const loadcurrencyData = () => async (dispatch) => {
   } catch (error) {
     errorCatcher(error, dispatch, currencyDataRequestedFailed);
   }
+};
+
+export const updatedsuccessNetworkCounts = () => async (dispatch) => {
+  dispatch(countsUpdatedsuccessNetworkReceived());
 };
 
 export const clearErrorCounts = (data) => async (dispatch) => {

@@ -67,7 +67,7 @@ export const validatorConfigCounts = {
       message: 'Обязательно введите название счёта',
     },
     min: {
-      message: 'Длина поля "Название счёта" не менее 3 символов',
+      message: 'Длина поля "Название счёта" не менее 2 символов',
       length:2
     },
   },
@@ -111,6 +111,23 @@ export const validatorConfigTranslations = {
     minBalance: {
       message: 'Сумма операции должна быть больше 0',
       value:1
+    },
+  },
+}
+
+export const validatorConfigCategories = {
+  name: {
+    isRequired: {
+      message: 'Обязательно введите название категории',
+    },
+    min: {
+      message: 'Длина поля "Название категории" не менее 2 символов',
+      length:2
+    },
+  },
+  icon: {
+    isRequired: {
+      message: 'Чтобы продолжить выберите аватарку',
     },
   },
 }

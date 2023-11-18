@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useForms } from '../../../hooks/useForms';
+import { useSettings } from '../../../hooks/useSettings';
 
 const ContainerShow = ({ children, classes, type }) => {
-  const { show, add } = useForms();
+  const { show, add } = useSettings();
   if (type === 'add') {
     return (
       <>

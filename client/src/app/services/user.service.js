@@ -14,7 +14,7 @@ const userService = {
       user,
     );
     return data;
-  },
+  }
 };
 
 export default userService;

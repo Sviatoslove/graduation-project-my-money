@@ -10,12 +10,13 @@ import {
 } from '../../store/countsSlice';
 import Badge from '../../components/common/Badge';
 import { BtnsGroup } from '../../components/common/buttons';
+import localStorageService from '../../services/localStorage.service';
 
 const CountCard = ({ count, onChange }) => {
   const dispatch = useDispatch();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
-  
+
   useEffect(() => {
     if (!countsDataLoaded) dispatch(loadCountsData());
   }, []);
@@ -23,13 +24,27 @@ const CountCard = ({ count, onChange }) => {
   return (
     <div className="col position-relative">
       <div className="card h-100 d-flex p-3 border-0 item-count">
-        {count.like && (
-          <i
-            className={
-              'like-for-card bi bi-heart-fill text-danger position-absolute top-0 start-2 translate-end fs-2'
-            }
-          />
-        )}
+        <div className="position-absolute top-0 start-2 translate-end flex-column d-flex">
+          {count.like && (
+            <div className="mt-2 w-48px">
+            <i
+              className={
+                'like-for-card bi bi-heart-fill text-danger fs-1 mx-auto lh-0 w-content'
+              }
+            />
+            </div>
+          )}
+          {count._id === localStorageService.getMasterCount() && (
+            <div className="">
+            <img
+            className='like-for-card'
+              src="https://img.icons8.com/plasticine/48/statue-of-liberty.png"
+              alt="logo"
+            />
+          </div>
+
+          )}
+        </div>
 
         <div className="text-center">
           <img
@@ -77,9 +92,9 @@ const CountCard = ({ count, onChange }) => {
           </div>
         </div>
         <BtnsGroup
-          count={3}
+          count={4}
           id={count._id}
-          dataType={[ 'like', 'edit', 'remove']}
+          dataType={['like', 'edit', 'remove', 'masterCount']}
           dataEssence={'count'}
           classes="btn-sm"
           func={(e) => onChange(e, count)}
@@ -87,6 +102,17 @@ const CountCard = ({ count, onChange }) => {
             'bi bi-heart' + (count.like ? '-fill' : ''),
             'bi bi-pencil-square',
             'bi bi-trash',
+            '',
+          ]}
+          imgSrc={[
+            '',
+            '',
+            '',
+            `https://img.icons8.com/material-${
+              count._id === localStorageService.getMasterCount()
+                ? 'rounded'
+                : 'outlined'
+            }/24/master.png`,
           ]}
           bgColor="light"
           iconSize={'24px'}

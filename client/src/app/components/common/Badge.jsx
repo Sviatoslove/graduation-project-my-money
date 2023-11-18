@@ -21,7 +21,7 @@ const Badge = ({
           <img src={imgSrc} alt="img" style={{ width: iconSize }} />
         </span>
       ) : (
-        <h3 className={"m-0"}>
+        <h3 className={"m-0 w-content mx-auto"}>
           <span
             className={`badge bg-${color} ${textColor} ${classes} d-flex align-items-center justify-content-center`}
           >

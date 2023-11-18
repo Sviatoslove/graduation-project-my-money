@@ -12,9 +12,11 @@ import {
   categoriesUpdate,
   selectCategoriesIconsDataloaded,
   selectCategoriesIcons,
+  selectSuccessNetworkCategories,
+  selectErrorCategories,
 } from '../../store/categoriesSlice';
 import Button from '../../components/common/buttons/Button';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import CategoriesForm from './CategoriesForm';
 import {
   ContainerCards,
@@ -35,10 +37,19 @@ const CategoriesPage = () => {
     essenceHandleToEdit,
     currentPage,
     handlePageChange,
-  } = useForms();
+    setError,
+    setSettingsToast,
+    setSuccessToast,
+    setCurrentPage
+  } = useSettings();
 
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
+  );
+
+  const errorCategories = useSelector(selectErrorCategories());
+  const successNetworkCategories = useSelector(
+    selectSuccessNetworkCategories()
   );
 
   const categoriesIcons = useSelector(selectCategoriesIcons());
@@ -52,6 +63,25 @@ const CategoriesPage = () => {
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
 
+  useEffect(() => {
+    if (errorCategories) {
+      setError(errorCategories);
+      setSettingsToast({
+        typeForm: 'categories',
+      });
+    }
+    if (
+      successNetworkCategories &&
+      successNetworkCategories?.type === 'remove'
+    ) {
+      setSuccessToast(successNetworkCategories.content);
+      setSettingsToast({
+        iconSize: '56px',
+        typeForm: 'categories',
+      });
+    }
+  }, [errorCategories, successNetworkCategories]);
+
   const filterForLikes = (arr) => {
     return arr.reduce((acc, item) => {
       if (item.like) acc.unshift(item);
@@ -60,16 +90,19 @@ const CategoriesPage = () => {
     }, []);
   };
 
-  if (!categoriesIsLoading) {
-    const arrCategories = categories ? Object.values(categories):[];
+  const arrCategories = categories ? Object.values(categories) : [];
 
-    const categoriesIncrement = arrCategories.filter((el) => el.status === 'increment');
-
-    const categoriesDecrement = arrCategories.filter((el) => el.status === 'decrement');
+  const categoriesIncrement = arrCategories.filter(
+      (el) => el.status === 'increment'
+      );
+      
+      const categoriesDecrement = arrCategories.filter(
+      (el) => el.status === 'decrement'
+    );
 
     const count =
-      statusOperation === 'increment'
-        ? categoriesIncrement.length
+    statusOperation === 'increment'
+    ? categoriesIncrement.length
         : categoriesDecrement.length;
 
     const countsCrop = paginate(
@@ -78,8 +111,13 @@ const CategoriesPage = () => {
         : filterForLikes(categoriesDecrement),
       currentPage,
       pageSize
-    );
+      );
+    
+      useEffect(() => {
+      if (count && countsCrop && !countsCrop?.length) setCurrentPage((state) => state - 1);
+    }, [count]);
 
+    if (!categoriesIsLoading) {
     return (
       <Container classes={'shadow-custom br-10 p-3'}>
         {!categoriesDataLoaded && (
@@ -92,10 +130,10 @@ const CategoriesPage = () => {
         )}
 
         <ContainerShow type={'add'}>
-          <CategoriesForm/>
+          <CategoriesForm />
         </ContainerShow>
 
-        <StatusAll classes={'mt-3'} />
+        <StatusAll classes={'mt-4'} />
 
         <ContainerScale classes={'flex-grow-1 mt-5'}>
           <ContainerCards colsNumber={'5'} gap={'4'}>
@@ -123,7 +161,11 @@ const CategoriesPage = () => {
             bgColor="primary"
             classes="shadow-lg ms-auto mt-2 me-3"
             dataType="add"
-            onClick={(e)=>essenceHandleToEdit(e, {['iconsForCategories']:categoriesIcons})}
+            onClick={(e) =>
+              essenceHandleToEdit(e, {
+                ['iconsForCategories']: categoriesIcons,
+              })
+            }
             imgSrc={addIcon}
             iconSize={'52px'}
           />

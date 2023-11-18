@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import getDate from '../../utils/getDate';
 import { displayDate } from '../../utils';
 import Badge from './Badge';
 
 const Toast = () => {
-  const { toast, setError } = useForms();
+  const { toast, setError } = useSettings();
   const { imgSrc, icon, iconSize, title, date, content, error, show, badge } = toast;
 
   const handleClick = () => {
@@ -31,7 +31,7 @@ const Toast = () => {
           <strong className="me-auto">{title}</strong>
           <strong>
             {!date
-              ? getDate().split('-').reverse().join('.')
+              ? getDate()
               : displayDate(date)}
           </strong>
           {toast.typeForm === 'auth' && (
@@ -49,8 +49,7 @@ const Toast = () => {
             'toast-body text-center align-items-center d-flex w-content mx-auto p-1'
           }
         >
-              {badge && badge
-          }
+          {badge && badge}
           {imgSrc && (
             <img
               src={imgSrc}

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import categoriesService from '../services/categories.service';
 import categoriesIconsService from '../services/categoriesIcons.service';
 import localStorageService from '../services/localStorage.service';
+import errorCatcher from '../utils/errorCatcher';
 
 const categoriesSlice = createSlice({
   name: 'categories',
@@ -9,6 +10,7 @@ const categoriesSlice = createSlice({
     entities: null,
     isLoading: true,
     error: null,
+    successNetwork: null,
     dataLoaded: null,
     categoriesIcons: null,
     categoriesIconsDataLoaded: null,
@@ -27,10 +29,11 @@ const categoriesSlice = createSlice({
         state.isLoading = false;
         return;
       }
-      if (!state.entities) state.entities = {[payload._id]: payload };
-      else state.entities = { ...state.entities,  [payload._id]: payload };
+      if (!state.entities) state.entities = { [payload._id]: payload };
+      else state.entities = { ...state.entities, [payload._id]: payload };
       state.isLoading = false;
       state.dataLoaded = true;
+      state.successNetwork = 'Категория успешно создана';
     },
     categoriesRequestedFailed: (state, action) => {
       state.error = action.payload;
@@ -41,13 +44,15 @@ const categoriesSlice = createSlice({
         ...state.entities[action.payload._id],
         ...action.payload,
       };
+      state.successNetwork = 'Категория успешно обновлена';
     },
     categoriesRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
       if (!Object.keys(state.entities).length) {
-        state.entities=null
-        state.dataLoaded = false
-      };
+        state.entities = null;
+        state.dataLoaded = false;
+      }
+      state.successNetwork = { type: 'remove', content:'Категория успешно удалена'}
     },
     categoriesIconsReceived: (state, action) => {
       state.categoriesIcons = action.payload;
@@ -68,6 +73,12 @@ const categoriesSlice = createSlice({
       state.entities = null;
       state.dataLoaded = false;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
+    resetSuccessNetwork: (state) => {
+      state.successNetwork = null;
+    },
   },
 });
 
@@ -83,6 +94,8 @@ const {
   categoriesIconsReceived,
   categoriesIconsRequestedFailed,
   categoriesIconsUpdatedReceived,
+  clearError,
+  resetSuccessNetwork,
 } = actions;
 
 export const categoriesCreate = (payload) => async (dispatch) => {
@@ -91,7 +104,7 @@ export const categoriesCreate = (payload) => async (dispatch) => {
     dispatch(categoryAdded(content));
     localStorageService.setCategoriesData('true');
   } catch (error) {
-    dispatch(categoriesRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesRequestedFailed);
   }
 };
 
@@ -100,7 +113,7 @@ export const loadCategories = () => async (dispatch) => {
     const { content } = await categoriesService.get();
     dispatch(categoriesReceived(content));
   } catch (error) {
-    dispatch(categoriesRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesRequestedFailed);
   }
 };
 
@@ -109,7 +122,7 @@ export const categoriesUpdate = (payload) => async (dispatch) => {
     const { content } = await categoriesService.update(payload);
     dispatch(categoriesUpdatedReceived(content));
   } catch (error) {
-    dispatch(categoriesRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesRequestedFailed);
   }
 };
 
@@ -118,7 +131,7 @@ export const categoriesRemove = (payload) => async (dispatch) => {
     await categoriesService.remove(payload);
     dispatch(categoriesRemovedReceived(payload));
   } catch (error) {
-    dispatch(categoriesRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesRequestedFailed);
   }
 };
 
@@ -132,7 +145,7 @@ export const loadСategoriesIcons = () => async (dispatch) => {
     const { content } = await categoriesIconsService.get();
     dispatch(categoriesIconsReceived(content));
   } catch (error) {
-    dispatch(categoriesIconsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesIconsRequestedFailed);
   }
 };
 
@@ -141,8 +154,16 @@ export const categoriesIconsUpdate = (payload) => async (dispatch) => {
     const { content } = await categoriesIconsService.update(payload);
     dispatch(categoriesIconsUpdatedReceived(content));
   } catch (error) {
-    dispatch(categoriesIconsRequestedFailed(error.message));
+    errorCatcher(error, dispatch, categoriesIconsRequestedFailed);
   }
+};
+
+export const clearErrorCategories = (data) => async (dispatch) => {
+  dispatch(clearError(data));
+};
+
+export const clearSuccessNetworkCategories = (data) => async (dispatch) => {
+  dispatch(resetSuccessNetwork(data));
 };
 
 export const selectCategoriesDataloaded = () => (state) =>
@@ -155,5 +176,8 @@ export const selectCategoriesIconsDataloaded = () => (state) =>
   state.categories.categoriesIconsDataLoaded;
 export const selectCategoriesIcons = () => (state) =>
   state.categories.categoriesIcons;
+export const selectErrorCategories = () => (state) => state.categories.error;
+export const selectSuccessNetworkCategories = () => (state) =>
+  state.categories.successNetwork;
 
 export default categoriesReducer;

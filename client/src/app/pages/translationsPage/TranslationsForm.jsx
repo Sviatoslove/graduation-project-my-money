@@ -7,7 +7,6 @@ import {
 } from '../../components/common/form';
 import Button from '../../components/common/buttons/Button';
 import {
-  countsUpdateAfterTranslation,
   selectCounts,
 } from '../../store/countsSlice';
 import getDate from '../../utils/getDate';
@@ -19,8 +18,8 @@ import {
   translationCreate,
 } from '../../store/translationsSlice';
 import LoadingBtn from '../../components/common/LoadingBtn';
+import { useSettings } from '../../hooks/useSettings';
 import { useForms } from '../../hooks/useForms';
-import { useAuth } from '../../hooks/useAuth';
 import { validatorConfigTranslations } from '../../utils/validator';
 
 const TranslationsForm = () => {
@@ -28,10 +27,9 @@ const TranslationsForm = () => {
   const {
     show,
     disAppearanceForm,
-    setError,
     setSettingsToast,
     setSuccessToast,
-  } = useForms();
+  } = useSettings();
   const inputBalanceTo = useRef();
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
@@ -39,21 +37,20 @@ const TranslationsForm = () => {
   const successNetworkTranslations = useSelector(
     selectSuccessNetworkTranslations()
   );
-  const errorTranslations = useSelector(selectErrorTranslations());
 
-  const { register, data, handleSubmit, errors } = useAuth(
+  const { register, data, handleSubmit, errors } = useForms(
     {
       defaultState: {
         fromCount: '0',
         toCount: '',
         content: '',
-        date: getDate(),
+        date: getDate().split('.').reverse().join('-'),
         balanceFrom: 0,
         balanceTo: 0,
       },
       errors: validatorConfigTranslations,
     },
-    errorTranslations,
+    '',
     valueConverted
   );
 
@@ -66,21 +63,14 @@ const TranslationsForm = () => {
   };
 
   useEffect(() => {
-    if (errorTranslations) {
-      setError(errorTranslations);
-      setSettingsToast({
-        typeForm: 'translations',
-      });
-    }
     if (successNetworkTranslations) {
       setSuccessToast(successNetworkTranslations);
       setSettingsToast({
         iconSize: '56px',
-        timeOut: true,
         typeForm: 'translations',
       });
     }
-  }, [errorTranslations, successNetworkTranslations]);
+  }, [successNetworkTranslations]);
 
   const currencyIdFrom = counts[data.defaultState?.fromCount]?.currency;
   const fromCurrency = currency[currencyIdFrom];
@@ -201,7 +191,7 @@ const TranslationsForm = () => {
           type="submit"
           dataType="create"
           classes="w-100 mx-auto"
-          disabled={!!(Object.keys(errors.fields).length - (valueConverted ? 0 : 1)) || errorTranslations}
+          disabled={!!(Object.keys(errors.fields).length - (valueConverted ? 0 : 1))}
         >
           Создать
         </Button>

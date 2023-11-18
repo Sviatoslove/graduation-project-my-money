@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useForms } from '../../../hooks/useForms';
+import { useSettings } from '../../../hooks/useSettings';
 
 const ContainerScale = ({ children, classes }) => {
-  const { transform } = useForms();
+  const { transform } = useSettings();
   return (
     <div className={'scaleTransition ' + classes} style={{ transform: transform }}>
       {children}

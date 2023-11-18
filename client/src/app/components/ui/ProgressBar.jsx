@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 const ProgressBar = () => {
   const { categories, filteredOperations } = useTables();
-  console.log('filteredOperations:', filteredOperations)
 
   const categoriesIds = filteredOperations?.map(operation => operation.categoryId)
   const currentCategoriesIds = _.uniqWith(

@@ -6,15 +6,15 @@ import {
   logIn,
   selectAuthError,
 } from '../../store/usersSlice';
-import { useAuth } from '../../hooks/useAuth';
 import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import { validatorConfigLogin } from '../../utils/validator';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { setError, setSettingsToast, timeOut } = useForms();
+  const { setError, setSettingsToast, timeOut } = useSettings();
   const loginError = useSelector(selectAuthError());
-  const { register, handleSubmit, errors } = useAuth(
+  const { register, handleSubmit, errors } = useForms(
     {
       defaultState: { email: '', password: '', stayOn: false },
       errors: validatorConfigLogin,

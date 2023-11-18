@@ -19,23 +19,6 @@ module.exports = async () => {
     await createInitialEntity(CountsData, countsMock);
   }
 
-  // const counts = await Count.find();
-  // const countsNew = counts.map(count => {
-  //   if(!count['like']) count['like'] = false
-  //   return count
-  // })
-  
-  // await createInitialEntity(Count, countsNew);
-
-  //   const users = await User.find();
-  //   console.log('users:', users)
-  //   const usersNew = users.map(user => {
-  //   if(!user['balance']) user['balance'] = 0
-  //   return user
-  // })
-  
-  // await createInitialEntity(User, usersNew);
-
   const icons = await IconsForCategoriesData.find();
   if (icons.length !== iconsforcategoriesMock.length) {
     await createInitialEntity(IconsForCategoriesData, iconsforcategoriesMock);

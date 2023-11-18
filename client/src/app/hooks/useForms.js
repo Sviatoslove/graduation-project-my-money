@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useForms } from './useForms';
+import { useSettings } from './useSettings';
 
-const useAuth = (state, error, valueConverted) => {
+const useForms = (state, error, valueConverted) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [data, setData] = useState(state);
-  const { setError } = useForms();
+  const { setError } = useSettings();
   const errors = { fields: {}, isValid: false };
 
   const register = (field) => ({
@@ -44,7 +44,7 @@ const useAuth = (state, error, valueConverted) => {
         break;
       }
       case 'isContainDigit': {
-        const digitRegExp = /\d+/g;
+        const digitRegExp = /^\d+$/;
         errors.isValid = !digitRegExp.test(value);
         break;
       }
@@ -86,4 +86,4 @@ const useAuth = (state, error, valueConverted) => {
   return { register, data, handleSubmit, errors };
 };
 
-export { useAuth };
+export { useForms };

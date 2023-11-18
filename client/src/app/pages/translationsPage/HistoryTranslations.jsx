@@ -26,13 +26,14 @@ import { Button } from '../../components/common/buttons';
 import Table from '../../components/common/table/Table';
 import { useTables } from '../../hooks/useTable';
 import Pagination from '../../components/common/pagination';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import _ from 'lodash';
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
   const { currentPage, handlePageChange, sortBy } = useTables();
-  const { setSettingsToast, setError, setSuccessToast } = useForms();
+  const { setSettingsToast, setError, setSuccessToast, essenceHandleToEdit } =
+    useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsLoaded = useSelector(selectCountsStatus());
   const countsData = useSelector(selectCountsData());
@@ -70,17 +71,10 @@ const HistoryTranslations = () => {
       setSuccessToast(successNetworkTranslations);
       setSettingsToast({
         iconSize: '56px',
-        timeOut: true,
         typeForm: 'translations',
       });
     }
   }, [successNetworkTranslations, errorTranslations]);
-
-  const handleRemove = (e) => {
-    const { target } = e;
-    const translId = target.closest('button').id;
-    dispatch(translationRemove(translId));
-  };
 
   if (translationsDataLoaded && countsData) {
     const count = Object?.values(translations)?.length;
@@ -88,7 +82,12 @@ const HistoryTranslations = () => {
     const columns = {
       number: {
         name: 'Номер',
-        component: (translation, idx) => idx + 1,
+        component: (translation, idx) => (
+          <img
+            src={`https://img.icons8.com/arcade/56/${idx + 1}.png`}
+            alt={idx + 1}
+          />
+        ),
       },
       date: {
         path: 'date',
@@ -99,7 +98,7 @@ const HistoryTranslations = () => {
         name: 'Перевод с...',
         component: (translation) => {
           const countFrom = counts[translation?.fromCount];
-          return translation.fromCount ? (
+          return countFrom ? (
             <Badge
               classes={'fs-6 h-i'}
               text={countFrom?.name}
@@ -126,7 +125,7 @@ const HistoryTranslations = () => {
         name: 'Перевод на...',
         component: (translation) => {
           const countTo = counts[translation?.toCount];
-          return translation.toCount ? (
+          return countTo ? (
             <Badge
               classes={'fs-6 h-i'}
               text={countTo?.name}
@@ -144,7 +143,7 @@ const HistoryTranslations = () => {
         component: (translation) => {
           const countFrom = counts[translation?.fromCount];
           const countTo = counts[translation?.toCount];
-          return translation.fromCount ? (
+          return countFrom && countTo ? (
             <Badge
               classes={'fs-6 h-i'}
               balance={translation.balanceFrom}
@@ -175,7 +174,7 @@ const HistoryTranslations = () => {
         name: 'Баланс на...',
         component: (translation) => {
           const countTo = counts[translation.toCount];
-          return translation.toCount ? (
+          return countTo ? (
             <Badge
               classes={'fs-6 h-i'}
               balance={translation.balanceTo}
@@ -193,10 +192,12 @@ const HistoryTranslations = () => {
         component: (translation) => (
           <Button
             outline={true}
+            dataEssence={'translation'}
+            dataType={'remove'}
             bgColor="secondary"
             iconSize={'36px'}
-            imgSrc="https://img.icons8.com/arcade/32/delete-sign.png"
-            onClick={handleRemove}
+            imgSrc="https://img.icons8.com/arcade/36/delete-sign.png"
+            onClick={(e) => essenceHandleToEdit(e, translation)}
             id={translation._id}
           />
         ),
@@ -205,7 +206,7 @@ const HistoryTranslations = () => {
 
     const sortedTranslations = _.orderBy(
       Object.values(translations),
-      [sortBy.path],
+      ['createdAt'],
       [sortBy.order]
     );
 

@@ -260,6 +260,16 @@ code {
   animation-fill-mode: both;
 }
 
+.modal.show {
+  z-index: 5 !important;
+  transition: z-index 0s ease 0s !important;
+}
+
+.modal {
+  z-index: -1 !important;
+  transition: z-index 0.2s ease 0s !important;
+}
+
 @keyframes like-for-card {
   from {
     display: none;

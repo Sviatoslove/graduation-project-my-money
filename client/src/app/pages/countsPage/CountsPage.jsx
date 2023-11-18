@@ -9,6 +9,7 @@ import {
   selectCountsLoadingStatus,
   selectCountsStatus,
   selectErrorCounts,
+  selectSuccessNetworkCounts,
 } from '../../store/countsSlice';
 import {
   Container,
@@ -24,7 +25,7 @@ import CountCard from './CountCard';
 import Button from '../../components/common/buttons/Button';
 import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 
 const CountsPage = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,8 @@ const CountsPage = () => {
     handlePageChange,
     setError,
     setSettingsToast,
-  } = useForms();
+    setSuccessToast,
+  } = useSettings();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -46,6 +48,7 @@ const CountsPage = () => {
   const countsDataLoaded = useSelector(selectCountsStatus());
   const countsIsLoading = useSelector(selectCountsLoadingStatus());
   const errorCounts = useSelector(selectErrorCounts());
+  const successNetworkCounts = useSelector(selectSuccessNetworkCounts());
 
   const pageSize = 6;
 
@@ -71,17 +74,27 @@ const CountsPage = () => {
         typeForm: 'counts',
       });
     }
-  }, [errorCounts]);
+    if (successNetworkCounts && successNetworkCounts?.type === 'remove') {
+      setSuccessToast(successNetworkCounts.content);
+      setSettingsToast({
+        iconSize: '56px',
+        typeForm: 'counts',
+      });
+    }
+  }, [errorCounts, successNetworkCounts]);
 
   const handleClick = () => {
     setCurrentPage(1);
   };
 
-  if (!countsIsLoading) {
-    const arrCounts = counts ? Object.values(counts) : [];
-    const count = arrCounts.length;
+  const changePageForEmptyList = () => {
+    setCurrentPage((state) => state - 1);
+  };
+
+  const arrCounts = counts ? Object.values(counts) : [];
+  const count = arrCounts?.length;
     let countsLikes;
-    if (likesPage) countsLikes = arrCounts.filter((count) => count.like);
+    if (likesPage) countsLikes = arrCounts?.filter((count) => count.like);
 
     const countsCrop = paginate(
       likesPage ? countsLikes : arrCounts,
@@ -89,6 +102,11 @@ const CountsPage = () => {
       pageSize
     );
 
+    useEffect(() => {
+      if (count && countsCrop && !countsCrop?.length) changePageForEmptyList();
+    }, [count]);
+
+    if (!countsIsLoading) {
     return (
       <Container classes="shadow-custom br-10 p-3">
         <ContainerShow type={'add'}>

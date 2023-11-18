@@ -10,14 +10,15 @@ import {
   selectCountsDataStatus,
   selectErrorCounts,
   selectSuccessNetworkCounts,
+  updatedsuccessNetworkCounts,
 } from '../../store/countsSlice';
 import AvatarsField from '../../components/common/form/AvatarsField';
 import currency from '../../mock/currency';
 import countsIconsMock from '../../mock/countsIcons';
 import Button from '../../components/common/buttons/Button';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import { formatDataCountsIcons } from '../../utils/formatData';
-import { useAuth } from '../../hooks/useAuth';
+import { useForms } from '../../hooks/useForms';
 import { validatorConfigCounts } from '../../utils/validator';
 
 let icon;
@@ -29,13 +30,11 @@ const CountsForm = () => {
     currentEssence,
     disAppearanceForm,
     setSettingsToast,
-    setError,
     setSuccessToast,
-  } = useForms();
+  } = useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
   const countsSuccessNetwork = useSelector(selectSuccessNetworkCounts());
-  const errorCounts = useSelector(selectErrorCounts());
 
   const initialState = currentEssence
     ? currentEssence
@@ -47,12 +46,11 @@ const CountsForm = () => {
         icon: '',
       };
 
-  const { register, data, handleSubmit, errors } = useAuth(
+  const { register, data, handleSubmit, errors } = useForms(
     {
       defaultState: initialState,
       errors: validatorConfigCounts,
     },
-    errorCounts
   );
 
   useEffect(() => {
@@ -60,12 +58,6 @@ const CountsForm = () => {
   }, []);
 
   useEffect(() => {
-    if (errorCounts) {
-      setError(errorCounts);
-      setSettingsToast({
-        typeForm: 'counts',
-      });
-    }
     if (countsSuccessNetwork) {
       setSuccessToast(countsSuccessNetwork);
       setSettingsToast({
@@ -75,13 +67,14 @@ const CountsForm = () => {
         typeForm: 'counts',
       });
     }
-  }, [errorCounts, countsSuccessNetwork]);
+  }, [countsSuccessNetwork]);
 
   const onSubmit = (data) => {
     icon = data.defaultState.icon;
     disAppearanceForm();
     if (currentEssence) {
       dispatch(countUpdate(data.defaultState));
+      dispatch(updatedsuccessNetworkCounts())
     } else {
       dispatch(countCreate(data.defaultState));
     }
@@ -118,7 +111,7 @@ const CountsForm = () => {
             <Button
               type="submit"
               classes="w-100 mx-auto"
-              disabled={!!Object.keys(errors.fields).length || errorCounts}
+              disabled={!!Object.keys(errors.fields).length}
             >
               {!currentEssence ? 'Создать' : 'Обновить'}
             </Button>

@@ -65,7 +65,7 @@ const MasterCount = ({ classes }) => {
             />
           )}
 
-          <div className="dropdown w-content info br-5 text-center mx-auto shadow-custom">
+          <div className="dropdown w-content info br-5 text-center mx-auto shadow-custom pb-1wpx">
             <div className="d-flex">
               <img
                 className="w-content mx-auto"

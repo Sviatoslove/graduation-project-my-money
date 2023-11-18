@@ -9,15 +9,15 @@ import {
   signUp,
 } from '../../store/usersSlice';
 import { validatorConfigRegister } from '../../utils/validator';
+import { useSettings } from '../../hooks/useSettings';
 import { useForms } from '../../hooks/useForms';
-import { useAuth } from '../../hooks/useAuth';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const { setSettingsToast, setError } = useForms();
+  const { setSettingsToast, setError } = useSettings();
 
   const errorRegister = useSelector(selectAuthError());
-  const { register, handleSubmit, errors } = useAuth(
+  const { register, handleSubmit, errors } = useForms(
     {
       defaultState: {
         email: '',

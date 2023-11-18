@@ -8,7 +8,7 @@ import {
   loadCategories,
   selectCategories,
 } from '../../store/categoriesSlice';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
 import {
@@ -18,11 +18,11 @@ import {
   selectSuccessNetworkOperations,
 } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
-import { useAuth } from '../../hooks/useAuth';
+import { useForms } from '../../hooks/useForms';
 import Badge from '../../components/common/Badge';
 import { validatorConfigOperations } from '../../utils/validator';
 
-let categoryId;
+let badge;
 
 const OperationsForm = () => {
   const {
@@ -30,15 +30,13 @@ const OperationsForm = () => {
     statusOperation,
     currentEssence,
     show,
-    setError,
     setSuccessToast,
     setSettingsToast,
-  } = useForms();
+  } = useSettings();
   const dispatch = useDispatch();
   const successNetworkOperations = useSelector(
     selectSuccessNetworkOperations()
   );
-  const errorOperations = useSelector(selectErrorOperations());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
   const filteredCategories =
@@ -55,51 +53,44 @@ const OperationsForm = () => {
         balance: 0,
         categoryId: '',
         content: '',
-        date: `${getDate()}T${hour < 10 ? '0' + hour : hour}:${
-          minutes < 10 ? '0' + minutes : minutes
-        }`,
+        date: `${getDate().split('.').reverse().join('-')}T${
+          hour < 10 ? '0' + hour : hour
+        }:${minutes < 10 ? '0' + minutes : minutes}`,
       };
-  const { register, data, handleSubmit, errors } = useAuth(
-    {
-      defaultState: initialState,
-      errors: validatorConfigOperations,
-    },
-    errorOperations
-  );
+  const { register, data, handleSubmit, errors } = useForms({
+    defaultState: initialState,
+    errors: validatorConfigOperations,
+  });
 
   useEffect(() => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
   }, []);
 
   useEffect(() => {
-    if (errorOperations) {
-      setError(errorOperations);
-      setSettingsToast({
-        typeForm: 'operations',
-      });
-    }
     if (successNetworkOperations) {
       setSuccessToast(successNetworkOperations);
       setSettingsToast({
         badge: (
           <Badge
-            key={categories[categoryId]._id}
-            icon={categories[categoryId].icon}
+            {...badge}
             iconSize="fs-1 "
-            color={categories[categoryId].bgColor}
-            iconColor={categories[categoryId].iconColor}
-            classes="br-50 text-center me-2 mb-1"
+            classes="br-50 text-center me-2 ms-3 mb-1"
           />
         ),
         iconSize: '56px',
-        timeOut: true,
         typeForm: 'operations',
       });
     }
-  }, [errorOperations, successNetworkOperations]);
+  }, [successNetworkOperations]);
 
   const onSubmit = (data) => {
-    categoryId = data.defaultState.categoryId;
+    const {
+      bgColor: color,
+      iconColor,
+      icon,
+      _id: key,
+    } = categories[data.defaultState.categoryId]
+    badge = { color, iconColor, icon, key };
     if (currentEssence) {
       dispatch(operationUpdate(data.defaultState));
     } else {
@@ -131,9 +122,9 @@ const OperationsForm = () => {
             <AvatarsField
               label="Выбери категорию"
               options={filteredCategories}
-              classesInputGroup={'mh-352px'}
-              count={32}
-              iconSize="56px"
+              classesInputGroup={''}
+              count={30}
+              iconSize="30px"
               {...register('categoryId')}
             />
             <TextField label="Комментарий" {...register('content')} />
@@ -145,7 +136,7 @@ const OperationsForm = () => {
             <Button
               type="submit"
               classes="w-100 mx-auto mt-4"
-              disabled={!!Object.keys(errors.fields).length || errorOperations}
+              disabled={!!Object.keys(errors.fields).length}
             >
               {currentEssence ? 'Обновить' : 'Создать'}
             </Button>

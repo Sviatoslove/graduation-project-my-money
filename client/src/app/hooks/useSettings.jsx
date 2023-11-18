@@ -1,20 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { clearErrorOperations, clearSuccessNetworkOperations, operationRemove } from '../store/operationsSlice';
-import { categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
+import {
+  clearErrorOperations,
+  clearSuccessNetworkOperations,
+  operationRemove,
+} from '../store/operationsSlice';
+import { categoriesRemove, categoriesUpdate, clearErrorCategories, clearSuccessNetworkCategories } from '../store/categoriesSlice';
 import {
   clearErrorCounts,
   clearSuccessNetworkCounts,
   countRemove,
   countUpdate,
 } from '../store/countsSlice';
-import { useDispatch } from 'react-redux';
-import { clearErrorAuth, clearSuccessNetworkAuth } from '../store/usersSlice';
-import { clearErrorTranslations, clearSuccessNetworkTranslations } from '../store/translationsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrorAuth, selectUser, updateUser } from '../store/usersSlice';
+import {
+  clearErrorTranslations,
+  clearSuccessNetworkTranslations,
+  translationRemove,
+} from '../store/translationsSlice';
+import localStorageService from '../services/localStorage.service';
+import getDate from '../utils/getDate';
+import { displayDate } from '../utils';
 
 const FormsContext = React.createContext();
 
-const useForms = () => useContext(FormsContext);
+const useSettings = () => useContext(FormsContext);
 
 const FormsProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -33,28 +44,35 @@ const FormsProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [successToast, setSuccessToast] = useState(null);
   const [settingsToast, setSettingsToast] = useState(null);
+  const [settingsModal, setSettingsModal] = useState({});
+  const user = useSelector(selectUser());
 
   const startClearFunc = () => {
     if (error === '') setError(null);
     if (successToast === '') setSuccessToast(null);
     switch (settingsToast?.typeForm) {
       case 'auth': {
-        if (error!==null) dispatch(clearErrorAuth());
+        if (error !== null) dispatch(clearErrorAuth());
         break;
       }
       case 'counts': {
-        if (error!==null) dispatch(clearErrorCounts());
+        if (error !== null) dispatch(clearErrorCounts());
         else dispatch(clearSuccessNetworkCounts());
         break;
       }
       case 'operations': {
-        if (error!==null) dispatch(clearErrorOperations());
+        if (error !== null) dispatch(clearErrorOperations());
         else dispatch(clearSuccessNetworkOperations());
         break;
       }
       case 'translations': {
-        if (error!==null) dispatch(clearErrorTranslations());
+        if (error !== null) dispatch(clearErrorTranslations());
         else dispatch(clearSuccessNetworkTranslations());
+        break;
+      }
+      case 'categories': {
+        if (error !== null) dispatch(clearErrorCategories());
+        else dispatch(clearSuccessNetworkCategories());
         break;
       }
     }
@@ -127,12 +145,32 @@ const FormsProvider = ({ children }) => {
     }
   };
 
+  const onChangeModal = (essence, idEssence) => {
+    if (essence === 'count') dispatch(countRemove(idEssence))
+    if (essence === 'operation') dispatch(operationRemove(idEssence));
+    if (essence === 'category') dispatch(categoriesRemove(idEssence));
+    if (essence === 'translation') dispatch(translationRemove(idEssence));
+    setSettingsModal({ showModal: false })
+  };
+
   const essenceHandleToEdit = (e, currentEssence) => {
     const { target } = e;
     const btn = target.closest('button');
     const btnType = btn?.dataset.type;
     const essence = btn?.dataset.essence;
     const idEssence = btn?.id;
+    const titleModal = {
+      category: 'категории',
+      count: 'счёта',
+      operation: 'операции',
+      translation: 'перевода',
+    };
+    const contentModal = {
+      category: `категорию: ${currentEssence?.name}`,
+      count: `счёт ${currentEssence?.name} и все связанные с ним операции и переводы`,
+      operation: `операцию от ${getDate(currentEssence?.date)} числа`,
+      translation: `перевод от ${displayDate(currentEssence?.createdAt)}`,
+    };
     switch (btnType) {
       case 'add':
         setCurrentEssence(currentEssence);
@@ -144,6 +182,11 @@ const FormsProvider = ({ children }) => {
         setTypeForm(btnType);
         appearanceForm();
         break;
+      case 'masterCount':
+        localStorageService.setMasterCount(idEssence);
+        const newUser = { ...user, masterCount: idEssence };
+        dispatch(updateUser(newUser));
+        break;
       case 'like':
         const editedEssence = {
           ...currentEssence,
@@ -153,9 +196,13 @@ const FormsProvider = ({ children }) => {
         if (essence === 'count') dispatch(countUpdate(editedEssence));
         break;
       case 'remove':
-        if (essence === 'count') dispatch(countRemove(idEssence));
-        if (essence === 'operation') dispatch(operationRemove(idEssence));
-        if (essence === 'category') dispatch(categoriesRemove(idEssence));
+        setSettingsModal({
+          showModal: true,
+          titleModal: `Удаление ${titleModal[essence]}:`,
+          contentModal: `Вы уверены, что желаете удалить ${contentModal[essence]}?`,
+          onChangeModal: () => onChangeModal(essence, idEssence),
+          onClose: () => setSettingsModal({ showModal: false }),
+        });
         break;
       case 'translationsAdd':
         setTypeForm(btnType);
@@ -191,6 +238,7 @@ const FormsProvider = ({ children }) => {
         setSettingsToast,
         settingsToast,
         setSuccessToast,
+        settingsModal,
       }}
     >
       {children}
@@ -198,4 +246,4 @@ const FormsProvider = ({ children }) => {
   );
 };
 
-export { FormsProvider, useForms };
+export { FormsProvider, useSettings };

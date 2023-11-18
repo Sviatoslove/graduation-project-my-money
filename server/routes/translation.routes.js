@@ -72,12 +72,12 @@ router.delete('/:translId', auth, async (req, res) => {
     const countTo = await Count.findById(toCount);
     countTo.balance = Number(countTo.balance) - Number(balanceTo);
     await Count.findByIdAndUpdate(toCount, countTo);
-    await removedTranslation.deleteOne(); // ждём пока удалится коммент
+    await removedTranslation.deleteOne();
     const data = {
       _id: 'translId',
       counts: { countFrom: countFrom, countTo: countTo },
     };
-    return res.send(data); // можем вернуть null, т.к. на фронте мы ничего не ждём
+    return res.send(data);
   } catch (e) {
     res
       .status(500)

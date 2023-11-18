@@ -7,7 +7,6 @@ import MasterCount from '../../components/common/MasterCount';
 import { useTables } from '../../hooks/useTable';
 
 const Translations = ({ onChange, counts }) => {
-  // const [masterCount, setMasterCount] = useState("");
   const { masterCount, setMasterCount } = useTables();
   const user = useSelector(selectUser());
 
@@ -37,7 +36,7 @@ const Translations = ({ onChange, counts }) => {
             <p>История</p>
           </Button>
 
-          <MasterCount classes={'mb-5'} />
+          <MasterCount classes={'mb-5 w-300px'} />
 
           <Button
             dataType="translationsAdd"

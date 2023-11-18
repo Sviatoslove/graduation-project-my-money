@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../buttons/Button';
-import { formatDataForAvatarsFields, getFindActiveIndex } from '../../../utils/formatData';
+import {
+  formatDataForAvatarsFields,
+  getFindActiveIndex,
+} from '../../../utils/formatData';
 
 const AvatarsField = ({
   label,
@@ -14,13 +17,20 @@ const AvatarsField = ({
   options,
   onChange,
   count,
-  classesInputGroup, error
+  classesInputGroup,
+  iconSize,
+  error,
 }) => {
-
-  const formatOptions = formatDataForAvatarsFields(count, options)
-  const [index, setIndex] = useState(getFindActiveIndex(value, formatOptions)||0);
-  const [showClassesIncBt, setShowClassesIncBt] = useState(index === formatOptions.length?'-fill': '');
-  const [showClassesDecBt, setShowClassesDecBt] = useState(index === 0 ? '-fill':'');
+  const formatOptions = formatDataForAvatarsFields(count, options);
+  const [index, setIndex] = useState(
+    getFindActiveIndex(value, formatOptions) || 0
+  );
+  const [showClassesIncBt, setShowClassesIncBt] = useState(
+    index === formatOptions.length ? '-fill' : ''
+  );
+  const [showClassesDecBt, setShowClassesDecBt] = useState(
+    index === 0 ? '-fill' : ''
+  );
 
   const handleClick = ({ target }) => {
     const activeBtn = target.closest('div').querySelector('.active');
@@ -57,6 +67,7 @@ const AvatarsField = ({
         outline: true,
         classes: `avatar border-0 bg-transparent br-10 ${active}`,
         zIndex: 0,
+        iconSize,
         ...item,
       };
       if (item.dataType === 'iconsForCategories') {
@@ -71,8 +82,7 @@ const AvatarsField = ({
           iconColor: valueIconColor,
           width: item.color ? '24px' : '',
           height: item.color ? '24px' : '80px',
-          children: nameCategory && nameCategory.slice(0, 2),
-          iconSize:'36px'
+          children: nameCategory && nameCategory.slice(0, 4),
         };
       }
       if (item.dataType === 'category') {
@@ -82,7 +92,7 @@ const AvatarsField = ({
           name: name,
           dataValue: item._id,
           classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center h-content`,
-          children: item.name.slice(0,8),
+          children: item.name.slice(0, 8),
         };
       }
 
@@ -93,7 +103,11 @@ const AvatarsField = ({
   return (
     <div className="mb-1">
       <label htmlFor={name}>{label}</label>
-      <div className={"input-group mt-2 justify-content-center " + classesInputGroup}>
+      <div
+        className={
+          'input-group mt-2 justify-content-center ' + classesInputGroup
+        }
+      >
         {drawingAvatars(index)}
         {error && <div className="invalid-feedback p-2 d-block">{error}</div>}
       </div>
@@ -132,6 +146,7 @@ AvatarsField.propTypes = {
   valueTextColor: PropTypes.string,
   valueIconColor: PropTypes.string,
   label: PropTypes.string.isRequired,
+  iconSize: PropTypes.string,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,

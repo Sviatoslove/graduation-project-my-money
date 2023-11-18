@@ -1,6 +1,8 @@
 const express = require('express');
 const auth = require('../middleware/auth.middleware');
 const Count = require('../models/Count');
+const Operation = require('../models/Operation');
+const Translation = require('../models/Translation');
 const router = express.Router({ mergeParams: true });
 
 router
@@ -62,11 +64,16 @@ router
 
 router.delete('/:countId', auth, async (req, res) => {
   try {
-    const { countId } = req.params; // получаем параметр commentId
-    //const removedComment = await Comment.find({ _id: commentId }) или ===>>>
-    const removedCount = await Count.findById(countId); // найдём комментарий который нужно удалить
-    await removedCount.deleteOne(); // ждём пока удалится коммент
-    return res.send(null); // можем вернуть null, т.к. на фронте мы ничего не ждём
+    const { countId } = req.params;
+    await Count.findByIdAndDelete(countId);
+    const operations = await Operation.deleteMany({countId})
+    const translationsFrom = await Translation.deleteMany({fromCount: countId})
+    const translationsTo = await Translation.deleteMany({toCount: countId})
+    return res.send({
+      _id: 'noTransformData',
+      deletedOperations: operations.deletedCount,
+      deletedTranslations: translationsFrom.deletedCount + translationsTo.deletedCount,
+    });
   } catch (e) {
     res.status(500).json({
       error: {

@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { getInputClasses } from "../../../utils";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { getInputClasses } from '../../../utils';
 // import { formatDataForFields, getInputClasses } from '../../../utils'
 
 const SelectedField = ({
@@ -12,7 +12,7 @@ const SelectedField = ({
   name,
   onChange,
   valueTwo,
-  disabled
+  disabled,
 }) => {
   const optionsArray = Object.values(options)?.map((optionName) => ({
     name: optionName.name,
@@ -22,17 +22,20 @@ const SelectedField = ({
   return (
     <div className="mb-2 d-flex flex-column">
       <label htmlFor={name} className="form-label">
-       {label} 
+        {label}
       </label>
       <select
-        className={"form-select-lg " + getInputClasses('form-select', error)}
+        className={'form-select-lg ' + getInputClasses('form-select', error)}
         value={value}
         onChange={onChange}
         name={name}
         id={name}
         disabled={disabled}
       >
-        <option disabled={defaultOption === 'Choose...' ? true : false} value="">
+        <option
+          disabled={defaultOption === 'Choose...' ? true : false}
+          value=""
+        >
           {defaultOption}
         </option>
         {optionsArray?.map((option) => {
@@ -59,7 +62,7 @@ const SelectedField = ({
 };
 
 SelectedField.defaultProps = {
-  defaultOption: "Choose...",
+  defaultOption: 'Choose...',
 };
 
 SelectedField.propTypes = {

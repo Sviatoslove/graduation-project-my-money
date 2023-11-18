@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { LoginForm, RegisterForm } from "../components/ui";
-import { useForms } from "../hooks/useForms";
+import { useSettings } from "../hooks/useSettings";
 
 const LoginPage = () => {
-const {formType, toggleFormType} = useForms()
+const {formType, toggleFormType} = useSettings()
   return (
     <>
       {formType === "register" ? (

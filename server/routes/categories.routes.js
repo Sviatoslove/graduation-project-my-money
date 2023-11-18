@@ -10,17 +10,15 @@ router
       const listAll = await Category.find();
       const list = listAll.filter(
         (category) => String(category.userId) === req.user._id
-      ); 
+      );
       res.send(list);
     } catch (e) {
-      res
-        .status(500)
-        .json({
-          error: {
-            message: 'На сервере произошла ошибка. Попробуйте позже.',
-            code: 500,
-          },
-        });
+      res.status(500).json({
+        error: {
+          message: 'На сервере произошла ошибка. Категории не загружены. Попробуйте позже.',
+          code: 500,
+        },
+      });
     }
   })
   .post(auth, async (req, res) => {
@@ -31,14 +29,12 @@ router
       });
       res.status(201).send(newCategory);
     } catch (e) {
-      res
-        .status(500)
-        .json({
-          error: {
-            message: 'На сервере произошла ошибка. Попробуйте позже.',
-            code: 500,
-          },
-        });
+      res.status(500).json({
+        error: {
+          message: 'На сервере произошла ошибка. Категория не создана. Попробуйте позже.',
+          code: 500,
+        },
+      });
     }
   })
   .patch(auth, async (req, res) => {
@@ -52,36 +48,34 @@ router
       );
       res.send(updatedCategory);
     } catch (e) {
-      res
-        .status(500)
-        .json({
-          error: {
-            message: 'На сервере произошла ошибка. Попробуйте позже.',
-            code: 500,
-          },
-        });
+      res.status(500).json({
+        error: {
+          message: 'На сервере произошла ошибка. Категория не обновлена. Попробуйте позже.',
+          code: 500,
+        },
+      });
     }
   });
 
 router.delete('/:categoryId', auth, async (req, res) => {
   try {
-    const { categoryId } = req.params; 
-    const removedCategory = await Category.findById(categoryId); удалить
+    const { categoryId } = req.params;
+    const removedCategory = await Category.findById(categoryId);
     if (removedCategory.userId.toString() === req.user._id) {
-      await removedCategory.deleteOne(); 
+      await removedCategory.deleteOne();
       return res.send(null);
     } else {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res
+        .status(401)
+        .json({ error: { message: 'Вы не авторизованы! Войдите в систему пожалуйста.', code: 401 } });
     }
   } catch (e) {
-    res
-      .status(500)
-      .json({
-        error: {
-          message: 'На сервере произошла ошибка. Попробуйте позже.',
-          code: 500,
-        },
-      });
+    res.status(500).json({
+      error: {
+        message: 'На сервере произошла ошибка. Категория не удалена. Попробуйте позже.',
+        code: 500,
+      },
+    });
   }
 });
 

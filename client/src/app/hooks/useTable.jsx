@@ -10,12 +10,13 @@ import _ from 'lodash';
 import { paginate } from '../utils';
 import LoadingSpinners from '../components/common/LoadingSpinners';
 import { selectIsLoggedIn } from '../store/usersSlice';
-import { useForms } from './useForms';
+import { useSettings } from './useSettings';
 import {
   loadCategories,
   selectCategories,
   selectCategoriesDataloaded,
 } from '../store/categoriesSlice';
+import getDate from '../utils/getDate';
 
 const TablesContext = React.createContext();
 
@@ -23,7 +24,7 @@ const useTables = () => useContext(TablesContext);
 
 const TablesProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { statusOperation } = useForms();
+  const { statusOperation } = useSettings();
   let filteredCategories = [];
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +55,6 @@ const TablesProvider = ({ children }) => {
       ...state,
       [target.name]: target.value,
     }));
-    // setErrors(null)
   };
 
   const handlePageChange = (pageIndex) => {
@@ -77,19 +77,12 @@ const TablesProvider = ({ children }) => {
     
   };
 
-  if (isLoggedIn && !categories && categories !== null)
-    return <LoadingSpinners number={3} />;
-
   const filterOperations = (data) => {
     if (data) {
       const dataArr = Object.values(data);
       const filteredOper = searchQuery
         ? dataArr.filter((operation) => {
-            const ddMmYyyyArr = operation.date
-              .split('T')[0]
-              .split('-')
-              .reverse()
-              .join('.');
+            const ddMmYyyyArr = getDate(operation.date)
             if (!isNaN(Number(searchQuery))) {
               return ddMmYyyyArr.includes(searchQuery.trim());
             }
@@ -102,7 +95,7 @@ const TablesProvider = ({ children }) => {
         operations &&
         categories &&
         filteredOper
-          .filter((op) => op.countId === masterCount._id)
+          .filter((op) => op.countId === masterCount?._id)
           .filter((operation) => {
             if (operation.status === statusOperation) {
               filteredCategories.push(categories[operation?.categoryId]);
@@ -119,7 +112,6 @@ const TablesProvider = ({ children }) => {
   };
 
   const filteredOperations = filterOperations(operations);
-  console.log('filteredOperations:', filteredOperations)
   const count = filteredOperations?.length;
 
   const sortedOperations = _.orderBy(
@@ -131,6 +123,14 @@ const TablesProvider = ({ children }) => {
   const pageSize = 10;
 
   const operationCrop = paginate(sortedOperations, currentPage, pageSize);
+
+  useEffect(() => {
+    if (count && operationCrop && !operationCrop?.length) setCurrentPage((state) => state - 1);
+  }, [count]);
+
+  
+  if (isLoggedIn && !categories && categories !== null)
+    return <LoadingSpinners number={3} />;
 
   return (
     <TablesContext.Provider

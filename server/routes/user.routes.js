@@ -6,18 +6,16 @@ const router = express.Router({ mergeParams: true });
 
 router.patch('/:userId', auth, async (req, res) => {
   try {
-    // получаем userId
-    const { userId } = req.params; // это тотже userId, что и => router.patch(==>'/:userId'<==, ...
+    const { userId } = req.params;
 
-    // необходимо проверить равняется ли userId текущему user, т.к. изменять на клиенте, пользователь может только свои данные пользователя
     if (userId === req.user._id) {
-      // если всё совпадает знчит обновляем юзера
       const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
-        new: true, // этот флаг означает, что мы получаем обновлённые данные только после того, как они обновятся в БД, чтобы в этой константе на клиента не ушли старые данные
+        new: true,
       });
       res.send(updatedUser);
+
     } else {
-      res.status(401).json({ message: 'Unauthorized' });
+      res.status(401).json({error: {message: 'Вы не авторизованы!', code:401} });
     }
   } catch (e) {
     res
@@ -25,7 +23,7 @@ router.patch('/:userId', auth, async (req, res) => {
       .json({
         error: {
           message: 'На сервере произошла ошибка. Попробуйте позже.',
-          code: 50,
+          code: 500,
         },
       });
   }
@@ -34,15 +32,15 @@ router.patch('/:userId', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   try {
     const userId = req.user._id;
-    const list = await User.findOne({ _id: userId }); // нашли всех юзеров в БД
-    res.send(list); // отправили их на клиента с статус кодом 200(он указывается по умолчанию, если необходимо отправить данные с другим кодом, то необходимо его указать, например, res.status(400).send())
+    const list = await User.findOne({ _id: userId });
+    res.send(list);
   } catch (e) {
     res
       .status(500)
       .json({
         error: {
           message: 'На сервере произошла ошибка. Попробуйте позже.',
-          code: 50,
+          code: 500,
         },
       });
   }

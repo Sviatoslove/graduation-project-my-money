@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 
 const StatusAll = ({classes}) => {
-  const {statusOperation, handleClick} = useForms()
+  const {statusOperation, handleClick} = useSettings()
 
   return (
     <ul className={"nav nav-tabs nav-tabs justify-content-evenly border-primary border-2 ff-roboto " + classes}>

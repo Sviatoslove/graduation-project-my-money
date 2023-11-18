@@ -9,7 +9,7 @@ import Button from '../components/common/buttons/Button';
 import addIcon from '../../assets/icons/patch-plus-fill.svg';
 import { ContainerScale, ContainerShow } from '../components/common/Containers';
 import OperationsForm from './operationsPage/OperationsForm';
-import { useForms } from '../hooks/useForms';
+import { useSettings } from '../hooks/useSettings';
 import OperationsTable from '../components/ui/OperationsTable';
 import { useTables } from '../hooks/useTable';
 import Pagination from '../components/common/pagination';
@@ -18,11 +18,13 @@ import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
 import ProgressBar from '../components/ui/ProgressBar';
 import localStorageService from '../services/localStorage.service';
-import { selectErrorOperations } from '../store/operationsSlice';
+import { selectErrorOperations, selectSuccessNetworkOperations } from '../store/operationsSlice';
 
 const MainPage = () => {
-  const { essenceHandleToEdit, setError, setSettingsToast } = useForms();
+  const { essenceHandleToEdit, setError, setSettingsToast, setSuccessToast } = useSettings();
   const errorOperations = useSelector(selectErrorOperations());
+  const successNetworkOperations = useSelector(selectSuccessNetworkOperations());
+
   const {
     dataCategory,
     operations,
@@ -46,7 +48,14 @@ const MainPage = () => {
         typeForm: 'operations',
       });
     }
-  }, [errorOperations]);
+    if (successNetworkOperations && successNetworkOperations?.type === 'remove') {
+      setSuccessToast(successNetworkOperations.content);
+      setSettingsToast({
+        iconSize: '56px',
+        typeForm: 'operations',
+      });
+    }
+  }, [errorOperations, successNetworkOperations]);
 
   return (
     <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>

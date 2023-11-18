@@ -1,10 +1,10 @@
 import React from 'react';
 import CountsForm from './CountsForm';
 import TranslationsForm from '../translationsPage/TranslationsForm';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
 
 const FormForCount = () => {
-  const { typeForm } = useForms();
+  const { typeForm } = useSettings();
   return (
     <>
       {typeForm === 'translationsAdd' ? (

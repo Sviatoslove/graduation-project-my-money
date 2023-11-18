@@ -43,6 +43,7 @@ const operationsSlice = createSlice({
     operationsRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
       if (!Object.keys(state.entities).length) state.dataLoaded = false;
+      state.successNetwork = {content:'Операция успешно удалена', type: 'remove'};
     },
     operationsDataRemoved: (state) => {
       state.entities = null;

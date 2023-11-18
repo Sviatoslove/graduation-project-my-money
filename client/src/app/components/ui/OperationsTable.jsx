@@ -12,12 +12,13 @@ import LoadingSpinners from '../common/LoadingSpinners';
 import { Button } from '../common/buttons';
 import { operationRemove } from '../../store/operationsSlice';
 import { useTables } from '../../hooks/useTable';
-import { useForms } from '../../hooks/useForms';
+import { useSettings } from '../../hooks/useSettings';
+import getDate from '../../utils/getDate';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
   const { categories, operationCrop } = useTables();
-  const { essenceHandleToEdit } = useForms();
+  const { essenceHandleToEdit } = useSettings();
 
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
@@ -39,16 +40,10 @@ const OperationsTable = () => {
     };
   };
 
-  const handleRemove = (e) => {
-    const { target } = e;
-    const operId = target.closest('button').id;
-    dispatch(operationRemove(operId));
-  };
-
   const columns = {
     number: {
       name: 'Номер',
-      component: (operation, idx) => idx + 1,
+      component: (operation, idx) => <img src={`https://img.icons8.com/arcade/56/${idx + 1}.png`} alt={idx + 1}/> ,
     },
     time: {
       path: 'date',
@@ -57,13 +52,7 @@ const OperationsTable = () => {
     },
     date: {
       name: 'Дата',
-      component: (operation) =>
-        operation.date
-          .split('T')[0]
-          .replaceAll('-', '.')
-          .split('.')
-          .reverse()
-          .join('.'),
+      component: (operation) => getDate(operation.date),
     },
     category: {
       name: 'Категория',
@@ -74,7 +63,7 @@ const OperationsTable = () => {
             classes={'p-0 br-50 border-0'}
             dataType={'edit'}
             dataEssence={'operation'}
-            onClick={(e)=> essenceHandleToEdit(e, operation)}
+            onClick={(e) => essenceHandleToEdit(e, operation)}
           >
             <CategoryCard
               table={'true'}
@@ -111,10 +100,12 @@ const OperationsTable = () => {
       component: (operation) => (
         <Button
           outline={true}
+          dataEssence={'operation'}
+          dataType={'remove'}
           bgColor="secondary"
           iconSize={'32px'}
           imgSrc="https://img.icons8.com/arcade/32/delete-sign.png"
-          onClick={handleRemove}
+          onClick={(e) => essenceHandleToEdit(e, operation)}
           id={operation._id}
         />
       ),
