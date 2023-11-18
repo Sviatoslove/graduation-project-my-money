@@ -31,6 +31,7 @@ const AvatarsField = ({
   const [showClassesDecBt, setShowClassesDecBt] = useState(
     index === 0 ? '-fill' : ''
   );
+  
   const handleClick = ({ target }) => {
     const activeBtn = target.closest('div').querySelector('.active');
     activeBtn?.classList.remove('active');
