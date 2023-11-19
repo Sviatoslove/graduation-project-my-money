@@ -8,8 +8,8 @@ import CategoriesPage from "./categories/CategoriesPage";
 import RegularPaymentsPage from "./RegularPaymentsPage";
 import CurrencyPage from "./CurrencyPage";
 import OperationsHistoryPage from "./operationsPage/OperationsHistoryPage";
-import UserPage from "./UserPage";
-import UserPageEdit from "./UserPageEdit";
+import UserPage from "./userPage/UserPage";
+import UserPageEdit from "./userPage/UserCardEdit";
 import Translations from "./translationsPage/Translations";
 
 export {

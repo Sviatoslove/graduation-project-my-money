@@ -82,7 +82,7 @@ const AvatarsField = ({
           iconColor: valueIconColor,
           width: item.color ? '24px' : '',
           height: item.color ? '24px' : '80px',
-          children: nameCategory && nameCategory.slice(0, 4),
+          children: nameCategory && nameCategory.slice(0, 2),
         };
       }
       if (item.dataType === 'category') {

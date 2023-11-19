@@ -192,7 +192,6 @@ const HistoryTranslations = () => {
         component: (translation) => (
           <Button
             outline={true}
-            dataEssence={'translation'}
             dataType={'remove'}
             bgColor="secondary"
             iconSize={'36px'}

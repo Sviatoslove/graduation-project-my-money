@@ -7,7 +7,7 @@ import { selectIsLoggedIn } from './store/usersSlice';
 import { useLocation, useRoutes } from 'react-router-dom';
 import routes from './components/routes/routes';
 import ContainerApp from './components/common/Containers/ContainerApp';
-import { FormsProvider } from './hooks/useSettings';
+import { SettingsProvider } from './hooks/useSettings';
 import BackBtn from './components/common/buttons/BackBtn';
 import { TablesProvider } from './hooks/useTable';
 import Toast from './components/common/Toast';
@@ -30,14 +30,14 @@ function App() {
             zIndex={2}
           />
         )}
-        <FormsProvider>
+        <SettingsProvider>
           <TablesProvider>
             <Navbar />
             {elements}
             <Toast/>
             <ModalWindow/>
           </TablesProvider>
-        </FormsProvider>
+        </SettingsProvider>
       </ContainerApp>
     </AppLoader>
   );

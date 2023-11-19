@@ -31,9 +31,11 @@ const CountsForm = () => {
     disAppearanceForm,
     setSettingsToast,
     setSuccessToast,
+    successToast
   } = useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
+  console.log('countsData:', countsData)
   const countsSuccessNetwork = useSelector(selectSuccessNetworkCounts());
 
   const initialState = currentEssence
@@ -58,12 +60,11 @@ const CountsForm = () => {
   }, []);
 
   useEffect(() => {
-    if (countsSuccessNetwork) {
+    if (countsSuccessNetwork && successToast === null) {
       setSuccessToast(countsSuccessNetwork);
       setSettingsToast({
         imgSrc: icon,
         iconSize: '56px',
-        timeOut: true,
         typeForm: 'counts',
       });
     }
@@ -73,10 +74,19 @@ const CountsForm = () => {
     icon = data.defaultState.icon;
     disAppearanceForm();
     if (currentEssence) {
-      dispatch(countUpdate(data.defaultState));
+      dispatch(countUpdate({...data.defaultState, 
+        color: countsData[data.defaultState.type].color, 
+        textColor: countsData[data.defaultState.type].textColor,////&&&&&&&&&&&&&&&&&&&&7777777777777 delete
+        typeName: countsData[data.defaultState.type].name
+        }));
       dispatch(updatedsuccessNetworkCounts())
     } else {
-      dispatch(countCreate(data.defaultState));
+        dispatch(countCreate({...data.defaultState, 
+        dataType:'counts',
+        color: countsData[data.defaultState.type].color, 
+        textColor: countsData[data.defaultState.type].textColor,
+        typeName: countsData[data.defaultState.type].name
+        }));
     }
   };
 

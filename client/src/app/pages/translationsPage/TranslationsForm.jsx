@@ -29,6 +29,7 @@ const TranslationsForm = () => {
     disAppearanceForm,
     setSettingsToast,
     setSuccessToast,
+    successToast
   } = useSettings();
   const inputBalanceTo = useRef();
   const [convertCurrency, setConvertCurrency] = useState();
@@ -47,6 +48,7 @@ const TranslationsForm = () => {
         date: getDate().split('.').reverse().join('-'),
         balanceFrom: 0,
         balanceTo: 0,
+        dataType: 'translations'
       },
       errors: validatorConfigTranslations,
     },
@@ -63,7 +65,7 @@ const TranslationsForm = () => {
   };
 
   useEffect(() => {
-    if (successNetworkTranslations) {
+    if (successNetworkTranslations && successToast === null) {
       setSuccessToast(successNetworkTranslations);
       setSettingsToast({
         iconSize: '56px',

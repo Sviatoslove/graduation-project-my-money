@@ -44,7 +44,9 @@ const useForms = (state, error, valueConverted) => {
         break;
       }
       case 'isContainDigit': {
-        const digitRegExp = /^\d+$/;
+        let digitRegExp
+        if(fieldName === 'password') digitRegExp = /\d+/g;
+        else digitRegExp = /^\d+$/;
         errors.isValid = !digitRegExp.test(value);
         break;
       }

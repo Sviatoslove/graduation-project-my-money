@@ -32,6 +32,7 @@ const OperationsForm = () => {
     show,
     setSuccessToast,
     setSettingsToast,
+    successToast
   } = useSettings();
   const dispatch = useDispatch();
   const successNetworkOperations = useSelector(
@@ -56,6 +57,7 @@ const OperationsForm = () => {
         date: `${getDate().split('.').reverse().join('-')}T${
           hour < 10 ? '0' + hour : hour
         }:${minutes < 10 ? '0' + minutes : minutes}`,
+        dataType: 'operations'
       };
   const { register, data, handleSubmit, errors } = useForms({
     defaultState: initialState,
@@ -67,7 +69,7 @@ const OperationsForm = () => {
   }, []);
 
   useEffect(() => {
-    if (successNetworkOperations) {
+    if (successNetworkOperations && successToast === null) {
       setSuccessToast(successNetworkOperations);
       setSettingsToast({
         badge: (

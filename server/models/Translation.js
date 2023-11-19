@@ -9,6 +9,7 @@ const schema = new Schema(
     date: String,
     fromCount: String,
     toCount: String,
+    dataType: String
   },
   {
     timestamps: true,

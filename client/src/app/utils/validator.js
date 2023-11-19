@@ -45,6 +45,27 @@ export const validatorConfigRegister = {
   }
 }
 
+export const validatorConfigUser = {
+  email: {
+    isRequired: {
+      message: 'Поле электронная почта обязательно для заполнения'
+    },
+    isEmail: {
+      message: 'Email введён не корректно'
+    }
+  },
+  name: {
+    isRequired: {
+      message: 'Поле имя обязательно для заполнения'
+    },
+    min: {
+      message:
+        'Имя введено не корректно, его длина должна быть более одного символа',
+        length: 2
+    }
+  }
+}
+
 export const validatorConfigLogin = {
   email: {
     isRequired: {

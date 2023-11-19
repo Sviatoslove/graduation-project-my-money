@@ -9,7 +9,7 @@ router.patch('/:userId', auth, async (req, res) => {
     const { userId } = req.params;
 
     if (userId === req.user._id) {
-      const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+      const updatedUser = await Userы.findByIdAndUpdate(userId, req.body, {
         new: true,
       });
       res.send(updatedUser);
@@ -22,7 +22,7 @@ router.patch('/:userId', auth, async (req, res) => {
       .status(500)
       .json({
         error: {
-          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          message: 'На сервере произошла ошибка. Профиль не обновлён. Попробуйте позже.',
           code: 500,
         },
       });
@@ -39,7 +39,7 @@ router.get('/', auth, async (req, res) => {
       .status(500)
       .json({
         error: {
-          message: 'На сервере произошла ошибка. Попробуйте позже.',
+          message: 'На сервере произошла ошибка. Данные профиля не загружены. Попробуйте позже.',
           code: 500,
         },
       });

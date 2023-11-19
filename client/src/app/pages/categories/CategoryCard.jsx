@@ -57,7 +57,6 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
             count={3}
             id={id}
             dataType={['like', 'edit', 'remove']}
-            dataEssence={category.dataType}
             classes="btn-sm p-1"
             classesEl={['btrr-50', '', 'bbrr-50']}
             classesGroup="h-i px-2"

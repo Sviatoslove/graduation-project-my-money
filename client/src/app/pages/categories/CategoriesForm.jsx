@@ -25,6 +25,7 @@ const CategoriesForm = () => {
     currentEssence,
     setSuccessToast,
     setSettingsToast,
+    successToast
   } = useSettings();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
@@ -32,8 +33,8 @@ const CategoriesForm = () => {
     selectSuccessNetworkCategories()
   );
 
-  const initialState = currentEssence['category']
-    ? currentEssence['category']
+  const initialState = currentEssence['categories']
+    ? currentEssence['categories']
     : {
         name: '',
         content: '',
@@ -48,7 +49,7 @@ const CategoriesForm = () => {
   });
 
   useEffect(() => {
-    if (successNetworkCategories) {
+    if (successNetworkCategories && successToast === null) {
       setSuccessToast(successNetworkCategories);
       setSettingsToast({
         badge: (
@@ -64,21 +65,21 @@ const CategoriesForm = () => {
       });
     }
   }, [successNetworkCategories]);
-
+  
   const onSubmit = (data) => {
     const img = Object.values(categoriesIcons).find(
       (icon) => icon.icon === data.defaultState.icon
     );
     const { bgColor: color, iconColor, icon, _id: key } = data.defaultState;
     badge = { color, iconColor, icon, key };
-    if (currentEssence['category']) {
+    if (currentEssence['categories']) {
       dispatch(categoriesUpdate(data.defaultState));
     } else {
       dispatch(
         categoriesCreate({
           ...data.defaultState,
           status: statusOperation,
-          dataType: 'category',
+          dataType: 'categories',
           iconId: img._id,
           like: img.like,
         })
@@ -108,7 +109,7 @@ const CategoriesForm = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-center">
-          {currentEssence['category']
+          {currentEssence['categories']
             ? 'Редактирование категории'
             : 'Создание категории'}
         </h3>
@@ -145,7 +146,7 @@ const CategoriesForm = () => {
           classes="w-100 mx-auto mt-4"
           disabled={!!Object.keys(errors.fields).length}
         >
-          {!currentEssence['category'] ? 'Создать' : 'Обновить'}
+          {!currentEssence['categories'] ? 'Создать' : 'Обновить'}
         </Button>
         <Button
           classes="w-100 mx-auto mt-2"

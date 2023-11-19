@@ -95,7 +95,6 @@ const CountCard = ({ count, onChange }) => {
           count={4}
           id={count._id}
           dataType={['like', 'edit', 'remove', 'masterCount']}
-          dataEssence={'count'}
           classes="btn-sm"
           func={(e) => onChange(e, count)}
           icon={[

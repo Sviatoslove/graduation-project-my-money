@@ -17,6 +17,8 @@ import {
   selectCategoriesDataloaded,
 } from '../store/categoriesSlice';
 import getDate from '../utils/getDate';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { loadCounts, selectCounts, selectCountsStatus } from '../store/countsSlice';
 
 const TablesContext = React.createContext();
 
@@ -40,14 +42,19 @@ const TablesProvider = ({ children }) => {
   const operations = useSelector(selectOperations());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
+  const countsDataLoaded = useSelector(selectCountsStatus());
+  const counts = useSelector(selectCounts());
 
   useEffect(() => {
     setCurrentPage(1);
   }, [dataCategory, searchQuery]);
 
   useEffect(() => {
-    if (isLoggedIn && !operationsDataLoading) dispatch(loadOperations());
-    if (isLoggedIn && !categoriesDataLoaded) dispatch(loadCategories());
+    if (isLoggedIn) {
+      if (!operationsDataLoading) dispatch(loadOperations());
+      if (!categoriesDataLoaded) dispatch(loadCategories());
+      if (!countsDataLoaded) dispatch(loadCounts());
+    }
   }, [isLoggedIn]);
 
   const handleChange = ({ target }) => {
@@ -71,10 +78,10 @@ const TablesProvider = ({ children }) => {
 
   const clearFilter = () => {
     if (setSearchQuery) setSearchQuery('');
-    if (dataCategory) setCategoryData({
-      category: '',
-    });
-    
+    if (dataCategory)
+      setCategoryData({
+        category: '',
+      });
   };
 
   const filterOperations = (data) => {
@@ -82,7 +89,7 @@ const TablesProvider = ({ children }) => {
       const dataArr = Object.values(data);
       const filteredOper = searchQuery
         ? dataArr.filter((operation) => {
-            const ddMmYyyyArr = getDate(operation.date)
+            const ddMmYyyyArr = getDate(operation.date);
             if (!isNaN(Number(searchQuery))) {
               return ddMmYyyyArr.includes(searchQuery.trim());
             }
@@ -125,10 +132,10 @@ const TablesProvider = ({ children }) => {
   const operationCrop = paginate(sortedOperations, currentPage, pageSize);
 
   useEffect(() => {
-    if (count && operationCrop && !operationCrop?.length) setCurrentPage((state) => state - 1);
+    if (count && operationCrop && !operationCrop?.length)
+      setCurrentPage((state) => state - 1);
   }, [count]);
 
-  
   if (isLoggedIn && !categories && categories !== null)
     return <LoadingSpinners number={3} />;
 
@@ -147,6 +154,7 @@ const TablesProvider = ({ children }) => {
         setMasterCount,
         dataCategory,
         categories,
+        counts,
         handleChange,
         categoriesDataLoaded,
         filteredCategories,
@@ -154,7 +162,8 @@ const TablesProvider = ({ children }) => {
         searchQuery,
         handleSearchChange,
         setSearchQuery,
-        filteredOperations,clearFilter
+        filteredOperations,
+        clearFilter,
       }}
     >
       {children}

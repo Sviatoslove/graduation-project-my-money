@@ -13,7 +13,7 @@ import {
   countUpdate,
 } from '../store/countsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrorAuth, selectUser, updateUser } from '../store/usersSlice';
+import { clearErrorAuth, clearErrorLoad, clearSuccessNetworkUsers, selectErrorLoad, selectUser, updateUser } from '../store/usersSlice';
 import {
   clearErrorTranslations,
   clearSuccessNetworkTranslations,
@@ -23,11 +23,11 @@ import localStorageService from '../services/localStorage.service';
 import getDate from '../utils/getDate';
 import { displayDate } from '../utils';
 
-const FormsContext = React.createContext();
+const SettingsContext = React.createContext();
 
-const useSettings = () => useContext(FormsContext);
+const useSettings = () => useContext(SettingsContext);
 
-const FormsProvider = ({ children }) => {
+const SettingsProvider = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { type } = useParams();
@@ -46,6 +46,7 @@ const FormsProvider = ({ children }) => {
   const [settingsToast, setSettingsToast] = useState(null);
   const [settingsModal, setSettingsModal] = useState({});
   const user = useSelector(selectUser());
+  const errorLoad = useSelector(selectErrorLoad());
 
   const startClearFunc = () => {
     if (error === '') setError(null);
@@ -73,6 +74,15 @@ const FormsProvider = ({ children }) => {
       case 'categories': {
         if (error !== null) dispatch(clearErrorCategories());
         else dispatch(clearSuccessNetworkCategories());
+        break;
+      }
+      case 'users': {
+        if (error !== null) dispatch(clearErrorAuth());
+        else dispatch(clearSuccessNetworkUsers());
+        break;
+      }
+      case 'errorLoad': {
+        if (error !== null) dispatch(clearErrorLoad());
         break;
       }
     }
@@ -107,6 +117,16 @@ const FormsProvider = ({ children }) => {
       }, 600);
     }
   }, [error, successToast]);
+
+  
+  useEffect(() => {
+    if (errorLoad) {
+      setError(errorLoad);
+      setSettingsToast({
+        typeForm: 'errorLoad',
+      });
+    }
+  }, [errorLoad]);
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -146,10 +166,10 @@ const FormsProvider = ({ children }) => {
   };
 
   const onChangeModal = (essence, idEssence) => {
-    if (essence === 'count') dispatch(countRemove(idEssence))
-    if (essence === 'operation') dispatch(operationRemove(idEssence));
-    if (essence === 'category') dispatch(categoriesRemove(idEssence));
-    if (essence === 'translation') dispatch(translationRemove(idEssence));
+    if (essence === 'counts') dispatch(countRemove(idEssence))
+    if (essence === 'operations') dispatch(operationRemove(idEssence));
+    if (essence === 'categories') dispatch(categoriesRemove(idEssence));
+    if (essence === 'translations') dispatch(translationRemove(idEssence));
     setSettingsModal({ showModal: false })
   };
 
@@ -157,19 +177,19 @@ const FormsProvider = ({ children }) => {
     const { target } = e;
     const btn = target.closest('button');
     const btnType = btn?.dataset.type;
-    const essence = btn?.dataset.essence;
+    const essence = currentEssence?.dataType;
     const idEssence = btn?.id;
     const titleModal = {
-      category: 'категории',
-      count: 'счёта',
-      operation: 'операции',
-      translation: 'перевода',
+      categories: 'категории',
+      counts: 'счёта',
+      operations: 'операции',
+      translations: 'перевода',
     };
     const contentModal = {
-      category: `категорию: ${currentEssence?.name}`,
-      count: `счёт ${currentEssence?.name} и все связанные с ним операции и переводы`,
-      operation: `операцию от ${getDate(currentEssence?.date)} числа`,
-      translation: `перевод от ${displayDate(currentEssence?.createdAt)}`,
+      categories: `категорию: ${currentEssence?.name}`,
+      counts: `счёт ${currentEssence?.name} и все связанные с ним операции и переводы`,
+      operations: `операцию от ${getDate(currentEssence?.date)} числа`,
+      translations: `перевод от ${displayDate(currentEssence?.createdAt)}`,
     };
     switch (btnType) {
       case 'add':
@@ -192,8 +212,8 @@ const FormsProvider = ({ children }) => {
           ...currentEssence,
           like: currentEssence.like ? !currentEssence.like : true,
         };
-        if (essence === 'category') dispatch(categoriesUpdate(editedEssence));
-        if (essence === 'count') dispatch(countUpdate(editedEssence));
+        if (essence === 'categories') dispatch(categoriesUpdate(editedEssence));
+        if (essence === 'counts') dispatch(countUpdate(editedEssence));
         break;
       case 'remove':
         setSettingsModal({
@@ -214,7 +234,7 @@ const FormsProvider = ({ children }) => {
   const transform = show ? 'scale(0)' : 'scale(1)';
 
   return (
-    <FormsContext.Provider
+    <SettingsContext.Provider
       value={{
         show,
         add,
@@ -239,11 +259,12 @@ const FormsProvider = ({ children }) => {
         settingsToast,
         setSuccessToast,
         settingsModal,
+        successToast
       }}
     >
       {children}
-    </FormsContext.Provider>
+    </SettingsContext.Provider>
   );
 };
 
-export { FormsProvider, useSettings };
+export { SettingsProvider, useSettings };

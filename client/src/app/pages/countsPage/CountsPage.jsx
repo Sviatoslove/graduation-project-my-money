@@ -26,9 +26,9 @@ import Button from '../../components/common/buttons/Button';
 import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useSettings } from '../../hooks/useSettings';
+import { useTables } from '../../hooks/useTable';
 
 const CountsPage = () => {
-  const dispatch = useDispatch();
   const { likesPage } = useParams();
   const {
     essenceHandleToEdit,
@@ -39,13 +39,12 @@ const CountsPage = () => {
     setSettingsToast,
     setSuccessToast,
   } = useSettings();
+  
+  const {counts} = useTables();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
 
-  const counts = useSelector(selectCounts());
-
-  const countsDataLoaded = useSelector(selectCountsStatus());
   const countsIsLoading = useSelector(selectCountsLoadingStatus());
   const errorCounts = useSelector(selectErrorCounts());
   const successNetworkCounts = useSelector(selectSuccessNetworkCounts());
@@ -53,7 +52,6 @@ const CountsPage = () => {
   const pageSize = 6;
 
   useEffect(() => {
-    if (!countsDataLoaded) dispatch(loadCounts());
   }, []);
 
   useEffect(() => {

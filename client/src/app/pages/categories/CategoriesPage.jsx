@@ -47,10 +47,10 @@ const CategoriesPage = () => {
     selectCategoriesIconsDataloaded()
   );
 
-  const errorCategories = useSelector(selectErrorCategories());
-  const successNetworkCategories = useSelector(
-    selectSuccessNetworkCategories()
-  );
+  // const errorCategories = useSelector(selectErrorCategories());
+  // const successNetworkCategories = useSelector(
+  //   selectSuccessNetworkCategories()
+  // );
 
   const categoriesIcons = useSelector(selectCategoriesIcons());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -63,24 +63,24 @@ const CategoriesPage = () => {
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
 
-  useEffect(() => {
-    if (errorCategories) {
-      setError(errorCategories);
-      setSettingsToast({
-        typeForm: 'categories',
-      });
-    }
-    if (
-      successNetworkCategories &&
-      successNetworkCategories?.type === 'remove'
-    ) {
-      setSuccessToast(successNetworkCategories.content);
-      setSettingsToast({
-        iconSize: '56px',
-        typeForm: 'categories',
-      });
-    }
-  }, [errorCategories, successNetworkCategories]);
+  // useEffect(() => {
+  //   if (errorCategories) {
+  //     setError(errorCategories);
+  //     setSettingsToast({
+  //       typeForm: 'categories',
+  //     });
+  //   }
+  //   if (
+  //     successNetworkCategories &&
+  //     successNetworkCategories?.type === 'remove'
+  //   ) {
+  //     setSuccessToast(successNetworkCategories.content);
+  //     setSettingsToast({
+  //       iconSize: '56px',
+  //       typeForm: 'categories',
+  //     });
+  //   }
+  // }, [errorCategories, successNetworkCategories]);
 
   const filterForLikes = (arr) => {
     return arr.reduce((acc, item) => {

@@ -5,6 +5,7 @@ const schema = new Schema(
     name: String,
     content: String,
     type: String,
+    dataType: String,
     currency: String,
     icon: String,
     like: Boolean,
@@ -13,6 +14,9 @@ const schema = new Schema(
     totalBalance: String,
     masterCount: String,
     active: Boolean,
+    color: String,
+    textColor: String,
+    typeName: String,
   },
   {
     timestamps: true,

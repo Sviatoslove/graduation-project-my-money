@@ -100,7 +100,6 @@ const OperationsTable = () => {
       component: (operation) => (
         <Button
           outline={true}
-          dataEssence={'operation'}
           dataType={'remove'}
           bgColor="secondary"
           iconSize={'32px'}

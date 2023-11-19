@@ -3,6 +3,7 @@ import categoriesService from '../services/categories.service';
 import categoriesIconsService from '../services/categoriesIcons.service';
 import localStorageService from '../services/localStorage.service';
 import errorCatcher from '../utils/errorCatcher';
+import { setErrorLoad } from './usersSlice';
 
 const categoriesSlice = createSlice({
   name: 'categories',
@@ -113,7 +114,8 @@ export const loadCategories = () => async (dispatch) => {
     const { content } = await categoriesService.get();
     dispatch(categoriesReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, categoriesRequestedFailed);
+    // errorCatcher(error, dispatch, categoriesRequestedFailed);
+    dispatch(setErrorLoad(error))
   }
 };
 
