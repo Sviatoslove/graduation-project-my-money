@@ -4,16 +4,14 @@ import CheckboxField from '../common/form/CheckboxField';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   logIn,
-  selectAuthError,
+  selectError,
 } from '../../store/usersSlice';
 import { useForms } from '../../hooks/useForms';
-import { useSettings } from '../../hooks/useSettings';
 import { validatorConfigLogin } from '../../utils/validator';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { setError, setSettingsToast, timeOut } = useSettings();
-  const loginError = useSelector(selectAuthError());
+  const loginError = useSelector(selectError());
   const { register, handleSubmit, errors } = useForms(
     {
       defaultState: { email: '', password: '', stayOn: false },
@@ -21,13 +19,6 @@ const LoginForm = () => {
     },
     loginError,
   );
-
-  useEffect(() => {
-    if (loginError) {
-      setError(loginError);
-      setSettingsToast({ typeForm: 'auth', timeOut:true });
-    }
-  }, [loginError]);
 
   const onSubmit = (data, path) => {
     if (errors.isValid) return;

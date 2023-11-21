@@ -13,8 +13,7 @@ import colorsIconsForCategories from '../../mock/colorIconsForCategories';
 import { useForms } from '../../hooks/useForms';
 import { validatorConfigCategories } from '../../utils/validator';
 import Badge from '../../components/common/Badge';
-
-let badge;
+import { selectSuccessNetwork } from '../../store/usersSlice';
 
 const CategoriesForm = () => {
   const dispatch = useDispatch();
@@ -29,8 +28,8 @@ const CategoriesForm = () => {
   } = useSettings();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
-  const successNetworkCategories = useSelector(
-    selectSuccessNetworkCategories()
+  const successNetwork = useSelector(
+    selectSuccessNetwork()
   );
 
   const initialState = currentEssence['categories']
@@ -49,8 +48,10 @@ const CategoriesForm = () => {
   });
 
   useEffect(() => {
-    if (successNetworkCategories && successToast === null) {
-      setSuccessToast(successNetworkCategories);
+    if (successNetwork && successToast === null) {
+      setSuccessToast(successNetwork);
+      const { bgColor: color, iconColor, icon, _id: key } = data.defaultState;
+      const badge = { color, iconColor, icon, key };
       setSettingsToast({
         badge: (
           <Badge
@@ -60,18 +61,15 @@ const CategoriesForm = () => {
           />
         ),
         iconSize: '56px',
-        timeOut: true,
-        typeForm: 'categories',
+        type: 'successNetwork',
       });
     }
-  }, [successNetworkCategories]);
+  }, [successNetwork]);
   
   const onSubmit = (data) => {
     const img = Object.values(categoriesIcons).find(
       (icon) => icon.icon === data.defaultState.icon
     );
-    const { bgColor: color, iconColor, icon, _id: key } = data.defaultState;
-    badge = { color, iconColor, icon, key };
     if (currentEssence['categories']) {
       dispatch(categoriesUpdate(data.defaultState));
     } else {
@@ -104,7 +102,7 @@ const CategoriesForm = () => {
   return (
     <div
       className={
-        'rounded-3 w-700px mh-989px shadow-lg py-3 px-5 wrapper-form ' + show
+        'rounded-3 w-700px mh-880px shadow-lg py-3 px-5 wrapper-form ' + show
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -126,19 +124,19 @@ const CategoriesForm = () => {
         <AvatarsField
           label="Выбери цвет иконки"
           options={colorsIconsForCategories}
-          count={12}
+          count={23}
           {...register('iconColor')}
         />
         <AvatarsField
           label="Выбери цвет текста иконки"
           options={colorsIconsForCategories}
-          count={12}
+          count={23}
           {...register('textColor')}
         />
         <AvatarsField
           label="Выбери цвет фона иконки"
           options={colorsIconsForCategories}
-          count={12}
+          count={23}
           {...register('bgColor')}
         />
         <Button

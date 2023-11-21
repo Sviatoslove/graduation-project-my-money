@@ -5,12 +5,12 @@ const router = express.Router({ mergeParams: true });
 
 router.get('/', auth, async (req, res) => {
     try {
-      const list = await CountsData.find(); //получаем список всех комментариев
-      res.send(list); // отправили их на клиента с статус кодом 200
+      const list = await CountsData.find();
+      res.send(list);
     } catch (e) {
       res
         .status(500)
-        .json({ message: 'На сервере произошла ошибка. Попробуйте позже.' });
+        .json({error:{ message: 'На сервере произошла ошибка. Попробуйте позже.',code:500} });
     }
   })
 

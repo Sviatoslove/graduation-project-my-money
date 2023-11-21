@@ -4,21 +4,16 @@ import {
   countsUpdateAfterDeleteTranslation,
   countsUpdateAfterTranslation,
 } from './countsSlice';
-import errorCatcher from '../utils/errorCatcher';
+import { setError, setSuccessNetwork } from './usersSlice';
 
 const translationsSlice = createSlice({
   name: 'translations',
   initialState: {
     entities: null,
     isLoading: true,
-    error: null,
     dataLoaded: null,
-    successNetwork: null,
   },
   reducers: {
-    translationsRequested: (state) => {
-      state.successNetwork = 'Перевод создан успешно.';
-    },
     translationsReceived: (state, action) => {
       const { payload } = action;
       if (!Object.keys(action.payload).length) return;
@@ -27,20 +22,12 @@ const translationsSlice = createSlice({
       state.isLoading = false;
       state.dataLoaded = true;
     },
-    translationsRequestedFailed: (state, action) => {
-      state.error = action.payload;
+    translationsRequestedFailed: (state) => {
       state.isLoading = false;
     },
     translationsRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
       state.isLoading = false;
-      state.successNetwork = 'Перевод удалён успешно.';
-    },
-    clearError: (state) => {
-      state.error = null;
-    },
-    resetSuccessNetwork: (state) => {
-      state.successNetwork = null;
     },
   },
 });
@@ -50,20 +37,20 @@ const { reducer: translationsReducer, actions } = translationsSlice;
 const {
   translationsRequested,
   translationsReceived,
-  translationsRequestedFailed,
   translationsRemovedReceived,
-  clearError,
-  resetSuccessNetwork,
+  translationsRequestedFailed
 } = actions;
 
 export const translationCreate = (payload) => async (dispatch) => {
-  dispatch(translationsRequested());
   try {
     const { content } = await translationsService.create(payload);
     dispatch(translationsReceived(content['newTranslation']));
     dispatch(countsUpdateAfterTranslation(content['counts']));
+    dispatch(setSuccessNetwork('Перевод создан успешно.'))
   } catch (error) {
-    errorCatcher(error, dispatch, translationsRequestedFailed);
+    dispatch(setError(error))
+    dispatch(translationsRequestedFailed())
+
   }
 };
 
@@ -72,7 +59,8 @@ export const loadTranslations = () => async (dispatch) => {
     const { content } = await translationsService.get();
     dispatch(translationsReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, translationsRequestedFailed);
+    dispatch(setError(error))
+    dispatch(translationsRequestedFailed())
   }
 };
 
@@ -81,27 +69,17 @@ export const translationRemove = (payload) => async (dispatch) => {
     const { content } = await translationsService.remove(payload);
     dispatch(translationsRemovedReceived(payload));
     dispatch(countsUpdateAfterDeleteTranslation(content['counts']));
+    dispatch(setSuccessNetwork(['Перевод удалён успешно.', 'remove']))
   } catch (error) {
-    errorCatcher(error, dispatch, translationsRequestedFailed);
+    dispatch(setError(error))
+    dispatch(translationsRequestedFailed())
   }
-};
-
-export const clearErrorTranslations = (data) => async (dispatch) => {
-  dispatch(clearError(data));
-};
-
-export const clearSuccessNetworkTranslations = (data) => async (dispatch) => {
-  dispatch(resetSuccessNetwork(data));
 };
 
 export const selectTranslations = () => (state) => state.translations.entities;
 export const selectTranslationsDataLoaded = () => (state) =>
   state.translations.dataLoaded;
 export const selectTranslationsLoadedStatus = () => (state) =>
-  state.translations.isLoading;
-export const selectErrorTranslations = () => (state) =>
-  state.translations.error;
-export const selectSuccessNetworkTranslations = () => (state) =>
-  state.translations.successNetwork;
+  state.translations.isLoading;;
 
 export default translationsReducer;

@@ -13,14 +13,13 @@ import getDate from '../../utils/getDate';
 import currency from '../../mock/currency';
 import getExchangeRates from '../../utils/getExchangeRates';
 import {
-  selectErrorTranslations,
-  selectSuccessNetworkTranslations,
   translationCreate,
 } from '../../store/translationsSlice';
 import LoadingBtn from '../../components/common/LoadingBtn';
 import { useSettings } from '../../hooks/useSettings';
 import { useForms } from '../../hooks/useForms';
 import { validatorConfigTranslations } from '../../utils/validator';
+import { selectSuccessNetwork } from '../../store/usersSlice';
 
 const TranslationsForm = () => {
   const dispatch = useDispatch();
@@ -35,8 +34,8 @@ const TranslationsForm = () => {
   const [convertCurrency, setConvertCurrency] = useState();
   const [pending, setPending] = useState(false);
   const [valueConverted, setValueConverted] = useState();
-  const successNetworkTranslations = useSelector(
-    selectSuccessNetworkTranslations()
+  const successNetwork = useSelector(
+    selectSuccessNetwork()
   );
 
   const { register, data, handleSubmit, errors } = useForms(
@@ -65,14 +64,13 @@ const TranslationsForm = () => {
   };
 
   useEffect(() => {
-    if (successNetworkTranslations && successToast === null) {
-      setSuccessToast(successNetworkTranslations);
+    if (successNetwork && successToast === null) {
+      setSuccessToast(successNetwork);
       setSettingsToast({
-        iconSize: '56px',
-        typeForm: 'translations',
+        type: 'successNetwork',
       });
     }
-  }, [successNetworkTranslations]);
+  }, [successNetwork]);
 
   const currencyIdFrom = counts[data.defaultState?.fromCount]?.currency;
   const fromCurrency = currency[currencyIdFrom];

@@ -11,7 +11,7 @@ import {
   selectAvatars,
   selectAvatarsDataStatus,
 } from '../../store/avatarsSlice';
-import { selectSuccessNetworkUsers, updateUser } from '../../store/usersSlice';
+import { selectSuccessNetwork, updateUser } from '../../store/usersSlice';
 import { useForms } from '../../hooks/useForms';
 import { validatorConfigUser } from '../../utils/validator';
 import { useSettings } from '../../hooks/useSettings';
@@ -26,7 +26,7 @@ const UserCardEdit = ({user}) => {
   } = useSettings();
   const [show, setShow] = useState('');
   const { register, data, handleSubmit, errors } = useForms({defaultState: user, errors: validatorConfigUser});
-  const usersSuccessNetwork = useSelector(selectSuccessNetworkUsers());
+  const successNetwork = useSelector(selectSuccessNetwork());
   const avatarsDataStatus = useSelector(selectAvatarsDataStatus());
   const avatars = useSelector(selectAvatars());
 
@@ -37,22 +37,19 @@ const UserCardEdit = ({user}) => {
     }
   }, []);
 
-  console.log('data.defaultState.icon:', data.defaultState.avatar)
-  
   useEffect(() => {
-    if (usersSuccessNetwork && successToast === null) {
-      setSuccessToast(usersSuccessNetwork);
+    if (successNetwork && successToast === null) {
+      setSuccessToast(successNetwork);
       setSettingsToast({
         badge:  <UserAvatar image={data.defaultState.avatar} height="56px" />,
-        typeForm: 'users',
+        typeForm: 'successNetwork',
       });
     }
-  }, [usersSuccessNetwork]);
+  }, [successNetwork]);
 
   const onSubmit = (data) => {
-    // const isValid = validate()
-    // if (!isValid) return
-    dispatch(updateUser(data.defaultState));
+    if (errors.isValid) return
+    dispatch(updateUser({payload: data.defaultState}));
     setShow('');
   };
 
@@ -70,10 +67,12 @@ const UserCardEdit = ({user}) => {
             <TextField
               label="Имя"
               {...register('name')}
+              style={{width:'250px',zIndex:0}}
             />
             <TextField
               label="Электронная почта"
               {...register('email')}
+              style={{width:'250px',zIndex:0}}
             />
           </div>
           <AvatarsField

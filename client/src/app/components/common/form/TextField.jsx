@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { getInputClasses } from "../../../utils";
 
-const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
+const TextField = ({ label, value, name, type, onChange, error, style }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -15,9 +15,9 @@ const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-2">
       <label htmlFor={name}>{label}</label>
-      <div className="input-group">
+      <div className="input-group" style={style}>
         <input
           type={showPassword ? "text" : type}
           id={name}
@@ -27,16 +27,6 @@ const TextField = ({ label, value, name, type, onChange, error, dataType }) => {
           value={value}
           className={getInputClasses("form-control", error)}
         />
-        {dataType && (
-          <input
-            type={type}
-            id={name}
-            name={name}
-            onChange={onChange}
-            value={value}
-            className={getInputClasses("form-control", error)}
-          />
-        )}
 
         {type === "password" && (
           <button
@@ -60,7 +50,7 @@ TextField.defaultProps = {
 };
 
 TextField.propTypes = {
-  dataType: PropTypes.string,
+  widthInput: PropTypes.string,
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   name: PropTypes.string.isRequired,

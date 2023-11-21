@@ -26,12 +26,12 @@ const AvatarsField = ({
     getFindActiveIndex(value, formatOptions) || 0
   );
   const [showClassesIncBt, setShowClassesIncBt] = useState(
-    index === formatOptions.length ? '-fill' : ''
+    index === formatOptions?.length ? '-fill' : ''
   );
   const [showClassesDecBt, setShowClassesDecBt] = useState(
     index === 0 ? '-fill' : ''
   );
-  
+
   const handleClick = ({ target }) => {
     const activeBtn = target.closest('div').querySelector('.active');
     activeBtn?.classList.remove('active');
@@ -85,7 +85,7 @@ const AvatarsField = ({
           children: nameCategory && nameCategory.slice(0, 2),
         };
       }
-      if (item.dataType === 'category') {
+      if (item.dataType === 'categories') {
         const active = value === item._id ? 'active' : '';
         settingsBtn = {
           ...settingsBtn,
@@ -114,7 +114,11 @@ const AvatarsField = ({
       {formatOptions.length > 1 && (
         <div className="text-center mt-2">
           <button
-            className="lh-1 p-0 btn btn-outline-secondary w-50"
+            className={
+              'lh-1 p-0 btn btn' +
+              (showClassesDecBt ? '-outline' : '') +
+              '-secondary w-50'
+            }
             type="button"
             onClick={handleDecrement}
             disabled={showClassesDecBt}
@@ -122,7 +126,11 @@ const AvatarsField = ({
             <i className={'fs-3 bi bi-skip-backward' + showClassesDecBt}></i>
           </button>
           <button
-            className="lh-1 p-0 btn btn-outline-secondary w-50"
+            className={
+              'lh-1 p-0 btn btn' +
+              (showClassesIncBt ? '-outline' : '') +
+              '-secondary w-50'
+            }
             type="button"
             onClick={handleIncrement}
             disabled={showClassesIncBt}

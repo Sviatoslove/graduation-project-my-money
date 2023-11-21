@@ -12,8 +12,8 @@ router
       const listAll = await Count.find();
       const list = listAll.filter(
         (count) => String(count.userId) === req.user._id
-      ); //получаем список всех комментариев
-      res.send(list); // отправили их на клиента с статус кодом 200
+      ); 
+      res.send(list);
     } catch (e) {
       res.status(500).json({
         error: {
@@ -26,13 +26,12 @@ router
   .post(auth, async (req, res) => {
     try {
       const newCount = await Count.create({
-        // ждём пока создадим комментарий
-        ...req.body, // здесь у нас прилетают все необходимые данные
-        userId: req.user._id, // добавляем здесь id, т.к. у нас в модели коммента есть userId
+        ...req.body,
+        userId: req.user._id,
         like: false,
         balance: 0,
       });
-      res.status(201).send(newCount); // отправляем созданный коммент со статусом 201(что-то создано) на клиента
+      res.status(201).send(newCount);
     } catch (e) {
       res.status(500).json({
         error: {
@@ -48,7 +47,7 @@ router
         req.body._id,
         req.body,
         {
-          new: true, // этот флаг означает, что мы получаем обновлённые данные только после того, как они обновятся в БД, чтобы в этой константе на клиента не ушли старые данные
+          new: true,
         }
       );
       res.send(updatedCount);

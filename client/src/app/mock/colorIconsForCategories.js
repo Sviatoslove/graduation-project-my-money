@@ -71,6 +71,78 @@ const colorsIconsForCategories = {
     color: 'brown',
     dataType: 'iconsForCategories',
   },
+  '67rdca3eeb7f6fgeed471827': {
+    _id: '67rdca3eeb7f6fgeed471827',
+    name: 'Светло-жёлтый',
+    color: 'yellow',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed471828': {
+    _id: '67rdca3eeb7f6fgeed471828',
+    name: 'indigo',
+    color: 'indigo',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed471829': {
+    _id: '67rdca3eeb7f6fgeed471829',
+    name: 'purple',
+    color: 'purple',
+    dataType: 'iconsForCategories',
+  }, 
+  '67rdca3eeb7f6fgeed470000f1': {
+    _id: '67rdca3eeb7f6fgeed470000f1',
+    name: 'pinkLight',
+    color: 'pinkLight',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f2': {
+    _id: '67rdca3eeb7f6fgeed470000f2',
+    name: 'blue',
+    color: 'blue',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f3': {
+    _id: '67rdca3eeb7f6fgeed470000f3',
+    name: 'gray',
+    color: 'gray',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f4': {
+    _id: '67rdca3eeb7f6fgeed470000f4',
+    name: 'yellowDark',
+    color: 'yellowDark',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f5': {
+    _id: '67rdca3eeb7f6fgeed470000f5',
+    name: 'red',
+    color: 'red',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f5': {
+    _id: '67rdca3eeb7f6fgeed470000f5',
+    name: 'orangeLight',
+    color: 'orangeLight',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f6': {
+    _id: '67rdca3eeb7f6fgeed470000f6',
+    name: 'green',
+    color: 'green',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f7': {
+    _id: '67rdca3eeb7f6fgeed470000f7',
+    name: 'teal',
+    color: 'teal',
+    dataType: 'iconsForCategories',
+  },
+  '67rdca3eeb7f6fgeed470000f8': {
+    _id: '67rdca3eeb7f6fgeed470000f8',
+    name: 'cyan',
+    color: 'cyan',
+    dataType: 'iconsForCategories',
+  },
 }
 
 export default colorsIconsForCategories

@@ -3,17 +3,13 @@ import Container from '../../components/common/Containers/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import {
-  categoriesRemove,
   loadCategories,
   loadСategoriesIcons,
   selectCategoriesDataloaded,
   selectCategories,
   selectCategoriesIsLoading,
-  categoriesUpdate,
   selectCategoriesIconsDataloaded,
   selectCategoriesIcons,
-  selectSuccessNetworkCategories,
-  selectErrorCategories,
 } from '../../store/categoriesSlice';
 import Button from '../../components/common/buttons/Button';
 import { useSettings } from '../../hooks/useSettings';
@@ -37,20 +33,12 @@ const CategoriesPage = () => {
     essenceHandleToEdit,
     currentPage,
     handlePageChange,
-    setError,
-    setSettingsToast,
-    setSuccessToast,
     setCurrentPage
   } = useSettings();
 
   const categoriesIconsDataLoaded = useSelector(
     selectCategoriesIconsDataloaded()
   );
-
-  // const errorCategories = useSelector(selectErrorCategories());
-  // const successNetworkCategories = useSelector(
-  //   selectSuccessNetworkCategories()
-  // );
 
   const categoriesIcons = useSelector(selectCategoriesIcons());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -62,25 +50,6 @@ const CategoriesPage = () => {
     if (!categoriesDataLoaded) dispatch(loadCategories());
     if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
   }, []);
-
-  // useEffect(() => {
-  //   if (errorCategories) {
-  //     setError(errorCategories);
-  //     setSettingsToast({
-  //       typeForm: 'categories',
-  //     });
-  //   }
-  //   if (
-  //     successNetworkCategories &&
-  //     successNetworkCategories?.type === 'remove'
-  //   ) {
-  //     setSuccessToast(successNetworkCategories.content);
-  //     setSettingsToast({
-  //       iconSize: '56px',
-  //       typeForm: 'categories',
-  //     });
-  //   }
-  // }, [errorCategories, successNetworkCategories]);
 
   const filterForLikes = (arr) => {
     return arr.reduce((acc, item) => {

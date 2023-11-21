@@ -14,13 +14,12 @@ import getDate from '../../utils/getDate';
 import {
   operationCreate,
   operationUpdate,
-  selectErrorOperations,
-  selectSuccessNetworkOperations,
 } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 import { useForms } from '../../hooks/useForms';
 import Badge from '../../components/common/Badge';
 import { validatorConfigOperations } from '../../utils/validator';
+import { selectSuccessNetwork } from '../../store/usersSlice';
 
 let badge;
 
@@ -35,8 +34,8 @@ const OperationsForm = () => {
     successToast
   } = useSettings();
   const dispatch = useDispatch();
-  const successNetworkOperations = useSelector(
-    selectSuccessNetworkOperations()
+  const successNetwork = useSelector(
+    selectSuccessNetwork()
   );
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
@@ -69,8 +68,8 @@ const OperationsForm = () => {
   }, []);
 
   useEffect(() => {
-    if (successNetworkOperations && successToast === null) {
-      setSuccessToast(successNetworkOperations);
+    if (successNetwork && successToast === null) {
+      setSuccessToast(successNetwork);
       setSettingsToast({
         badge: (
           <Badge
@@ -80,10 +79,10 @@ const OperationsForm = () => {
           />
         ),
         iconSize: '56px',
-        typeForm: 'operations',
+        type: 'successNetwork',
       });
     }
-  }, [successNetworkOperations]);
+  }, [successNetwork]);
 
   const onSubmit = (data) => {
     const {

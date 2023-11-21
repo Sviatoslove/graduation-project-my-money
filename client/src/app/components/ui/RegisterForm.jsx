@@ -5,18 +5,15 @@ import TextField from '../common/form/TextField';
 import RadioField from '../common/form/RadioField';
 import CheckboxField from '../common/form/CheckboxField';
 import {
-  selectAuthError,
+  selectError,
   signUp,
 } from '../../store/usersSlice';
 import { validatorConfigRegister } from '../../utils/validator';
-import { useSettings } from '../../hooks/useSettings';
 import { useForms } from '../../hooks/useForms';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const { setSettingsToast, setError } = useSettings();
-
-  const errorRegister = useSelector(selectAuthError());
+  const errorRegister = useSelector(selectError());
   const { register, handleSubmit, errors } = useForms(
     {
       defaultState: {
@@ -29,14 +26,7 @@ const RegisterForm = () => {
       errors: validatorConfigRegister,
     },
     errorRegister
-  );
-
-  useEffect(() => {
-    if (errorRegister) {
-      setError(errorRegister);
-      setSettingsToast({  typeForm: 'auth' });
-    }
-  }, [errorRegister]);
+  );;
 
   const onSubmit = (data, path) => {
     if (errors.isValid) return;

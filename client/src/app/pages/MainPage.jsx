@@ -16,14 +16,12 @@ import Pagination from '../components/common/pagination';
 import { SelectedField } from '../components/common/form';
 import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
-import ProgressBar from '../components/ui/ProgressBar';
+import ProgressBar from '../components/ui/analytics/ProgressBar';
 import localStorageService from '../services/localStorage.service';
-import { selectErrorOperations, selectSuccessNetworkOperations } from '../store/operationsSlice';
+import ChartRound from '../components/ui/analytics/ChartRound';
 
 const MainPage = () => {
-  const { essenceHandleToEdit, setError, setSettingsToast, setSuccessToast } = useSettings();
-  const errorOperations = useSelector(selectErrorOperations());
-  const successNetworkOperations = useSelector(selectSuccessNetworkOperations());
+  const { essenceHandleToEdit } = useSettings();
 
   const {
     dataCategory,
@@ -41,26 +39,11 @@ const MainPage = () => {
 
   const user = useSelector(selectUser());
 
-  useEffect(() => {
-    if (errorOperations) {
-      setError(errorOperations);
-      setSettingsToast({
-        typeForm: 'operations',
-      });
-    }
-    if (successNetworkOperations && successNetworkOperations?.type === 'remove') {
-      setSuccessToast(successNetworkOperations.content);
-      setSettingsToast({
-        iconSize: '56px',
-        typeForm: 'operations',
-      });
-    }
-  }, [errorOperations, successNetworkOperations]);
-
   return (
     <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>
       <Container newClasses="position-relative">
         <ProgressBar />
+        <ChartRound/>
         {user && user?.masterCount && (
           <>
             <Container newClasses="position-absolute bottom-0 start-5">

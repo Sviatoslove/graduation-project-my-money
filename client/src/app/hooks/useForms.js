@@ -6,7 +6,7 @@ const useForms = (state, error, valueConverted) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [data, setData] = useState(state);
-  const { setError } = useSettings();
+  const { setToast, startClearFunc } = useSettings();
   const errors = { fields: {}, isValid: false };
 
   const register = (field) => ({
@@ -15,7 +15,8 @@ const useForms = (state, error, valueConverted) => {
     error: errors.fields[field],
     onChange: ({ target }) => {
       if (error) {
-        setError('');
+        setToast((state) => ({ ...state, show: 'hide' }));
+        startClearFunc();
       }
       return setData((state) => ({
         ...state,
@@ -44,8 +45,8 @@ const useForms = (state, error, valueConverted) => {
         break;
       }
       case 'isContainDigit': {
-        let digitRegExp
-        if(fieldName === 'password') digitRegExp = /\d+/g;
+        let digitRegExp;
+        if (fieldName === 'password') digitRegExp = /\d+/g;
         else digitRegExp = /^\d+$/;
         errors.isValid = !digitRegExp.test(value);
         break;

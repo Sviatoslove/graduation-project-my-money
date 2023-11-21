@@ -3,15 +3,13 @@ import countsService from '../services/counts.service';
 import countsDataService from '../services/countsData.service';
 import countsIconsDataService from '../services/countsIconsData.service';
 import currencyDataService from '../services/currencyData.service';
-import errorCatcher from '../utils/errorCatcher';
+import { setError, setSuccessNetwork } from './usersSlice';
 
 const countsSlice = createSlice({
   name: 'counts',
   initialState: {
     entities: null,
     isLoading: true,
-    successNetwork: null,
-    error: null,
     dataLoaded: null,
     countsData: null,
     countsDataLoaded: null,
@@ -23,7 +21,6 @@ const countsSlice = createSlice({
   reducers: {
     countsRequested: (state) => {
       state.isLoading = true;
-      state.successNetwork = null;
     },
     countsReceived: (state, action) => {
       const { payload } = action;
@@ -45,10 +42,8 @@ const countsSlice = createSlice({
         };
       state.isLoading = false;
       state.dataLoaded = true;
-      state.successNetwork = 'Счёт успешно создан';
     },
-    countsRequestedFailed: (state, action) => {
-      state.error = action.payload;
+    countsRequestedFailed: (state) => {
       state.isLoading = false;
     },
     countsUpdatedReceived: (state, action) => {
@@ -57,16 +52,12 @@ const countsSlice = createSlice({
         ...action.payload,
       };
     },
-    countsUpdatedsuccessNetworkReceived: (state) => {
-      state.successNetwork = 'Счёт успешно обновлён';
-    },
     countsRemovedReceived: (state, action) => {
-      delete state.entities[action.payload.payload];
+      delete state.entities[action.payload];
       if (!Object.keys(state.entities).length) {
         state.entities = null;
         state.dataLoaded = false;
       }
-      state.successNetwork = { type: 'remove',content:`Счёт успешно удалён. Вместе с ним удалено: операций в количестве: ${action.payload.content.deletedOperations} шт; переводов в количестве: ${action.payload.content.deletedTranslations} шт.`};
     },
     countsDataReceived: (state, action) => {
       state.countsData = action.payload;
@@ -111,12 +102,6 @@ const countsSlice = createSlice({
         ...action.payload.countTo,
       };
     },
-    clearError: (state) => {
-      state.error = null;
-    },
-    resetSuccessNetwork: (state) => {
-      state.successNetwork = null;
-    },
   },
 });
 
@@ -130,16 +115,10 @@ const {
   countsUpdatedReceived,
   countsRemovedReceived,
   countsDataReceived,
-  countsDataRequestedFailed,
   countsIconsDataReceived,
-  countsIconsDataRequestedFailed,
   currencyDataReceived,
-  currencyDataRequestedFailed,
   countsDataRemoved,
   countsUpdateByTranslation,
-  clearError,
-  resetSuccessNetwork,
-  countsUpdatedsuccessNetworkReceived
 } = actions;
 
 export const countCreate = (payload) => async (dispatch) => {
@@ -147,8 +126,10 @@ export const countCreate = (payload) => async (dispatch) => {
   try {
     const { content } = await countsService.create(payload);
     dispatch(countAdded(content));
+    dispatch(setSuccessNetwork('Счёт успешно создан'));
   } catch (error) {
-    errorCatcher(error, dispatch, countsRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -157,7 +138,8 @@ export const loadCounts = () => async (dispatch) => {
     const { content } = await countsService.get();
     dispatch(countsReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, countsRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -165,8 +147,10 @@ export const countUpdate = (payload) => async (dispatch) => {
   try {
     const { content } = await countsService.update(payload);
     dispatch(countsUpdatedReceived(content));
+    dispatch(setSuccessNetwork('Счёт успешно обновлён'));
   } catch (error) {
-    errorCatcher(error, dispatch, countsRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -190,9 +174,15 @@ export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
 export const countRemove = (payload) => async (dispatch) => {
   try {
     const { content } = await countsService.remove(payload);
-    dispatch(countsRemovedReceived({payload, content}));
+    dispatch(countsRemovedReceived({ payload }));
+    dispatch(
+      setSuccessNetwork([
+        `Счёт успешно удалён. Вместе с ним удалено: операций в количестве: ${content.deletedOperations} шт; переводов в количестве: ${content.deletedTranslations} шт.`, 'remove',
+      ])
+    );
   } catch (error) {
-    errorCatcher(error, dispatch, countsRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -205,7 +195,8 @@ export const loadCountsData = () => async (dispatch) => {
     const { content } = await countsDataService.get();
     dispatch(countsDataReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, countsDataRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -214,7 +205,8 @@ export const loadCountsIconsData = () => async (dispatch) => {
     const { content } = await countsIconsDataService.get();
     dispatch(countsIconsDataReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, countsIconsDataRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
 };
 
@@ -223,20 +215,9 @@ export const loadcurrencyData = () => async (dispatch) => {
     const { content } = await currencyDataService.get();
     dispatch(currencyDataReceived(content));
   } catch (error) {
-    errorCatcher(error, dispatch, currencyDataRequestedFailed);
+    dispatch(setError(error));
+    dispatch(countsRequestedFailed());
   }
-};
-
-export const updatedsuccessNetworkCounts = () => async (dispatch) => {
-  dispatch(countsUpdatedsuccessNetworkReceived());
-};
-
-export const clearErrorCounts = (data) => async (dispatch) => {
-  dispatch(clearError(data));
-};
-
-export const clearSuccessNetworkCounts = (data) => async (dispatch) => {
-  dispatch(resetSuccessNetwork(data));
 };
 
 export const selectCounts = () => (state) => state.counts.entities;
@@ -248,14 +229,11 @@ export const selectCurrencyData = () => (state) => state.counts.currencyData;
 export const selectCountsLoadingStatus = () => (state) =>
   state.counts.isLoading;
 export const selectCountsStatus = () => (state) => state.counts.dataLoaded;
-export const selectErrorCounts = () => (state) => state.counts.error;
 export const selectCountsDataStatus = () => (state) =>
   state.counts.countsDataLoaded;
 export const selectCurrencyDataStatus = () => (state) =>
   state.counts.currencyDataLoaded;
 export const selectCountsIconsDataStatus = () => (state) =>
   state.counts.countsIconsDataLoaded;
-export const selectSuccessNetworkCounts = () => (state) =>
-  state.counts.successNetwork;
 
 export default countsReducer;

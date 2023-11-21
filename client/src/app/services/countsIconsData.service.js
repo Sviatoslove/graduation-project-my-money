@@ -7,10 +7,6 @@ const countsIconsDataService = {
     const { data } = await httpService.get(countsIconsDataEndpoint);
     return data;
   },
-  // update: async (user) => {
-  //   const { data } = await httpService.patch(userEndpoint + user._id, user);
-  //   return data;
-  // },
 };
 
 export default countsIconsDataService;

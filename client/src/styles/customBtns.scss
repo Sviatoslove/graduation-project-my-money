@@ -60,3 +60,183 @@ $bd-brown: rgb(143, 66, 3);
   --bs-btn-active-bg: rgb(143, 66, 3);
   --bs-btn-active-border-color: #{shade-color($bd-brown, 20%)};
 }
+
+$bd-yellow: #f4f49e;
+.btn-outline-yellow {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#f4f49e;
+  --bs-btn-hover-border-color: #{shade-color($bd-yellow, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #f4f49e;
+  --bs-btn-active-border-color: #{shade-color($bd-yellow, 20%)};
+}
+
+$bd-indigo: #6610f2;
+.btn-outline-indigo {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#6610f2;
+  --bs-btn-hover-border-color: #{shade-color($bd-indigo, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #6610f2;
+  --bs-btn-active-border-color: #{shade-color($bd-indigo, 20%)};
+}
+
+$bd-purple: #6f42c1;
+.btn-outline-purple {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#6f42c1;
+  --bs-btn-hover-border-color: #{shade-color($bd-purple, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #6f42c1;
+  --bs-btn-active-border-color: #{shade-color($bd-purple, 20%)};
+}
+
+$bd-pinkLight: #d63384;
+.btn-outline-pinkLight {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#d63384;
+  --bs-btn-hover-border-color: #{shade-color($bd-pinkLight, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #d63384;
+  --bs-btn-active-border-color: #{shade-color($bd-pinkLight, 20%)};
+}
+
+$bd-blue: #052c65;
+.btn-outline-blue {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#052c65;
+  --bs-btn-hover-border-color: #{shade-color($bd-blue, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #052c65;
+  --bs-btn-active-border-color: #{shade-color($bd-blue, 20%)};
+}
+
+$bd-gray: #2b2f32;
+.btn-outline-gray {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#2b2f32;
+  --bs-btn-hover-border-color: #{shade-color($bd-gray, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #2b2f32;
+  --bs-btn-active-border-color: #{shade-color($bd-gray, 20%)};
+}
+
+$bd-yellowDark: #664d03;
+.btn-outline-yellowDark {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#664d03;
+  --bs-btn-hover-border-color: #{shade-color($bd-yellowDark, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #664d03;
+  --bs-btn-active-border-color: #{shade-color($bd-yellowDark, 20%)};
+}
+
+$bd-red: #58151c;
+.btn-outline-red {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#58151c;
+  --bs-btn-hover-border-color: #{shade-color($bd-red, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #58151c;
+  --bs-btn-active-border-color: #{shade-color($bd-red, 20%)};
+}
+
+$bd-orangeLight: #fd7d14c7;
+.btn-outline-orangeLight {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#fd7d14c7;
+  --bs-btn-hover-border-color: #{shade-color($bd-orangeLight, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #fd7d14c7;
+  --bs-btn-active-border-color: #{shade-color($bd-orangeLight, 20%)};
+}
+
+$bd-green: #0a3622;
+.btn-outline-green {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#0a3622;
+  --bs-btn-hover-border-color: #{shade-color($bd-green, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #0a3622;
+  --bs-btn-active-border-color: #{shade-color($bd-green, 20%)};
+}
+
+$bd-teal: #5468ff;
+.btn-outline-teal {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#5468ff;
+  --bs-btn-hover-border-color: #{shade-color($bd-teal, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #5468ff;
+  --bs-btn-active-border-color: #{shade-color($bd-teal, 20%)};
+}
+
+$bd-cyan: #712cf9;
+.btn-outline-cyan {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg:#712cf9;
+  --bs-btn-hover-border-color: #{shade-color($bd-cyan, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #712cf9;
+  --bs-btn-active-border-color: #{shade-color($bd-cyan, 20%)};
+}

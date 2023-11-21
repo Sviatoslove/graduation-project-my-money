@@ -9,7 +9,7 @@ router.patch('/:userId', auth, async (req, res) => {
     const { userId } = req.params;
 
     if (userId === req.user._id) {
-      const updatedUser = await Userы.findByIdAndUpdate(userId, req.body, {
+      const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
         new: true,
       });
       res.send(updatedUser);

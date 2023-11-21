@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import likesIcon from '../../../assets/icons/heart-fill.svg';
 import {
-  loadCounts,
-  selectCounts,
   selectCountsLoadingStatus,
-  selectCountsStatus,
-  selectErrorCounts,
-  selectSuccessNetworkCounts,
 } from '../../store/countsSlice';
 import {
   Container,
@@ -35,9 +30,6 @@ const CountsPage = () => {
     currentPage,
     setCurrentPage,
     handlePageChange,
-    setError,
-    setSettingsToast,
-    setSuccessToast,
   } = useSettings();
   
   const {counts} = useTables();
@@ -46,8 +38,6 @@ const CountsPage = () => {
   const [likesButton, setLikesButton] = useState();
 
   const countsIsLoading = useSelector(selectCountsLoadingStatus());
-  const errorCounts = useSelector(selectErrorCounts());
-  const successNetworkCounts = useSelector(selectSuccessNetworkCounts());
 
   const pageSize = 6;
 
@@ -64,22 +54,6 @@ const CountsPage = () => {
       setLikesButton(count);
     }
   }, [counts]);
-
-  useEffect(() => {
-    if (errorCounts) {
-      setError(errorCounts);
-      setSettingsToast({
-        typeForm: 'counts',
-      });
-    }
-    if (successNetworkCounts && successNetworkCounts?.type === 'remove') {
-      setSuccessToast(successNetworkCounts.content);
-      setSettingsToast({
-        iconSize: '56px',
-        typeForm: 'counts',
-      });
-    }
-  }, [errorCounts, successNetworkCounts]);
 
   const handleClick = () => {
     setCurrentPage(1);

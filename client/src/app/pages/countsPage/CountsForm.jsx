@@ -8,9 +8,6 @@ import {
   loadCountsData,
   selectCountsData,
   selectCountsDataStatus,
-  selectErrorCounts,
-  selectSuccessNetworkCounts,
-  updatedsuccessNetworkCounts,
 } from '../../store/countsSlice';
 import AvatarsField from '../../components/common/form/AvatarsField';
 import currency from '../../mock/currency';
@@ -20,6 +17,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { formatDataCountsIcons } from '../../utils/formatData';
 import { useForms } from '../../hooks/useForms';
 import { validatorConfigCounts } from '../../utils/validator';
+import { selectSuccessNetwork } from '../../store/usersSlice';
 
 let icon;
 
@@ -31,12 +29,11 @@ const CountsForm = () => {
     disAppearanceForm,
     setSettingsToast,
     setSuccessToast,
-    successToast
+    successToast,
   } = useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsData = useSelector(selectCountsData());
-  console.log('countsData:', countsData)
-  const countsSuccessNetwork = useSelector(selectSuccessNetworkCounts());
+  const successNetwork = useSelector(selectSuccessNetwork());
 
   const initialState = currentEssence
     ? currentEssence
@@ -48,45 +45,48 @@ const CountsForm = () => {
         icon: '',
       };
 
-  const { register, data, handleSubmit, errors } = useForms(
-    {
-      defaultState: initialState,
-      errors: validatorConfigCounts,
-    },
-  );
+  const { register, data, handleSubmit, errors } = useForms({
+    defaultState: initialState,
+    errors: validatorConfigCounts,
+  });
 
   useEffect(() => {
     if (!countsDataLoaded) dispatch(loadCountsData());
   }, []);
 
   useEffect(() => {
-    if (countsSuccessNetwork && successToast === null) {
-      setSuccessToast(countsSuccessNetwork);
+    if (successNetwork && successToast === null) {
+      setSuccessToast(successNetwork);
       setSettingsToast({
         imgSrc: icon,
         iconSize: '56px',
-        typeForm: 'counts',
+        type: 'successNetwork',
       });
     }
-  }, [countsSuccessNetwork]);
+  }, [successNetwork]);
 
   const onSubmit = (data) => {
     icon = data.defaultState.icon;
     disAppearanceForm();
     if (currentEssence) {
-      dispatch(countUpdate({...data.defaultState, 
-        color: countsData[data.defaultState.type].color, 
-        textColor: countsData[data.defaultState.type].textColor,////&&&&&&&&&&&&&&&&&&&&7777777777777 delete
-        typeName: countsData[data.defaultState.type].name
-        }));
-      dispatch(updatedsuccessNetworkCounts())
+      dispatch(
+        countUpdate({
+          ...data.defaultState,
+          // color: countsData[data.defaultState.type].color,
+          // textColor: countsData[data.defaultState.type].textColor, ////&&&&&&&&&&&&&&&&&&&&7777777777777 delete
+          // typeName: countsData[data.defaultState.type].name,
+        })
+      );
     } else {
-        dispatch(countCreate({...data.defaultState, 
-        dataType:'counts',
-        color: countsData[data.defaultState.type].color, 
-        textColor: countsData[data.defaultState.type].textColor,
-        typeName: countsData[data.defaultState.type].name
-        }));
+      dispatch(
+        countCreate({
+          ...data.defaultState,
+          dataType: 'counts',
+          color: countsData[data.defaultState.type].color,
+          textColor: countsData[data.defaultState.type].textColor,
+          typeName: countsData[data.defaultState.type].name,
+        })
+      );
     }
   };
 

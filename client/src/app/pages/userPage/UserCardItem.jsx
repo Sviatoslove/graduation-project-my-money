@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { dataEditForUserPage } from '../../utils/dataEditForUserPage';
+import { dataEditToEqualStrings } from '../../utils/dataEditToEqualStrings';
 import Badge from '../../components/common/Badge';
 import { useTables } from '../../hooks/useTable';
 
@@ -44,7 +44,7 @@ const UserCardItem = ({ essence, type, content }) => {
             </div>
             <div className="d-flex flex-wrap mx-auto">
               {essence ? (
-                dataEditForUserPage(essence, 8)?.map((array, idx) => {
+                dataEditToEqualStrings(essence, 8)?.map((array, idx) => {
                   if (idx < 2) {
                     return (
                       <div className="d-flex mx-auto" key={idx}>

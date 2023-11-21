@@ -1,22 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import {
-  clearErrorOperations,
-  clearSuccessNetworkOperations,
   operationRemove,
 } from '../store/operationsSlice';
-import { categoriesRemove, categoriesUpdate, clearErrorCategories, clearSuccessNetworkCategories } from '../store/categoriesSlice';
 import {
-  clearErrorCounts,
-  clearSuccessNetworkCounts,
+  categoriesRemove,
+  categoriesUpdate,
+} from '../store/categoriesSlice';
+import {
   countRemove,
   countUpdate,
 } from '../store/countsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrorAuth, clearErrorLoad, clearSuccessNetworkUsers, selectErrorLoad, selectUser, updateUser } from '../store/usersSlice';
 import {
-  clearErrorTranslations,
-  clearSuccessNetworkTranslations,
+  clearError,
+  clearSuccessNetwork,
+  selectError,
+  selectSuccessNetwork,
+  selectUser,
+  updateUser,
+} from '../store/usersSlice';
+import {
   translationRemove,
 } from '../store/translationsSlice';
 import localStorageService from '../services/localStorage.service';
@@ -46,46 +50,22 @@ const SettingsProvider = ({ children }) => {
   const [settingsToast, setSettingsToast] = useState(null);
   const [settingsModal, setSettingsModal] = useState({});
   const user = useSelector(selectUser());
-  const errorLoad = useSelector(selectErrorLoad());
+  const errorGlobal = useSelector(selectError());
+  const successNetwork = useSelector(selectSuccessNetwork());
 
   const startClearFunc = () => {
-    if (error === '') setError(null);
-    if (successToast === '') setSuccessToast(null);
-    switch (settingsToast?.typeForm) {
-      case 'auth': {
-        if (error !== null) dispatch(clearErrorAuth());
+    switch (settingsToast?.type) {
+      case 'successNetwork': {
+        dispatch(clearSuccessNetwork());
         break;
       }
-      case 'counts': {
-        if (error !== null) dispatch(clearErrorCounts());
-        else dispatch(clearSuccessNetworkCounts());
+      default:
+        if (error !== null) dispatch(clearError());
         break;
-      }
-      case 'operations': {
-        if (error !== null) dispatch(clearErrorOperations());
-        else dispatch(clearSuccessNetworkOperations());
-        break;
-      }
-      case 'translations': {
-        if (error !== null) dispatch(clearErrorTranslations());
-        else dispatch(clearSuccessNetworkTranslations());
-        break;
-      }
-      case 'categories': {
-        if (error !== null) dispatch(clearErrorCategories());
-        else dispatch(clearSuccessNetworkCategories());
-        break;
-      }
-      case 'users': {
-        if (error !== null) dispatch(clearErrorAuth());
-        else dispatch(clearSuccessNetworkUsers());
-        break;
-      }
-      case 'errorLoad': {
-        if (error !== null) dispatch(clearErrorLoad());
-        break;
-      }
     }
+    setSettingsToast(null);
+    setError(null);
+    setSuccessToast(null);
   };
 
   useEffect(() => {
@@ -97,36 +77,31 @@ const SettingsProvider = ({ children }) => {
         show: 'show',
         ...settingsToast,
       });
-      if (settingsToast?.typeForm !== 'auth') {
+      if (settingsToast?.type !== 'auth') {
         setTimeout(() => {
           setToast((state) => ({ ...state, show: 'hide' }));
-          setSuccessToast('');
-          setError('');
-          setSettingsToast(null);
           startClearFunc();
         }, 3000);
       }
     }
-    if (
-      (!error && error !== null) ||
-      (!successToast && successToast !== null)
-    ) {
-      setToast((state) => ({ ...state, show: 'hide' }));
-      setTimeout(() => {
-        startClearFunc();
-      }, 600);
-    }
   }, [error, successToast]);
 
-  
   useEffect(() => {
-    if (errorLoad) {
-      setError(errorLoad);
+    if (errorGlobal && successToast === null) {
+      setError(errorGlobal.error ? errorGlobal.error : errorGlobal);
       setSettingsToast({
-        typeForm: 'errorLoad',
+        type: errorGlobal?.type ? errorGlobal?.type : 'errorGlobal',
       });
     }
-  }, [errorLoad]);
+    if (successNetwork && (successNetwork[1] === 'remove' || successNetwork[1] === 'updateMasterCount')) {
+      setSuccessToast(successNetwork[0]);
+      setSettingsToast({
+        imgSrc: successNetwork[2] ? successNetwork[2] : '',
+        iconSize: '56px',
+        type: 'successNetwork',
+      });
+    }
+  }, [errorGlobal, successNetwork]);
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -134,7 +109,7 @@ const SettingsProvider = ({ children }) => {
 
   const toggleFormType = () => {
     setFormType((state) => (state === 'register' ? 'login' : 'register'));
-    dispatch(clearErrorAuth());
+    dispatch(clearError());
     if (toast.show === 'show')
       setToast((state) => ({ ...state, show: 'hide' }));
   };
@@ -166,11 +141,11 @@ const SettingsProvider = ({ children }) => {
   };
 
   const onChangeModal = (essence, idEssence) => {
-    if (essence === 'counts') dispatch(countRemove(idEssence))
+    if (essence === 'counts') dispatch(countRemove(idEssence));
     if (essence === 'operations') dispatch(operationRemove(idEssence));
     if (essence === 'categories') dispatch(categoriesRemove(idEssence));
     if (essence === 'translations') dispatch(translationRemove(idEssence));
-    setSettingsModal({ showModal: false })
+    setSettingsModal({ showModal: false });
   };
 
   const essenceHandleToEdit = (e, currentEssence) => {
@@ -205,7 +180,7 @@ const SettingsProvider = ({ children }) => {
       case 'masterCount':
         localStorageService.setMasterCount(idEssence);
         const newUser = { ...user, masterCount: idEssence };
-        dispatch(updateUser(newUser));
+        dispatch(updateUser({payload: newUser, type: 'updateMasterCount', iconCount: currentEssence.icon}));
         break;
       case 'like':
         const editedEssence = {
@@ -259,7 +234,8 @@ const SettingsProvider = ({ children }) => {
         settingsToast,
         setSuccessToast,
         settingsModal,
-        successToast
+        successToast,
+        startClearFunc
       }}
     >
       {children}

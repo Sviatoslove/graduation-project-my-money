@@ -17,7 +17,6 @@ import {
   selectCategoriesDataloaded,
 } from '../store/categoriesSlice';
 import getDate from '../utils/getDate';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { loadCounts, selectCounts, selectCountsStatus } from '../store/countsSlice';
 
 const TablesContext = React.createContext();
@@ -38,11 +37,9 @@ const TablesProvider = ({ children }) => {
   });
 
   const isLoggedIn = useSelector(selectIsLoggedIn());
-  const operationsDataLoading = useSelector(selectOperationsDataLoaded());
+
   const operations = useSelector(selectOperations());
-  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
-  const countsDataLoaded = useSelector(selectCountsStatus());
   const counts = useSelector(selectCounts());
 
   useEffect(() => {
@@ -51,9 +48,7 @@ const TablesProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      if (!operationsDataLoading) dispatch(loadOperations());
-      if (!categoriesDataLoaded) dispatch(loadCategories());
-      if (!countsDataLoaded) dispatch(loadCounts());
+
     }
   }, [isLoggedIn]);
 
@@ -156,7 +151,6 @@ const TablesProvider = ({ children }) => {
         categories,
         counts,
         handleChange,
-        categoriesDataLoaded,
         filteredCategories,
         isLoggedIn,
         searchQuery,

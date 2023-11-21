@@ -9,7 +9,7 @@ const initialState = localStorageService.getAccessToken()
       entities: null,
       isLoading: true,
       error: null,
-      errorLoad: null,
+      errorGlobal: null,
       auth: { userId: localStorageService.getUserId() },
       isLoggedIn: true,
       dataLoaded: false,
@@ -19,7 +19,7 @@ const initialState = localStorageService.getAccessToken()
       entities: null,
       isLoading: false,
       error: null,
-      errorLoad: null,
+      errorGlobal: null,
       auth: null,
       isLoggedIn: false,
       dataLoaded: false,
@@ -46,7 +46,7 @@ const usersSlice = createSlice({
       state.isLoggedIn = true;
     },
     authRequestFailed: (state, action) => {
-      state.error = action.payload;
+      state.error = { error: action.payload, type: 'auth' };
     },
     userLoggedOut: (state) => {
       state.entities = null;
@@ -56,7 +56,6 @@ const usersSlice = createSlice({
     },
     userUpdateSuccessed: (state, action) => {
       state.entities = action.payload;
-      state.successNetwork = 'Профиль успешно обновлён';
     },
     authRequested: (state) => {
       state.error = null;
@@ -70,11 +69,11 @@ const usersSlice = createSlice({
     userUpdateFailed: (state, action) => {
       state.error = action.payload;
     },
-    savedErrorLoad: (state, action) => {
-      state.errorLoad = action.payload;
+    savedError: (state, action) => {
+      state.error = action.payload;
     },
-    resetErrorLoad: (state) => {
-      state.errorLoad = null;
+    savedSuccessNetwork: (state, action) => {
+      state.successNetwork = action.payload;
     },
   },
 });
@@ -90,8 +89,8 @@ const {
   userUpdateSuccessed,
   resetSuccessNetwork,
   userUpdateFailed,
-  savedErrorLoad,
-  resetErrorLoad,
+  savedError,
+  savedSuccessNetwork,
 } = actions;
 
 const authRequested = createAction('users/authRequested');
@@ -144,41 +143,42 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const updateUser = (payload) => async (dispatch) => {
+export const updateUser = ({payload, type, iconCount}) => async (dispatch) => {
+  let contentSuccessNetwork
+  if(type) contentSuccessNetwork='Главный счёт успешно обновлён'
+  else contentSuccessNetwork='Профиль успешно обновлён'
   dispatch(userUpdateRequested());
   try {
     const { content } = await userService.update(payload);
     dispatch(userUpdateSuccessed(content));
+    dispatch(savedSuccessNetwork([contentSuccessNetwork, type, iconCount]));
   } catch (error) {
     errorCatcher(error, dispatch, userUpdateFailed);
   }
 };
 
-export const clearErrorAuth = (data) => async (dispatch) => {
+export const clearError = (data) => async (dispatch) => {
   dispatch(authRequested(data));
 };
 
-export const setErrorLoad = (error) => async (dispatch) => {
-  errorCatcher(error, dispatch, savedErrorLoad);
+export const setError = (error) => async (dispatch) => {
+  errorCatcher(error, dispatch, savedError);
 };
 
-export const clearErrorLoad = (data) => async (dispatch) => {
-  dispatch(resetErrorLoad(data));
+export const setSuccessNetwork = (data) => async (dispatch) => {
+  dispatch(savedSuccessNetwork(data));
 };
 
-export const clearSuccessNetworkUsers = (data) => async (dispatch) => {
+export const clearSuccessNetwork = (data) => async (dispatch) => {
   dispatch(resetSuccessNetwork(data));
 };
 
 export const selectUser = () => (state) => state.users.entities;
-
 export const selectIsLoggedIn = () => (state) => state.users.isLoggedIn;
 export const selectDataStatus = () => (state) => state.users.dataLoaded;
 export const selectUserLoadingStatus = () => (state) => state.users.isLoading;
 export const selectUserId = () => (state) => state.users.auth.userId;
-export const selectAuthError = () => (state) => state.users.error;
-export const selectErrorLoad = () => (state) => state.users.errorLoad;
-export const selectSuccessNetworkUsers = () => (state) =>
-  state.users.successNetwork;
+export const selectError = () => (state) => state.users.error;
+export const selectSuccessNetwork = () => (state) => state.users.successNetwork;
 
 export default userReducer;

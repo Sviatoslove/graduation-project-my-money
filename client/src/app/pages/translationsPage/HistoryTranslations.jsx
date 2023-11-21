@@ -3,12 +3,8 @@ import Container from '../../components/common/Containers/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   loadTranslations,
-  selectErrorTranslations,
-  selectSuccessNetworkTranslations,
   selectTranslations,
   selectTranslationsDataLoaded,
-  selectTranslationsLoadedStatus,
-  translationRemove,
 } from '../../store/translationsSlice';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { displayDate, paginate } from '../../utils';
@@ -32,7 +28,7 @@ import _ from 'lodash';
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
   const { currentPage, handlePageChange, sortBy } = useTables();
-  const { setSettingsToast, setError, setSuccessToast, essenceHandleToEdit } =
+  const { essenceHandleToEdit } =
     useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsLoaded = useSelector(selectCountsStatus());
@@ -40,10 +36,6 @@ const HistoryTranslations = () => {
   const translationsDataLoaded = useSelector(selectTranslationsDataLoaded());
   const translations = useSelector(selectTranslations());
   const pageSize = 12;
-  const errorTranslations = useSelector(selectErrorTranslations());
-  const successNetworkTranslations = useSelector(
-    selectSuccessNetworkTranslations()
-  );
 
   const counts = {
     0: {
@@ -59,22 +51,6 @@ const HistoryTranslations = () => {
     if (!countsDataLoaded) dispatch(loadCountsData());
     if (!countsLoaded) dispatch(loadCounts());
   }, []);
-
-  useEffect(() => {
-    if (errorTranslations) {
-      setError(errorTranslations);
-      setSettingsToast({
-        typeForm: 'translations',
-      });
-    }
-    if (successNetworkTranslations) {
-      setSuccessToast(successNetworkTranslations);
-      setSettingsToast({
-        iconSize: '56px',
-        typeForm: 'translations',
-      });
-    }
-  }, [successNetworkTranslations, errorTranslations]);
 
   if (translationsDataLoaded && countsData) {
     const count = Object?.values(translations)?.length;

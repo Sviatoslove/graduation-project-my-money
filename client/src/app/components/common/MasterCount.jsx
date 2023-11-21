@@ -45,7 +45,7 @@ const MasterCount = ({ classes }) => {
     if ((target.dataset.bsToggle = 'dropdown')) setIsOpen((state) => !state);
     const countId = target.closest('button').dataset.item;
     if (countId) {
-      dispatch(updateUser({ ...user, masterCount: countId }));
+      dispatch(updateUser({payload: { ...user, masterCount: countId }, type: 'updateMasterCount', iconCount: counts[countId].icon}));
       setMasterCount(counts[countId]);
       localStorageService.setMasterCount(countId);
     }
