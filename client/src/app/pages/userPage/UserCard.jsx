@@ -5,12 +5,15 @@ import UserAvatar from '../../components/common/UserAvatar';
 import { displayDate } from '../../utils';
 import UserPlaceholder from './UserPlaceholder';
 import UserCardItem from './UserCardItem';
+import { useSelector } from 'react-redux';
+import { selectCountsLoadingStatus } from '../../store/countsSlice';
 
 const UserCard = ({ user }) => {
   const { operations, categories, counts } = useTables();
+  const countsIsLoading = useSelector(selectCountsLoadingStatus())
 
   const userCardItems = [
-    { content: 'Вы зарегистрировались' + displayDate(user.createdAt) },
+    { content: 'Вы зарегистрировались ' + displayDate(user.createdAt) },
     { essence: categories, type: 'categories' },
     { essence: counts, type: 'counts' },
     { essence: operations },
@@ -35,7 +38,7 @@ const UserCard = ({ user }) => {
           <UserAvatar image={user.avatar} height="300" />
           <h4 className="text-center mt-5">{user.name}</h4>
         </div>
-        {counts ? (
+        {counts || !countsIsLoading ? (
           <div className="flex-grow-1 ff-roboto">
             <ul className="list-group list-group-flush list-group-userPage fs-5">
               {userCardItems.map((item, idx) => (

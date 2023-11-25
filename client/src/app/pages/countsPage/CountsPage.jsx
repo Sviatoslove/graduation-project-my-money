@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import likesIcon from '../../../assets/icons/heart-fill.svg';
-import {
-  selectCountsLoadingStatus,
-} from '../../store/countsSlice';
+import { selectCountsLoadingStatus } from '../../store/countsSlice';
 import {
   Container,
   ContainerCards,
@@ -22,17 +20,14 @@ import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useSettings } from '../../hooks/useSettings';
 import { useTables } from '../../hooks/useTable';
+import EmptyList from '../../components/common/EmptyList';
 
 const CountsPage = () => {
   const { likesPage } = useParams();
-  const {
-    essenceHandleToEdit,
-    currentPage,
-    setCurrentPage,
-    handlePageChange,
-  } = useSettings();
-  
-  const {counts} = useTables();
+  const { essenceHandleToEdit, currentPage, setCurrentPage, handlePageChange } =
+    useSettings();
+
+  const { counts } = useTables();
 
   const [likes, setLikes] = useState();
   const [likesButton, setLikesButton] = useState();
@@ -40,9 +35,6 @@ const CountsPage = () => {
   const countsIsLoading = useSelector(selectCountsLoadingStatus());
 
   const pageSize = 6;
-
-  useEffect(() => {
-  }, []);
 
   useEffect(() => {
     const count = getCountLike(counts);
@@ -65,95 +57,99 @@ const CountsPage = () => {
 
   const arrCounts = counts ? Object.values(counts) : [];
   const count = arrCounts?.length;
-    let countsLikes;
-    if (likesPage) countsLikes = arrCounts?.filter((count) => count.like);
+  let countsLikes;
+  if (likesPage) countsLikes = arrCounts?.filter((count) => count.like);
 
-    const countsCrop = paginate(
-      likesPage ? countsLikes : arrCounts,
-      currentPage,
-      pageSize
-    );
+  const countsCrop = paginate(
+    likesPage ? countsLikes : arrCounts,
+    currentPage,
+    pageSize
+  );
 
-    useEffect(() => {
-      if (count && countsCrop && !countsCrop?.length) changePageForEmptyList();
-    }, [count]);
+  useEffect(() => {
+    if (count && countsCrop && !countsCrop?.length) changePageForEmptyList();
+  }, [count]);
 
-    if (!countsIsLoading) {
+  if (countsIsLoading) {
     return (
-      <Container classes="shadow-custom br-10 p-3">
-        <ContainerShow type={'add'}>
-          <FormForCount />
-        </ContainerShow>
-        {!count && (
-          <ContainerScale classes={'my-auto mx-auto'}>
-            <h1 className="">Добавьте свой первый счёт</h1>
-          </ContainerScale>
-        )}
-
-        <ContainerScale classes="brrrr">
-          {count ? (
-            <Translations onChange={essenceHandleToEdit} counts={counts} />
-          ) : null}
-
-          <ContainerCards colsNumber={'3'} gap={'4'}>
-            {countsCrop.map((count, idx) => (
-              <CountCard
-                count={count}
-                onChange={essenceHandleToEdit}
-                key={count._id + idx}
-              />
-            ))}
-          </ContainerCards>
-        </ContainerScale>
-
-        <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
-          <Pagination
-            likesPage={likesPage}
-            countsLikes={countsLikes}
-            itemsCount={count}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-
-          <div
-            className="btn-group mt-2 w-content ms-auto me-3"
-            role="group"
-            aria-label="Button group"
-          >
-            {(likesPage ? true : likesButton) && (
-              <Button
-                classes={
-                  'btn btn-primary shadow-lg p-2 like ' +
-                  ((likesPage ? true : likes) ? 'appearance' : '')
-                }
-                link={likesPage ? '/counts' : '/counts/likesPage'}
-                onClick={handleClick}
-                imgSrc={
-                  likesPage
-                    ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
-                    : likesIcon
-                }
-              />
-            )}
-            <Button
-              bgColor="primary"
-              classes="shadow-lg p-2"
-              dataType="add"
-              onClick={essenceHandleToEdit}
-              imgSrc={addIcon}
-            />
-          </div>
-        </ContainerScale>
-      </Container>
+      <LoadingSpinners
+        style={{ width: '56px', height: '56px' }}
+        classesSpinner=""
+        number={6}
+      />
     );
   }
   return (
-    <LoadingSpinners
-      style={{ width: '56px', height: '56px' }}
-      classesSpinner=""
-      number={6}
-    />
+    <Container classes="shadow-custom br-10 p-3">
+      <ContainerShow type={'add'}>
+        <FormForCount />
+      </ContainerShow>
+      {!count && (
+        <EmptyList
+          title="свой первый счёт"
+          dataType="add"
+          onClick={essenceHandleToEdit}
+        />
+      )}
+
+      {count ? (
+        <>
+          <ContainerScale>
+            <Translations onChange={essenceHandleToEdit} counts={counts} />
+
+            <ContainerCards colsNumber={'3'} gap={'4'}>
+              {countsCrop.map((count, idx) => (
+                <CountCard
+                  count={count}
+                  onChange={essenceHandleToEdit}
+                  key={count._id + idx}
+                />
+              ))}
+            </ContainerCards>
+          </ContainerScale>
+
+          <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
+            <Pagination
+              likesPage={likesPage}
+              countsLikes={countsLikes}
+              itemsCount={count}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+
+            <div
+              className="btn-group mt-2 w-content ms-auto me-3"
+              role="group"
+              aria-label="Button group"
+            >
+              {(likesPage ? true : likesButton) && (
+                <Button
+                  classes={
+                    'btn btn-primary shadow-lg p-2 like ' +
+                    ((likesPage ? true : likes) ? 'appearance' : '')
+                  }
+                  link={likesPage ? '/counts' : '/counts/likesPage'}
+                  onClick={handleClick}
+                  imgSrc={
+                    likesPage
+                      ? 'https://img.icons8.com/cute-clipart/54/circled-chevron-left.png'
+                      : likesIcon
+                  }
+                />
+              )}
+              <Button
+                bgColor="primary"
+                classes="shadow-lg p-2"
+                dataType="add"
+                onClick={essenceHandleToEdit}
+                imgSrc={addIcon}
+              />
+            </div>
+          </ContainerScale>
+        </>
+      ) : null}
+    </Container>
   );
 };
 

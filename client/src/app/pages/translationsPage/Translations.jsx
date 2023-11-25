@@ -5,10 +5,12 @@ import { selectUser } from '../../store/usersSlice';
 import Button from '../../components/common/buttons/Button';
 import MasterCount from '../../components/common/MasterCount';
 import { useTables } from '../../hooks/useTable';
+import { selectTranslations } from '../../store/translationsSlice';
 
 const Translations = ({ onChange, counts }) => {
   const { masterCount, setMasterCount } = useTables();
   const user = useSelector(selectUser());
+  const translations = useSelector(selectTranslations())
 
   useEffect(() => {
     if (user.masterCount) {
@@ -20,11 +22,6 @@ const Translations = ({ onChange, counts }) => {
     <div className="info-action-panel mb-4">
       <div className="btns">
         <h4 className="text-center mb-4">Переводы</h4>
-        {!masterCount && (
-          <h4 className="text-center mb-4">
-            Выберите главный счёт с помощью кнопки чуть ниже
-          </h4>
-        )}
         <div className="d-flex justify-content-evenly">
           <Button
             link={'/counts/translations'}
@@ -32,6 +29,7 @@ const Translations = ({ onChange, counts }) => {
             outline={true}
             classes="w-90px shadow-custom mt-auto"
             imgSrc="https://img.icons8.com/stickers/54/time-machine.png"
+            disabled={!translations ? true : false}
           >
             <p>История</p>
           </Button>

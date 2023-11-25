@@ -114,9 +114,11 @@ $utilities: map-merge(
       property: min-height,
       class: mh,
       values: (
-        96vh: 96vh,
-        94vh: 94vh,
+        i: inherit,
         86vh: 86vh,
+        90vh: 90vh,
+        94vh: 94vh,
+        96vh: 96vh,
         105px: 105px,
         352px: 352px,
         866px: 866px,
@@ -139,6 +141,8 @@ $utilities: map-merge(
         6: 3.5rem,
         7: 4rem,
         8: 4.5rem,
+        9: 5rem,
+        10: 5.5rem,
       ),
     ),
     'padding-bottom': (
@@ -361,6 +365,8 @@ $utilities: map-merge(
         green: #0a3622,
         teal: #5468ff,
         cyan: #712cf9,
+        paper: rgba(134, 128, 80, 0.3),
+        transparent: transparent
       ),
     ),
     'shadow': (

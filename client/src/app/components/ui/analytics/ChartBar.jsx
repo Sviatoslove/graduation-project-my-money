@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -15,50 +15,132 @@ import { TextField } from '../../common/form';
 import { useForms } from '../../../hooks/useForms';
 import { getArray } from '../../../utils/formatData';
 import { useTables } from '../../../hooks/useTable';
-import _ from 'lodash';
 import LoadingSpinners from '../../common/LoadingSpinners';
 import { COLORS } from '../../../utils/constants';
+import {
+  getDaysOfWeek,
+  getMonthOfWeek,
+  getNameMonth,
+  getUniquenessEssence,
+} from '../../../utils/analyticsHelp';
+import { useSelector } from 'react-redux';
+import { selectOperationsLoadingStatus } from '../../../store/operationsSlice';
+import EmptyList from '../../common/EmptyList';
+import localStorageService from '../../../services/localStorage.service';
 
 const ChartBar = () => {
-  const { filteredOperations, categories } = useTables();
-  console.log('filteredOperations:', filteredOperations)
+  const { operations, categories, counts } = useTables();
   const initialState = {
     month: `${new Date().getFullYear()}-${new Date().getMonth() + 1}`,
+    week: '',
+    year: '2023',
   };
+  const [filteredQuery, setFilteredQuery] = useState({});
+  const [placeholderMonth, setPlaceholderMonth] = useState('');
+  const [placeholderWeek, setPlaceholderWeek] = useState('Выберите неделю');
+  const operationsIsLoading = useSelector(selectOperationsLoadingStatus());
+
   const { register, data } = useForms({
     defaultState: initialState,
     errors: {},
   });
 
-  const monthLength = (dataString) => {
+  useEffect(() => {
+    const { week, year, month } = data.defaultState;
+    const yearOfWeek = week.split('-')[0];
+    const monthOfWeek = week && getMonthOfWeek(week);
+    setPlaceholderWeek(getDaysOfWeek(week));
+    if (!week) {
+      setFilteredQuery({
+        ...initialState,
+        month: initialState.month.split('-')[1],
+      });
+      return;
+    }
+    setFilteredQuery({
+      month: monthOfWeek !== month ? monthOfWeek : month,
+      week,
+      year: yearOfWeek !== year ? yearOfWeek : year,
+    });
+  }, [data.defaultState.week]);
+
+  useEffect(() => {
+    let month;
+    const { month: monthDef, year } = data.defaultState;
+    if (data.defaultState.month.includes('-')) month = monthDef.split('-')[1];
+    else month = monthDef;
+    setFilteredQuery((state) => ({
+      ...state,
+      month,
+      year: monthDef ? (monthDef.split('-')[0] !== year ? monthDef.split('-')[0] : year) : year,
+    }));
+    setPlaceholderMonth(getNameMonth(month));
+  }, [data.defaultState.month]);
+
+  useEffect(() => {
+    setFilteredQuery((state) => ({
+      ...state,
+      year: data.defaultState.year,
+    }));
+  }, [data.defaultState.year]);
+
+  const getMonthLength = (dataString) => {
     const [year, month] = dataString.split('-');
     return new Date(year, month, 0).getDate();
   };
 
-  const filterDate = data.defaultState.month;
-  const monthDaysArr = monthLength(filterDate);
+  const filterDate =
+    !filteredQuery.week && !filteredQuery.month
+      ? filteredQuery.year
+      : filteredQuery.year + '-' + filteredQuery.month;
+  const monthLengthArr =
+    !filteredQuery.week && !filteredQuery.month
+      ? getArray(12)
+      : filteredQuery.week
+      ? getArray(
+          7,
+          getDaysOfWeek(filteredQuery.week).split(' ')[1],
+          getMonthLength(filterDate)
+        )
+      : getArray(getMonthLength(filterDate));
 
   const operationsFilteredForMonth =
-    filteredOperations &&
-    Object.values(filteredOperations).filter(
-      ({ date }) =>
-        date.split('-').slice(0, 2).join('-') === data.defaultState.month
-    );
+    operations &&
+    Object.values(operations).filter(({countId})=> countId === localStorageService.getMasterCount()).filter(({ date }) => {
+      const yyyyMM = date.split('-').slice(0, 2).join('-');
+      const yyyy = date.split('-')[0];
+      if (filteredQuery.week) {
+        const flteredDateWith = getDaysOfWeek(filteredQuery.week).split(' ')[1];
+        const flteredDateBefore = getDaysOfWeek(filteredQuery.week).split(
+          ' '
+        )[3];
+        const dateOperation = date.split('T')[0];
+        const dayOperation = dateOperation.split('-')[2];
+        if (
+          dayOperation <= flteredDateBefore &&
+          dayOperation >= flteredDateWith
+        )
+          return yyyyMM === filterDate;
+      } else if (!filteredQuery.week && !filteredQuery.month) {
+        return yyyy===filterDate
+      }
+      return yyyyMM === filterDate;
+    });
 
-  const categoriesFilteredMonth = _.uniqWith(
-    operationsFilteredForMonth?.map(({ categoryId }) => categoryId),
-    (first, second) => first === second
+  const categoriesIdsFilteredMonth = getUniquenessEssence(
+    operationsFilteredForMonth?.map(({ categoryId }) => categoryId)
   );
 
   const operationsSliceForDays =
     operationsFilteredForMonth &&
-    getArray(monthDaysArr).reduce((acc, numDay) => {
+    monthLengthArr.reduce((acc, numDay) => {
       let day,
         findDay,
         operationThisDay = [];
       operationsFilteredForMonth.forEach((operation, idx) => {
         day = String(numDay < 10 ? '0' + numDay : numDay);
-        findDay = operation.date.split('T')[0].slice(-2);
+        if(monthLengthArr.length === 12) findDay = operation.date.split('T')[0].split('-')[1];
+        else findDay = operation.date.split('T')[0].slice(-2);
         if (day === findDay) {
           operationThisDay.push(operation);
         }
@@ -67,55 +149,55 @@ const ChartBar = () => {
       return acc;
     }, {});
 
-  if (operationsSliceForDays && categories) {
-    const categoriesThisDay = categoriesFilteredMonth.reduce(
-      (acc, categoryId) => {
-        let balance;
-        const balanceCategory = Object.entries(operationsSliceForDays).reduce(
-          (acc, [key, item]) => {
-            balance = item.reduce((acc, operation) => {
-              if (operation.categoryId === categoryId) {
-                if (operation.status === 'decrement')
-                  acc = (acc + operation.balance);
-                else acc = -(acc+ operation.balance);
-              }
-              return acc;
-            }, 0);
-            if (balance) {
-              acc = [
-                ...acc,
-                {
-                  ['nameCategory']: categories[categoryId].name,
-                  balance,
-                  ['color']: categories[categoryId].bgColor,
-                  numDay: key,
-                },
-              ];
+  const categoriesThisDay =
+    categories &&
+    categoriesIdsFilteredMonth.reduce((acc, categoryId) => {
+      let balance;
+      const balanceCategory = Object.entries(operationsSliceForDays).reduce(
+        (acc, [key, item]) => {
+          balance = item.reduce((acc, operation) => {
+            if (operation.categoryId === categoryId) {
+              if(operation.status === 'increment') acc += operation.balance;
+              else acc -= operation.balance;
             }
             return acc;
-          },
-          []
-        );
-        return (acc = [...acc, ...balanceCategory]);
-      },
-      []
-    );
+          }, 0);
+          if (balance) {
+            acc = [
+              ...acc,
+              {
+                ['nameCategory']: categories[categoryId].name,
+                ['color']: categories[categoryId].bgColor,
+                numDay: key,
+                balance,
+              },
+            ];
+          }
+          return acc;
+        },
+        []
+      );
+      return (acc = [...acc, ...balanceCategory]);
+    }, []);
 
-    console.log('categoriesThisDay:', categoriesThisDay);
-
-    const dataChart = getArray(monthDaysArr).reduce((acc, num) => {
+  const dataChart =
+    categories &&
+    monthLengthArr.reduce((acc, num) => {
       const day = String(num < 10 ? '0' + num : num);
       const item = categoriesThisDay.reduce((acc, item, idx) => {
-        let arr = [];
+        let dayDataChartArr = [];
         if (item.numDay === day) {
           const cell = { [item.nameCategory]: item.balance };
-          arr.push(cell);
+          dayDataChartArr.push(cell);
         }
-        let obj;
-        if (arr.length) {
-          obj = arr.reduce((acc, item) => (acc = { ...acc, ...item }), {});
+        let dayDataChartObj;
+        if (dayDataChartArr.length) {
+          dayDataChartObj = dayDataChartArr.reduce(
+            (acc, item) => (acc = { ...acc, ...item }),
+            {}
+          );
         }
-        return (acc = { ...acc, ...obj });
+        return (acc = { ...acc, ...dayDataChartObj });
       }, {});
       return (acc = [
         ...acc,
@@ -126,47 +208,87 @@ const ChartBar = () => {
       ]);
     }, []);
 
+  const uniquenessCategories = getUniquenessEssence(
+    categoriesThisDay,
+    'nameCategory'
+  );
 
-    return (
-      <Container newClasses="mt-8 mx-auto">
-        <TextField
-          label="Фильтрация по месяцу"
-          type={'month'}
-          style={{ width: '300px' }}
-          {...register('month')}
+  if (operationsIsLoading) return <LoadingSpinners number={3} />;
+
+  return (
+    <>
+      {operations ? (
+        <Container newClasses="mt-8 mx-auto">
+          <>
+            <div className="d-flex justify-content-evenly">
+              <TextField
+                label="Фильтрация по неделе"
+                type={'week'}
+                style={{ width: '300px' }}
+                {...register('week')}
+                placeholder={placeholderWeek}
+                classes={'chartBar w-250px'}
+              />
+
+              <TextField
+                label="Фильтрация по месяцу"
+                type={'month'}
+                style={{ width: '300px' }}
+                {...register('month')}
+                placeholder={placeholderMonth}
+                classes={'chartBar w-250px'}
+              />
+
+              <TextField
+                label="Фильтрация по году"
+                type={'number'}
+                style={{ width: '300px' }}
+                {...register('year')}
+              />
+            </div>
+            <BarChart
+              width={1180}
+              height={900}
+              data={dataChart}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend
+                verticalAlign="top"
+                wrapperStyle={{ lineHeight: '40px' }}
+              />
+              <ReferenceLine y={0} stroke="#000" />
+              <Brush dataKey="date" height={30} stroke="#5554d8" />
+              {uniquenessCategories.map((item, idx) => (
+                <Bar
+                  width={'10px'}
+                  key={item.numDay + idx}
+                  dataKey={item.nameCategory}
+                  fill={COLORS[item.color]}
+                  radius={[10, 10, 0, 0]}
+                  isAnimationActive={true}
+                  background
+                />
+              ))}
+            </BarChart>
+          </>
+        </Container>
+      ) : (
+        <EmptyList
+          title="свою первую операцию"
+          link={counts ? (categories ? '/' : '/categories') : '/counts'}
         />
-
-        <BarChart
-          width={1180}
-          height={900}
-          data={dataChart}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
-          <ReferenceLine y={0} stroke="#000" />
-          <Brush dataKey="date" height={30} stroke="#8884d8" />
-          {categoriesThisDay.map((item, idx) => (
-            <Bar
-              width={'10px'}
-              key={item.numDay + idx}
-              dataKey={item.nameCategory}
-              fill={COLORS[item.color]}
-            />
-          ))}
-        </BarChart>
-      </Container>
-    );
-  }
-  return <LoadingSpinners number={3} />;
+      )}
+    </>
+  );
 };
 
 export default ChartBar;

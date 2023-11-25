@@ -5,13 +5,13 @@ import {
   loadTranslations,
   selectTranslations,
   selectTranslationsDataLoaded,
+  selectTranslationsLoadedStatus,
 } from '../../store/translationsSlice';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { displayDate, paginate } from '../../utils';
 import {
   loadCounts,
   loadCountsData,
-  selectCounts,
   selectCountsData,
   selectCountsDataStatus,
   selectCountsStatus,
@@ -24,17 +24,25 @@ import { useTables } from '../../hooks/useTable';
 import Pagination from '../../components/common/pagination';
 import { useSettings } from '../../hooks/useSettings';
 import _ from 'lodash';
+import EmptyList from '../../components/common/EmptyList';
+import { useNavigate } from 'react-router-dom';
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
-  const { currentPage, handlePageChange, sortBy } = useTables();
-  const { essenceHandleToEdit } =
-    useSettings();
+  const {
+    currentPage,
+    handlePageChange,
+    sortBy,
+    counts: countsObjects,
+  } = useTables();
+  const navigate=useNavigate()
+  const { essenceHandleToEdit } = useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsLoaded = useSelector(selectCountsStatus());
   const countsData = useSelector(selectCountsData());
   const translationsDataLoaded = useSelector(selectTranslationsDataLoaded());
   const translations = useSelector(selectTranslations());
+  const translationsIsLoading = useSelector(selectTranslationsLoadedStatus());
   const pageSize = 12;
 
   const counts = {
@@ -43,7 +51,7 @@ const HistoryTranslations = () => {
       type: '652e4f70498ed451c3f23b9f',
       icon: 'https://img.icons8.com/clouds/100/cash-in-hand.png',
     },
-    ...useSelector(selectCounts()),
+    ...countsObjects,
   };
 
   useEffect(() => {
@@ -51,6 +59,14 @@ const HistoryTranslations = () => {
     if (!countsDataLoaded) dispatch(loadCountsData());
     if (!countsLoaded) dispatch(loadCounts());
   }, []);
+
+  useEffect(()=> {
+    if(translations && !translations) {
+      navigate('/counts')
+    }
+
+    console.log('translations:', translations)
+  },[translations])
 
   if (translationsDataLoaded && countsData) {
     const count = Object?.values(translations)?.length;
@@ -191,9 +207,14 @@ const HistoryTranslations = () => {
       pageSize
     );
 
+    if (translationsIsLoading)
+      return (
+        <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
+      );
+
     return (
-      <Container classes="br-10 shadow-custom">
-        <Container newClasses={'mt-8'}>
+      <Container classes="br-10 shadow-custom p-3">
+        <Container newClasses={'mt-10 w-98 mx-auto'}>
           <Table columns={columns} data={translationsCrop} c />
         </Container>
         <Container newClasses={'mx-auto mt-auto mb-3'}>
@@ -206,10 +227,16 @@ const HistoryTranslations = () => {
         </Container>
       </Container>
     );
-  }
-  return (
-    <LoadingSpinners number={3} style={{ width: '56px', height: '56px' }} />
-  );
+  } else
+    return (
+      <Container classes="br-10 shadow-custom p-3">
+        <EmptyList
+          title="свой первый перевод"
+          dataType="translationsAdd"
+          onClick={essenceHandleToEdit}
+        />
+      </Container>
+    );
 };
 
 export default HistoryTranslations;

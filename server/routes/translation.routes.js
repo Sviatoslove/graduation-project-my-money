@@ -14,14 +14,13 @@ router
       );
       res.send(list);
     } catch (e) {
-      res
-        .status(500)
-        .json({
-          error: {
-            message: 'На сервере произошла ошибка. Переводы не загружены. Попробуйте позже.',
-            code: 500,
-          },
-        });
+      res.status(500).json({
+        error: {
+          message:
+            'На сервере произошла ошибка. Переводы не загружены. Попробуйте позже.',
+          code: 500,
+        },
+      });
     }
   })
   .post(auth, async (req, res) => {
@@ -31,6 +30,9 @@ router
         ...req.body,
         userId: userId,
       });
+      const translationsList = await Translation.find();
+      const translationsListUser = translationsList.filter(
+        ({ userId: id }) => id.toString() === userId);
       const { fromCount, toCount, balanceFrom, balanceTo } = newTranslation;
       let countFrom;
       if (fromCount !== '0') {
@@ -41,21 +43,24 @@ router
       const countTo = await Count.findById(toCount);
       countTo.balance = Number(countTo.balance) + Number(balanceTo);
       await Count.findByIdAndUpdate(toCount, countTo);
+      let editNewTranslation
+      if(translationsListUser.length === 1) {
+        editNewTranslation = {[newTranslation._id]: newTranslation}
+      } else editNewTranslation = newTranslation
       const data = {
         _id: 'noTransformData',
-        newTranslation: newTranslation,
+        newTranslation: editNewTranslation,
         counts: { countFrom: countFrom, countTo: countTo },
       };
       res.status(201).send(data);
     } catch (e) {
-      res
-        .status(500)
-        .json({
-          error: {
-            message: 'На сервере произошла ошибка. Перевод не создан. Попробуйте позже.',
-            code: 500,
-          },
-        });
+      res.status(500).json({
+        error: {
+          message:
+            'На сервере произошла ошибка. Перевод не создан. Попробуйте позже.',
+          code: 500,
+        },
+      });
     }
   });
 router.delete('/:translId', auth, async (req, res) => {
@@ -79,14 +84,13 @@ router.delete('/:translId', auth, async (req, res) => {
     };
     return res.send(data);
   } catch (e) {
-    res
-      .status(500)
-      .json({
-        error: {
-          message: 'На сервере произошла ошибка.  Перевод не удалён. Попробуйте позже.',
-          code: 500,
-        },
-      });
+    res.status(500).json({
+      error: {
+        message:
+          'На сервере произошла ошибка.  Перевод не удалён. Попробуйте позже.',
+        code: 500,
+      },
+    });
   }
 });
 

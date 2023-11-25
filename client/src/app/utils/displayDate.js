@@ -28,7 +28,7 @@ function getDateFormat(date, separator) {
   return `${day}${separator}${month}${separator}${year}г.`;
 }
 
-const declensionWord = (num = 0, word, end1, end2, end3) => {
+export const declensionWord = (num = 0, word, end1, end2, end3) => {
   const z = (num % 100) / 10;
   const x = num % 10;
   z >= 1.1 && z <= 1.4

@@ -1,5 +1,4 @@
 export const dataEditToEqualStrings = (data, num) => {
-  console.log('data:', data)
   if (data) {
     const array = Object.values(data);
     const rate =

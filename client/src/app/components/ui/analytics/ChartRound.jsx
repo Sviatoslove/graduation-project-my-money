@@ -6,10 +6,7 @@ import { COLORS } from '../../../utils/constants';
 import { useTables } from '../../../hooks/useTable';
 
 const ChartRound = () => {
-  const { filteredOperations } = useTables();
-
-  const { filteredCategories } = useAnalytics(filteredOperations);
-  console.log('filteredCategories:', filteredCategories);
+  const { filteredCategories } = useAnalytics();
 
   const data =
     filteredCategories &&

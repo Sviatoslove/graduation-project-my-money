@@ -1,16 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import {
-  operationRemove,
-} from '../store/operationsSlice';
-import {
-  categoriesRemove,
-  categoriesUpdate,
-} from '../store/categoriesSlice';
-import {
-  countRemove,
-  countUpdate,
-} from '../store/countsSlice';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { operationRemove } from '../store/operationsSlice';
+import { categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
+import { countRemove, countUpdate } from '../store/countsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearError,
@@ -20,9 +12,7 @@ import {
   selectUser,
   updateUser,
 } from '../store/usersSlice';
-import {
-  translationRemove,
-} from '../store/translationsSlice';
+import { translationRemove } from '../store/translationsSlice';
 import localStorageService from '../services/localStorage.service';
 import getDate from '../utils/getDate';
 import { displayDate } from '../utils';
@@ -34,6 +24,7 @@ const useSettings = () => useContext(SettingsContext);
 const SettingsProvider = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const { type } = useParams();
   const [formType, setFormType] = useState(
     type === 'register' ? type : 'login'
@@ -93,7 +84,11 @@ const SettingsProvider = ({ children }) => {
         type: errorGlobal?.type ? errorGlobal?.type : 'errorGlobal',
       });
     }
-    if (successNetwork && (successNetwork[1] === 'remove' || successNetwork[1] === 'updateMasterCount')) {
+    if (
+      successNetwork &&
+      (successNetwork[1] === 'remove' ||
+        successNetwork[1] === 'updateMasterCount')
+    ) {
       setSuccessToast(successNetwork[0]);
       setSettingsToast({
         imgSrc: successNetwork[2] ? successNetwork[2] : '',
@@ -141,7 +136,12 @@ const SettingsProvider = ({ children }) => {
   };
 
   const onChangeModal = (essence, idEssence) => {
-    if (essence === 'counts') dispatch(countRemove(idEssence));
+    if (essence === 'counts') {
+      if(idEssence === user.masterCount) {
+        localStorageService.removeMasterCount()
+        dispatch(updateUser({payload:{...user, masterCount: ''}}))
+      }
+      dispatch(countRemove(idEssence))};
     if (essence === 'operations') dispatch(operationRemove(idEssence));
     if (essence === 'categories') dispatch(categoriesRemove(idEssence));
     if (essence === 'translations') dispatch(translationRemove(idEssence));
@@ -178,9 +178,17 @@ const SettingsProvider = ({ children }) => {
         appearanceForm();
         break;
       case 'masterCount':
-        localStorageService.setMasterCount(idEssence);
-        const newUser = { ...user, masterCount: idEssence };
-        dispatch(updateUser({payload: newUser, type: 'updateMasterCount', iconCount: currentEssence.icon}));
+        if(idEssence !== user.masterCount) {
+          localStorageService.setMasterCount(idEssence);
+          const newUser = { ...user, masterCount: idEssence };
+          dispatch(
+            updateUser({
+              payload: newUser,
+              type: 'updateMasterCount',
+              iconCount: currentEssence.icon,
+            })
+          );
+        }
         break;
       case 'like':
         const editedEssence = {
@@ -200,8 +208,16 @@ const SettingsProvider = ({ children }) => {
         });
         break;
       case 'translationsAdd':
-        setTypeForm(btnType);
-        appearanceForm();
+        if (location.pathname === '/counts/translations') {
+          navigate('/counts');
+          setTimeout(() => {
+            setTypeForm(btnType);
+            appearanceForm();
+          }, 0);
+        } else {
+          setTypeForm(btnType);
+          appearanceForm();
+        }
         break;
     }
   };
@@ -235,7 +251,7 @@ const SettingsProvider = ({ children }) => {
         setSuccessToast,
         settingsModal,
         successToast,
-        startClearFunc
+        startClearFunc,
       }}
     >
       {children}

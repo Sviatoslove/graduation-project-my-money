@@ -6,7 +6,7 @@ const Container = ({ children, classes, newClasses }) => {
     <div
       className={
         !newClasses
-          ? "w-98 mh-86vh d-flex mx-auto mt-4 flex-column " +
+          ? "w-98 mh-i d-flex mx-auto mt-4 flex-column " +
             classes
           : newClasses
       }
@@ -15,6 +15,10 @@ const Container = ({ children, classes, newClasses }) => {
     </div>
   );
 };
+
+Container.defaultProps={
+  classes: 'bg-paper'
+}
 
 Container.propTypes = {
   newClasses: PropTypes.string,

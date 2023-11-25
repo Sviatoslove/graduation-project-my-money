@@ -4,7 +4,6 @@ import useAnalytics from '../../../hooks/useAnalytics';
 
 const ProgressBar = () => {
   const { filteredCategories } = useAnalytics();
-
   return (
     <div className={'progress-stacked mb-3'} style={{ height: '50px' }}>
       {filteredCategories && filteredCategories.length !== 0 ? (

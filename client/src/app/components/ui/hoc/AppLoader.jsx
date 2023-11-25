@@ -9,23 +9,11 @@ import {
 } from '../../../store/usersSlice';
 import localStorageService from '../../../services/localStorage.service';
 import LoadingSpinners from '../../common/LoadingSpinners';
-import {
-  loadCategories,
-  selectCategoriesDataloaded,
-} from '../../../store/categoriesSlice';
-import {
-  loadOperations,
-  selectOperationsDataLoaded,
-} from '../../../store/operationsSlice';
-import { loadCounts, selectCountsStatus } from '../../../store/countsSlice';
 
 const AppLoader = ({ children }) => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn());
   const usersLoadingStatus = useSelector(selectUserLoadingStatus());
-  const operationsDataLoaded = useSelector(selectOperationsDataLoaded());
-  const countsDataLoaded = useSelector(selectCountsStatus());
-  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const user = useSelector(selectUser());
   const masterCount = user?.masterCount;
 
@@ -34,17 +22,10 @@ const AppLoader = ({ children }) => {
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(loadUser());
-      if (!operationsDataLoaded) dispatch(loadOperations());
-      if (!categoriesDataLoaded) dispatch(loadCategories());
-      if (!countsDataLoaded) dispatch(loadCounts());
     }
   }, []);
 
-  if (
-    !operationsDataLoaded &&
-    !categoriesDataLoaded &&
-    !countsDataLoaded
-  ) {
+  if (usersLoadingStatus) {
     return (
       <LoadingSpinners
         style={{ width: '96px', height: '96px' }}

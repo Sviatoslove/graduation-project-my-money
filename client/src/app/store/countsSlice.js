@@ -9,7 +9,7 @@ const countsSlice = createSlice({
   name: 'counts',
   initialState: {
     entities: null,
-    isLoading: true,
+    isLoading: false,
     dataLoaded: null,
     countsData: null,
     countsDataLoaded: null,
@@ -51,6 +51,7 @@ const countsSlice = createSlice({
         ...state.entities[action.payload._id],
         ...action.payload,
       };
+      state.isLoading = false;
     },
     countsRemovedReceived: (state, action) => {
       delete state.entities[action.payload];
@@ -58,6 +59,7 @@ const countsSlice = createSlice({
         state.entities = null;
         state.dataLoaded = false;
       }
+      state.isLoading = false;
     },
     countsDataReceived: (state, action) => {
       state.countsData = action.payload;
@@ -134,6 +136,7 @@ export const countCreate = (payload) => async (dispatch) => {
 };
 
 export const loadCounts = () => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await countsService.get();
     dispatch(countsReceived(content));
@@ -172,9 +175,10 @@ export const countsUpdateDeleteOperation = (payload) => async (dispatch) => {
 };
 
 export const countRemove = (payload) => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await countsService.remove(payload);
-    dispatch(countsRemovedReceived({ payload }));
+    dispatch(countsRemovedReceived(payload));
     dispatch(
       setSuccessNetwork([
         `Счёт успешно удалён. Вместе с ним удалено: операций в количестве: ${content.deletedOperations} шт; переводов в количестве: ${content.deletedTranslations} шт.`, 'remove',
@@ -191,6 +195,7 @@ export const countsDestroyed = () => async (dispatch) => {
 };
 
 export const loadCountsData = () => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await countsDataService.get();
     dispatch(countsDataReceived(content));
@@ -201,6 +206,7 @@ export const loadCountsData = () => async (dispatch) => {
 };
 
 export const loadCountsIconsData = () => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await countsIconsDataService.get();
     dispatch(countsIconsDataReceived(content));
@@ -211,6 +217,7 @@ export const loadCountsIconsData = () => async (dispatch) => {
 };
 
 export const loadcurrencyData = () => async (dispatch) => {
+  dispatch(countsRequested());
   try {
     const { content } = await currencyDataService.get();
     dispatch(currencyDataReceived(content));

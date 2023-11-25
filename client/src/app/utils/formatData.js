@@ -27,8 +27,20 @@ function formatDataAvatars(data) {
   return obj;
 }
 
-const getArray = (count) => {
-  return Array.from({ length: count }, (v, i) => i + 1);
+const getArray = (count, numDays, monthLength) => {
+  let rate
+  let z = 0
+  return Array.from({ length: count }, (v, i) => {
+    if(numDays) {
+      if (monthLength && monthLength >= i + +numDays) {
+        rate = numDays
+        z=i
+      }else {
+        return i - z
+      };
+    }
+    return i + (rate ? + rate : + 1);
+  });
 };
 
 const formatDataForAvatarsFields = (count, data) => {

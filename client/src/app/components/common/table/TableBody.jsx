@@ -56,7 +56,7 @@ const TableBody = ({ columns, data }) => {
                 );
               else if (id === Object.keys(columns).length - 1)
                 return (
-                  <td key={id}>
+                  <td key={id*109+id}>
                     <Button
                       outline={true}
                       bgColor="secondary"

@@ -104,7 +104,7 @@ const CategoriesPage = () => {
 
         <StatusAll classes={'mt-4'} />
 
-        <ContainerScale classes={'flex-grow-1 mt-5'}>
+        <ContainerScale classes={'mt-5'}>
           <ContainerCards colsNumber={'5'} gap={'4'}>
             {categoriesIcons ? (
               countsCrop?.map((category) => (

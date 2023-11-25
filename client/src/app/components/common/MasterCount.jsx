@@ -38,6 +38,7 @@ const MasterCount = ({ classes }) => {
     ) {
       setMasterCount(counts[user.masterCount]);
     }
+    if (!user.masterCount) setMasterCount('');
   }, [counts]);
 
   const handleClick = (e) => {
@@ -45,15 +46,23 @@ const MasterCount = ({ classes }) => {
     if ((target.dataset.bsToggle = 'dropdown')) setIsOpen((state) => !state);
     const countId = target.closest('button').dataset.item;
     if (countId) {
-      dispatch(updateUser({payload: { ...user, masterCount: countId }, type: 'updateMasterCount', iconCount: counts[countId].icon}));
-      setMasterCount(counts[countId]);
-      localStorageService.setMasterCount(countId);
+      if (masterCount._id !== countId) {
+        dispatch(
+          updateUser({
+            payload: { ...user, masterCount: countId },
+            type: 'updateMasterCount',
+            iconCount: counts[countId].icon,
+          })
+        );
+        setMasterCount(counts[countId]);
+        localStorageService.setMasterCount(countId);
+      }
     }
   };
 
   return (
     <>
-      {countsDataLoaded && countsLoaded ? (
+      {countsDataLoaded ? (
         <div className={'text-center ' + classes}>
           {masterCount && countsData && (
             <Badge
@@ -64,8 +73,14 @@ const MasterCount = ({ classes }) => {
               {...countsData[masterCount.type]}
             />
           )}
+             {!masterCount && (
+              <h4 className="text-center mb-4">
+                Выберите главный счёт с помощью кнопки чуть ниже
+              </h4>
+            )}
 
           <div className="dropdown w-content info br-5 text-center mx-auto shadow-custom pb-1wpx">
+         
             <div className="d-flex">
               <img
                 className="w-content mx-auto"
@@ -83,7 +98,7 @@ const MasterCount = ({ classes }) => {
             {masterCount ? (
               <Badge
                 balance={masterCount.balance}
-                imgSrc={currency[masterCount.currency].icon}
+                imgSrc={currency[masterCount.currency]?.icon}
                 iconSize={'32px'}
                 color={'success'}
                 classes={'fw-bold ls-1 fs-4 align-items-center d-flex p-1 m-2'}
@@ -102,23 +117,24 @@ const MasterCount = ({ classes }) => {
               </li>
               <hr className="m-0" />
               <div className="d-flex align-content-start justify-content-center flex-wrap">
-                {Object.values(counts).map((count, idx) => (
-                  <li key={count._id + idx}>
-                    <button
-                      className={'p-1 m-0 dropdown-item'}
-                      type="button"
-                      onClick={handleClick}
-                      data-item={count._id}
-                    >
-                      <Badge
-                        text={count.name}
-                        {...countsData[count.type]}
-                        imgSrc={count.icon}
-                        iconSize={'32px'}
-                      />
-                    </button>
-                  </li>
-                ))}
+                {counts &&
+                  Object.values(counts).map((count, idx) => (
+                    <li key={count._id + idx}>
+                      <button
+                        className={'p-1 m-0 dropdown-item'}
+                        type="button"
+                        onClick={handleClick}
+                        data-item={count._id}
+                      >
+                        <Badge
+                          text={count.name}
+                          {...countsData[count.type]}
+                          imgSrc={count.icon}
+                          iconSize={'32px'}
+                        />
+                      </button>
+                    </li>
+                  ))}
               </div>
             </ul>
           </div>

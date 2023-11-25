@@ -22,7 +22,7 @@ const TableHeader = ({ columns }) => {
   };
 
   return (
-    <thead>
+    <thead className=''>
       <tr>
         {Object.keys(columns).map((column) => (
           <th

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import Container from '../components/common/Containers/Container';
@@ -14,11 +14,10 @@ import OperationsTable from '../components/ui/OperationsTable';
 import { useTables } from '../hooks/useTable';
 import Pagination from '../components/common/pagination';
 import { SelectedField } from '../components/common/form';
-import _ from 'lodash';
 import SearchInput from '../components/common/form/SearchInput';
 import ProgressBar from '../components/ui/analytics/ProgressBar';
-import localStorageService from '../services/localStorage.service';
-import ChartRound from '../components/ui/analytics/ChartRound';
+import { getUniquenessEssence } from '../utils/analyticsHelp';
+import EmptyList from '../components/common/EmptyList';
 
 const MainPage = () => {
   const { essenceHandleToEdit } = useSettings();
@@ -31,77 +30,81 @@ const MainPage = () => {
     currentPage,
     handlePageChange,
     handleChange,
-    categoriesDataLoaded,
     filteredCategories,
     searchQuery,
     handleSearchChange,
+    counts,
+    categories,
   } = useTables();
 
   const user = useSelector(selectUser());
 
   return (
-    <Container newClasses={'w-98 h-90vh d-flex mx-auto mt-4 flex-column '}>
-      <Container newClasses="position-relative">
-        <ProgressBar />
-        <ChartRound/>
-        {user && user?.masterCount && (
-          <>
-            <Container newClasses="position-absolute bottom-0 start-5">
-              <SelectedField
-                name="category"
-                type="categories"
-                label="Фильтр по категориям"
-                value={dataCategory.category}
-                options={_.uniqWith(
-                  filteredCategories,
-                  (first, second) => first._id === second._id
-                )}
-                onChange={handleChange}
-                defaultOption={
-                  !filteredCategories.length
-                    ? 'Нет категорий'
-                    : 'Не фильтровать'
-                }
-                disabled={!filteredCategories.length ? true : false}
+    <>
+      {user && counts ? (
+        <Container classes="">
+          <Container newClasses="position-relative">
+            <>
+              <ProgressBar />
+              <Container newClasses="position-absolute bottom-0 start-5">
+                <SelectedField
+                  name="category"
+                  type="categories"
+                  label="Фильтр по категориям"
+                  value={dataCategory.category}
+                  options={getUniquenessEssence(filteredCategories, '_id')}
+                  onChange={handleChange}
+                  defaultOption={
+                    !filteredCategories.length
+                      ? 'Нет категорий'
+                      : 'Не фильтровать'
+                  }
+                  disabled={!filteredCategories.length ? true : false}
+                />
+              </Container>
+              <Container newClasses="position-absolute bottom-7 end-0">
+                <SearchInput
+                  onChange={handleSearchChange}
+                  value={searchQuery}
+                />
+              </Container>
+              <MasterCount
+                classes={'d-flex flex-column fs-4 w-content mx-auto'}
               />
-            </Container>
-            <Container newClasses="position-absolute bottom-7 end-0">
-              <SearchInput onChange={handleSearchChange} value={searchQuery} />
-            </Container>
-            <MasterCount
-              classes={'d-flex flex-column fs-4 w-content mx-auto'}
-            />
-            <StatusAll />
-          </>
-        )}
-      </Container>
-      <ContainerScale classes="wrapper-operation flex-grow-1">
-        {operations ? <OperationsTable /> : null}
-      </ContainerScale>
+              <StatusAll />
+            </>
+          </Container>
+          <ContainerScale classes="wrapper-operation flex-grow-1">
+            {operations ? <OperationsTable /> : null}
+          </ContainerScale>
 
-      <ContainerShow type={'add'} classes={'position-relative'}>
-        <OperationsForm />
-      </ContainerShow>
-      <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
-        <Pagination
-          itemsCount={count}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
+          <ContainerShow type={'add'} classes={'position-relative'}>
+            <OperationsForm />
+          </ContainerShow>
+          <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
+            <Pagination
+              itemsCount={count}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+            <Button
+              bgColor="primary"
+              classes="shadow-lg p-2 w-content ms-auto me-3"
+              dataType="add"
+              onClick={essenceHandleToEdit}
+              imgSrc={addIcon}
+            />
+          </ContainerScale>
+        </Container>
+      ) : (
+        <EmptyList
+          classes="p-3 w-98 mh-i d-flex mx-auto mt-4 flex-column"
+          title="свою первую операцию"
+          link={counts ? (categories ? '/' : '/categories') : '/counts'}
         />
-        <Button
-          link={
-            (!localStorageService.getMasterCount() && '/counts') ||
-            (!categoriesDataLoaded && '/categories')
-          }
-          bgColor="primary"
-          classes="shadow-lg p-2 w-content ms-auto me-3"
-          dataType="add"
-          onClick={essenceHandleToEdit}
-          imgSrc={addIcon}
-        />
-      </ContainerScale>
-    </Container>
+      )}
+    </>
   );
 };
 

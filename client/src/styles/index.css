@@ -108,7 +108,6 @@ code {
 
 .item-count {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.125);
-  /* height: 342px; */
 }
 
 .item-count:before {
@@ -368,6 +367,14 @@ code {
 .toast.hide {
   display: block !important;
   animation: toastHide 0s ease-in-out 0.5s;
+}
+
+.chartBar {
+  position: absolute !important;
+  width: 150px !important;
+  border: none !important;
+  top: 2px;
+  left: 2px;
 }
 
 @keyframes toastShow {

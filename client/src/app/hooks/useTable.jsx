@@ -18,6 +18,7 @@ import {
 } from '../store/categoriesSlice';
 import getDate from '../utils/getDate';
 import { loadCounts, selectCounts, selectCountsStatus } from '../store/countsSlice';
+import localStorageService from '../services/localStorage.service';
 
 const TablesContext = React.createContext();
 
@@ -29,7 +30,7 @@ const TablesProvider = ({ children }) => {
   let filteredCategories = [];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [masterCount, setMasterCount] = useState('');
+  const [masterCount, setMasterCount] = useState(localStorageService.getMasterCount()||'');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState({ path: 'date', order: 'desc' });
   const [dataCategory, setCategoryData] = useState({
@@ -37,7 +38,9 @@ const TablesProvider = ({ children }) => {
   });
 
   const isLoggedIn = useSelector(selectIsLoggedIn());
-
+  const operationsDataLoaded = useSelector(selectOperationsDataLoaded());
+  const countsDataLoaded = useSelector(selectCountsStatus());
+  const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const operations = useSelector(selectOperations());
   const categories = useSelector(selectCategories());
   const counts = useSelector(selectCounts());
@@ -48,7 +51,9 @@ const TablesProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-
+      if (!operationsDataLoaded) dispatch(loadOperations());
+      if (!categoriesDataLoaded) dispatch(loadCategories());
+      if (!countsDataLoaded) dispatch(loadCounts());
     }
   }, [isLoggedIn]);
 
@@ -109,6 +114,7 @@ const TablesProvider = ({ children }) => {
               if (dataCategory.category === op.categoryId) return op;
             } else return op;
           })
+
       );
     }
   };

@@ -11,10 +11,7 @@ import {
 import { useSettings } from '../../hooks/useSettings';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import getDate from '../../utils/getDate';
-import {
-  operationCreate,
-  operationUpdate,
-} from '../../store/operationsSlice';
+import { operationCreate, operationUpdate } from '../../store/operationsSlice';
 import localStorageService from '../../services/localStorage.service';
 import { useForms } from '../../hooks/useForms';
 import Badge from '../../components/common/Badge';
@@ -31,12 +28,10 @@ const OperationsForm = () => {
     show,
     setSuccessToast,
     setSettingsToast,
-    successToast
+    successToast,
   } = useSettings();
   const dispatch = useDispatch();
-  const successNetwork = useSelector(
-    selectSuccessNetwork()
-  );
+  const successNetwork = useSelector(selectSuccessNetwork());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
   const filteredCategories =
@@ -56,7 +51,7 @@ const OperationsForm = () => {
         date: `${getDate().split('.').reverse().join('-')}T${
           hour < 10 ? '0' + hour : hour
         }:${minutes < 10 ? '0' + minutes : minutes}`,
-        dataType: 'operations'
+        dataType: 'operations',
       };
   const { register, data, handleSubmit, errors } = useForms({
     defaultState: initialState,
@@ -90,19 +85,20 @@ const OperationsForm = () => {
       iconColor,
       icon,
       _id: key,
-    } = categories[data.defaultState.categoryId]
+    } = categories[data.defaultState.categoryId];
     badge = { color, iconColor, icon, key };
     if (currentEssence) {
       dispatch(operationUpdate(data.defaultState));
     } else {
-      dispatch(
-        operationCreate({
-          ...data.defaultState,
-          status: statusOperation,
-          countId: localStorageService.getMasterCount(),
-          userId: localStorageService.getUserId(),
-        })
-      );
+      const countId = localStorageService.getMasterCount();
+      const newOperation = {
+        ...data.defaultState,
+        status: statusOperation,
+        countId,
+        userId: localStorageService.getUserId(),
+      };
+      if (countId) dispatch(operationCreate({payload:newOperation}))
+      else dispatch(operationCreate({payload:newOperation, contentError: countId}));
     }
     disAppearanceForm();
   };
