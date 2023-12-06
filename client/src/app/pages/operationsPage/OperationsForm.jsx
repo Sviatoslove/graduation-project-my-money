@@ -114,7 +114,7 @@ const OperationsForm = () => {
   return (
     <div
       className={
-        'top-60 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
+        'top-50 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
