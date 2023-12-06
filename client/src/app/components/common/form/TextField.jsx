@@ -1,17 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { getInputClasses } from '../../../utils';
 
 const TextField = ({
   label,
-  value,
   name,
   type,
+  value,
   onChange,
   error,
   style,
   placeholder,
   classes,
+  widthInput,
+  labelClasses,
+  inputClasses
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,12 +35,14 @@ const TextField = ({
         }
       };
     }
-    if (target.value === '0') target.value = '';
+    if(name !== 'numOperations') {
+      if (target.value === '0') target.value = '';
+    }
   };
 
   return (
     <div className="mb-2">
-      <label htmlFor={name}>{label}</label>
+      <label className={labelClasses} htmlFor={name}>{label}</label>
       <div className="input-group position-relative" style={style}>
         <input
           type={showPassword ? 'text' : type}
@@ -46,7 +51,8 @@ const TextField = ({
           onChange={onChange}
           onClick={cleanInput}
           value={value}
-          className={getInputClasses('form-control', error)}
+          className={inputClasses + ' min-w-180px '+ getInputClasses('form-control', error)}
+          style={{width: widthInput}}
         />
 
         {placeholder && (
@@ -82,6 +88,8 @@ TextField.defaultProps = {
 };
 
 TextField.propTypes = {
+  inputClasses: PropTypes.string,
+  labelClasses: PropTypes.string,
   widthInput: PropTypes.string,
   classes: PropTypes.string,
   placeholder: PropTypes.string,

@@ -1,15 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { trimStringLength } from '../../utils/trimStringLength';
 
 const Badge = ({
   name,
   textColor,
   color,
   text,
-  classes, imgClasses,
+  classes,
+  imgClasses,
   balance,
   imgSrc,
-  iconSize,icon, iconColor
+  iconSize,
+  icon,
+  iconColor,
 }) => {
   return (
     <>
@@ -17,29 +21,30 @@ const Badge = ({
         <span
           className={`justify-content-center badge bg-${color} ${textColor} ${classes} d-flex align-items-center`}
         >
-          <span>{balance}</span>
+          <span>
+            {trimStringLength(balance, 10)}
+          </span>
           <img src={imgSrc} alt="img" style={{ width: iconSize }} />
         </span>
       ) : (
-        <h3 className={"m-0 w-content mx-auto"}>
+        <h3 className={'m-0 w-content mx-auto'}>
           <span
             className={`badge bg-${color} ${textColor} ${classes} d-flex align-items-center justify-content-center`}
           >
             {imgSrc && (
               <img
-                className={imgClasses?imgClasses:"me-2"}
+                className={imgClasses ? imgClasses : 'me-2'}
                 src={imgSrc}
                 alt="img"
                 style={{ width: iconSize }}
               />
             )}
             {icon && (
-              <i
-                className={iconSize + icon + ` text-${iconColor}`}
-                alt="img"
-              />
+              <i className={iconSize + icon + ` text-${iconColor}`} alt="img" />
             )}
-            <span>{text ? text : name}</span>
+            <span>
+              {trimStringLength((text ? text : name), 10)}
+            </span>
           </span>
         </h3>
       )}

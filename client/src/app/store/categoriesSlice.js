@@ -3,6 +3,7 @@ import categoriesService from '../services/categories.service';
 import categoriesIconsService from '../services/categoriesIcons.service';
 import localStorageService from '../services/localStorage.service';
 import { setError, setSuccessNetwork } from './usersSlice';
+import { operationsFilterAfterRemovedCategory } from './operationsSlice';
 
 const categoriesSlice = createSlice({
   name: 'categories',
@@ -107,9 +108,10 @@ export const categoriesUpdate = (payload) => async (dispatch) => {
 
 export const categoriesRemove = (payload) => async (dispatch) => {
   try {
-    await categoriesService.remove(payload);
+    const { content } = await categoriesService.remove(payload);
     dispatch(categoriesRemovedReceived(payload));
-    dispatch(setSuccessNetwork(['Категория успешно удалена', 'remove']));
+    dispatch(operationsFilterAfterRemovedCategory(payload));
+    dispatch(setSuccessNetwork([`Категория успешно удалена. Вместе с ней удалено: операций в количестве: ${content.deletedOperations} шт.`, 'remove']));
   } catch (error) {
     dispatch(setError(error))
     dispatch(categoriesRequestedFailed())

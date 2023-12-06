@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MenuItem from "./MenuItem";
+import NavProfile from "./NavProfile";
 
 const Menu = ({ onShow, menu }) => {
   return (
@@ -17,6 +18,7 @@ const Menu = ({ onShow, menu }) => {
           onClick={onShow}
         ></button>
       </div>
+        <NavProfile classes='menu-profile'/>
       <div className="offcanvas-body">
         <ul
           className="navbar-nav justify-content-end flex-grow-1 pe-3"
@@ -25,19 +27,6 @@ const Menu = ({ onShow, menu }) => {
           {menu.map((item, idx) => {
             if (item.display) return <MenuItem {...item} key={idx} />;
           })}
-          {menu[2].display && (
-            <form className="d-flex mt-3" role="search">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
-          )}
         </ul>
       </div>
     </>

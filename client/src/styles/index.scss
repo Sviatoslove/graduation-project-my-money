@@ -13,7 +13,7 @@ $pMargin: 0;
 // @import '../../node_modules/bootstrap/scss/variables';
 // @import "../../node_modules/bootstrap/scss/variables-dark";
 // @import "../../node_modules/bootstrap/scss/maps";
-// @import "../../node_modules/bootstrap/scss/mixins";
+@import '../../node_modules/bootstrap/scss/mixins';
 // @import "../../node_modules/bootstrap/scss/root";
 
 // Optional components
@@ -30,6 +30,49 @@ $pMargin: 0;
 p {
   margin: $pMargin;
 }
+
+@include media-breakpoint-only(xs) {
+  .nav-profile {
+    display: none;
+  }
+  .menu-profile {
+    display: block;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .menu-profile {
+    display: none;
+  }
+}
+
+@include media-breakpoint-down(md) { 
+  .chartBarForm{
+   flex-direction: column;
+   width: 180px;
+   margin: 0 auto;
+  }
+  .chartBarContainer{
+    margin: 0;
+  }
+ }
+
+
+ @media (min-width: 768px) and (max-width: 991.98px) { 
+  .chartBarForm{
+    width: 650px;
+  }
+ }
+
+
+
+// @media (min-width: 768px) and (max-width: 1199.98px) { ... }
+//  @include media-breakpoint-between(md, xl) { ... }
+// @include media-breakpoint-only(sm) { ... }
+// @include media-breakpoint-only(md) { ... }
+// @include media-breakpoint-only(lg) { ... }
+// @include media-breakpoint-only(xl) { ... }
+// @include media-breakpoint-only(xxl) { ... }
 
 $utilities: map-merge(
   $utilities,
@@ -82,7 +125,8 @@ $utilities: map-merge(
       property: min-width,
       class: min-w,
       values: (
-        210: 210px,
+        180px: 180px,
+        210px: 210px,
       ),
     ),
     'height': (
@@ -94,11 +138,17 @@ $utilities: map-merge(
         maxc: max-content,
         i: inherit,
         100vh: 100vh,
+        45: 45%,
         100: 100%,
+        98vh: 98vh,
         90vh: 90vh,
+        88vh: 88vh,
+        85vh: 85vh,
+        80vh: 80vh,
         50vh: 50vh,
         40vh: 40vh,
         10vh: 10vh,
+        70px: 70px,
         50px: 50px,
         48px: 48px,
         100px: 100px,
@@ -115,8 +165,34 @@ $utilities: map-merge(
       class: mh,
       values: (
         i: inherit,
+        75vh: 75vh,
+        80vh: 80vh,
+        84vh: 84vh,
+        86vh: 86vh,
+        87vh: 87vh,
+        88vh: 88vh,
+        89vh: 89vh,
+        90vh: 90vh,
+        94vh: 94vh,
+        96vh: 96vh,
+        98vh: 98vh,
+        105px: 105px,
+        352px: 352px,
+        790px: 790px,
+        866px: 866px,
+        872px: 872px,
+        880px: 880px,
+        989px: 989px,
+      ),
+    ),
+    'max-height': (
+      property: max-height,
+      class: maxh,
+      values: (
+        i: inherit,
         86vh: 86vh,
         90vh: 90vh,
+        95vh: 95vh,
         94vh: 94vh,
         96vh: 96vh,
         105px: 105px,
@@ -177,6 +253,7 @@ $utilities: map-merge(
       property: font-size,
       class: fs,
       values: (
+        12px: 12px,
         24px: 24px,
         42px: 42px,
         56px: 56px,
@@ -197,6 +274,17 @@ $utilities: map-merge(
       property: border-top-right-radius,
       class: btrr,
       values: (
+        3: 3px,
+        5: 5px,
+        10: 10px,
+        50: 50px,
+      ),
+    ),
+    'border-top-left-radius': (
+      property: border-top-left-radius,
+      class: btlr,
+      values: (
+        3: 3px,
         5: 5px,
         10: 10px,
         50: 50px,
@@ -246,6 +334,7 @@ $utilities: map-merge(
       values: (
         94px: 94px,
         100px: 100px,
+        105px: 105px,
         110px: 110px,
         7: 7%,
         20: 20%,
@@ -258,8 +347,10 @@ $utilities: map-merge(
       class: start,
       values: (
         20px: 20px,
+        25px: 25px,
         30px: 30px,
         1: 1%,
+        3: 3%,
         5: 5%,
         6: 6%,
         7: 7%,
@@ -273,6 +364,7 @@ $utilities: map-merge(
         30px: 30px,
         1: 1%,
         2: 2%,
+        3: 3%,
         5: 5%,
         6: 6%,
         7: 7%,
@@ -286,9 +378,12 @@ $utilities: map-merge(
         30px: 30px,
         1: 1%,
         2: 2%,
+        3: 3%,
         5: 5%,
         6: 6%,
         7: 7%,
+        15: 15%,
+        17: 17%,
         24: 24%,
         100: 100%,
         130: 130%,
@@ -365,8 +460,9 @@ $utilities: map-merge(
         green: #0a3622,
         teal: #5468ff,
         cyan: #712cf9,
-        paper: rgba(134, 128, 80, 0.3),
-        transparent: transparent
+        paper: rgba(148, 147, 146, 0.3),
+        transparent: transparent,
+        app: rgba(249, 249, 229, 0.392)
       ),
     ),
     'shadow': (

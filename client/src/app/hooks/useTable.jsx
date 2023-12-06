@@ -15,6 +15,9 @@ import {
   loadCategories,
   selectCategories,
   selectCategoriesDataloaded,
+  loadСategoriesIcons,
+  selectCategoriesIconsDataloaded,
+  selectCategoriesIcons
 } from '../store/categoriesSlice';
 import getDate from '../utils/getDate';
 import { loadCounts, selectCounts, selectCountsStatus } from '../store/countsSlice';
@@ -30,6 +33,7 @@ const TablesProvider = ({ children }) => {
   let filteredCategories = [];
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(localStorageService.getPageSize()||6);
   const [masterCount, setMasterCount] = useState(localStorageService.getMasterCount()||'');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState({ path: 'date', order: 'desc' });
@@ -38,6 +42,10 @@ const TablesProvider = ({ children }) => {
   });
 
   const isLoggedIn = useSelector(selectIsLoggedIn());
+  const categoriesIconsDataLoaded = useSelector(
+    selectCategoriesIconsDataloaded()
+  );
+  const categoriesIcons = useSelector(selectCategoriesIcons());
   const operationsDataLoaded = useSelector(selectOperationsDataLoaded());
   const countsDataLoaded = useSelector(selectCountsStatus());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
@@ -54,6 +62,7 @@ const TablesProvider = ({ children }) => {
       if (!operationsDataLoaded) dispatch(loadOperations());
       if (!categoriesDataLoaded) dispatch(loadCategories());
       if (!countsDataLoaded) dispatch(loadCounts());
+    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
     }
   }, [isLoggedIn]);
 
@@ -128,8 +137,6 @@ const TablesProvider = ({ children }) => {
     [sortBy.order]
   );
 
-  const pageSize = 10;
-
   const operationCrop = paginate(sortedOperations, currentPage, pageSize);
 
   useEffect(() => {
@@ -149,6 +156,7 @@ const TablesProvider = ({ children }) => {
         operationCrop,
         count,
         pageSize,
+        setPageSize,
         currentPage,
         handlePageChange,
         masterCount,
@@ -164,6 +172,8 @@ const TablesProvider = ({ children }) => {
         setSearchQuery,
         filteredOperations,
         clearFilter,
+        categoriesIcons,
+        categoriesDataLoaded,setCategoryData
       }}
     >
       {children}

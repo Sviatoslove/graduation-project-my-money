@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { BtnsGroup } from '../../components/common/buttons';
 import { useSettings } from '../../hooks/useSettings';
 
-const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
+const CategoryCard = ({ category, categoriesIcons, table }) => {
   const {
     _id: id,
     name,
@@ -26,7 +26,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
       <div
         className={`${
           classesForWrapp ? classesForWrapp : 'card'
-        } h-100 bg-${bgColor} br-50 item-categories position-relative min-w-210 w-maxc mw-300 shadow-lg`}
+        } h-100 bg-${bgColor} br-50 item-categories position-relative min-w-210px w-maxc mw-300 shadow-lg`}
       >
         {!table && like && (
           <i
@@ -56,7 +56,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
           <BtnsGroup
             count={3}
             id={id}
-            dataType={['like', 'edit', 'remove']}
+            dataType={['like', 'categories', 'remove']}
             classes="btn-sm p-1"
             classesEl={['btrr-50', '', 'bbrr-50']}
             classesGroup="h-i px-2"
@@ -90,7 +90,7 @@ const CategoryCard = ({ onClick, category, categoriesIcons, table }) => {
 CategoryCard.propTypes = {
   category: PropTypes.object,
   categoriesIcons: PropTypes.object,
-  onClick: PropTypes.func,
+  table: PropTypes.string,
 };
 
 export default CategoryCard;

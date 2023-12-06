@@ -6,7 +6,7 @@ const useForms = (state, error, valueConverted) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [data, setData] = useState(state);
-  const { setToast, startClearFunc } = useSettings();
+  const { setToast, startClearFunc, setStatusOperation } = useSettings();
   const errors = { fields: {}, isValid: false };
 
   const register = (field) => ({
@@ -17,6 +17,13 @@ const useForms = (state, error, valueConverted) => {
       if (error) {
         setToast((state) => ({ ...state, show: 'hide' }));
         startClearFunc();
+      }
+      if(field === 'status') {
+        setStatusOperation(target.value)
+        setData((state) => ({
+          ...state,
+          defaultState: { ...state.defaultState, ['categoryId']: ''},
+        }))
       }
       return setData((state) => ({
         ...state,

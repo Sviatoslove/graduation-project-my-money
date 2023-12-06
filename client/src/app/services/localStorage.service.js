@@ -6,6 +6,7 @@ const localStorageService = {
   STAY_ON: "stay-on",
   MASTER_COUNT: "master-count",
   CATEGORIES_DATA: "categories_data",
+  PAGE_SIZE: "page-size",
 
   setTokens({
     expiresIn = 3600,
@@ -47,17 +48,26 @@ const localStorageService = {
   getCategoriesData() {
     return localStorage.getItem(this.CATEGORIES_DATA);
   },
+  getPageSize() {
+    return localStorage.getItem(this.PAGE_SIZE);
+  },
   setMasterCount(data) {
     localStorage.setItem(this.MASTER_COUNT, data);
   },
   setCategoriesData(data) {
     localStorage.setItem(this.CATEGORIES_DATA, data);
   },
+  setPageSize(data) {
+    return localStorage.setItem(this.PAGE_SIZE, data);
+  },
   removeCategoriesData() {
     localStorage.removeItem(this.CATEGORIES_DATA);
   },
   removeMasterCount() {
     localStorage.removeItem(this.MASTER_COUNT);
+  },
+  removePageSize(data) {
+    return localStorage.removeItem(this.PAGE_SIZE);
   },
 };
 

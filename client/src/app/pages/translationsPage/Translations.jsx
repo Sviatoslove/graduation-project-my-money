@@ -8,7 +8,7 @@ import { useTables } from '../../hooks/useTable';
 import { selectTranslations } from '../../store/translationsSlice';
 
 const Translations = ({ onChange, counts }) => {
-  const { masterCount, setMasterCount } = useTables();
+  const { setMasterCount } = useTables();
   const user = useSelector(selectUser());
   const translations = useSelector(selectTranslations())
 
@@ -37,7 +37,7 @@ const Translations = ({ onChange, counts }) => {
           <MasterCount classes={'mb-5 w-300px'} />
 
           <Button
-            dataType="translationsAdd"
+            dataType="translations"
             outline={true}
             classes="w-90px shadow-custom mt-auto"
             imgSrc="https://img.icons8.com/stickers/54/money-circulation.png"

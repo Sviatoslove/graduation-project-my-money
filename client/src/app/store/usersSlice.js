@@ -129,7 +129,6 @@ export const signUp =
 
 export const logOut = () => (dispatch) => {
   dispatch(userLoggedOut());
-  if (localStorageService.getStayOn() === 'true') return;
   localStorageService.removeAuthData();
 };
 

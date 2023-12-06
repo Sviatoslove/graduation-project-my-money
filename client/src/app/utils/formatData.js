@@ -44,7 +44,7 @@ const getArray = (count, numDays, monthLength) => {
 };
 
 const formatDataForAvatarsFields = (count, data) => {
-  if (data) {
+  if (data && Object.values(data).length) {
     const array = getArray(count);
     let newData =
       typeof data === 'object' ? Object.values({ ...data }) : [...data];

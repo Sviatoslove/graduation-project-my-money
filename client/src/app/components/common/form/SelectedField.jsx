@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getInputClasses } from '../../../utils';
-// import { formatDataForFields, getInputClasses } from '../../../utils'
 
 const SelectedField = ({
   label,
@@ -13,6 +12,7 @@ const SelectedField = ({
   onChange,
   valueTwo,
   disabled,
+  selectClasses
 }) => {
   const optionsArray = Object.values(options)?.map((optionName) => ({
     name: optionName.name,
@@ -25,7 +25,7 @@ const SelectedField = ({
         {label}
       </label>
       <select
-        className={'form-select-lg ' + getInputClasses('form-select', error)}
+        className={selectClasses + ' form-select ' + getInputClasses('form-select', error)}
         value={value}
         onChange={onChange}
         name={name}
@@ -38,7 +38,7 @@ const SelectedField = ({
         >
           {defaultOption}
         </option>
-        {optionsArray?.map((option) => {
+        {optionsArray?.map((option, idx) => {
           if (valueTwo) {
             if (option.value !== valueTwo) {
               return (
@@ -70,6 +70,7 @@ SelectedField.propTypes = {
     PropTypes.string.isRequired,
     PropTypes.object.isRequired,
   ]),
+  selectClasses: PropTypes.string,
   value: PropTypes.string,
   valueTwo: PropTypes.string,
   disabled: PropTypes.bool,

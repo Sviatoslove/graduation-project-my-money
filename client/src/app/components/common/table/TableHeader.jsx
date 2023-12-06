@@ -26,7 +26,7 @@ const TableHeader = ({ columns }) => {
       <tr>
         {Object.keys(columns).map((column) => (
           <th
-            className={'w-content bi bi-caret-' + renderSortArrow(columns[column].path)}
+            className={'bg-transparent w-content bi bi-caret-' + renderSortArrow(columns[column].path)}
             key={column}
             onClick={() =>
               columns[column].path

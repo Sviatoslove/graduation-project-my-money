@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth.middleware');
 const Category = require('../models/Category');
+const Operation = require('../models/Operation');
 const router = express.Router({ mergeParams: true });
 
 router
@@ -62,8 +63,12 @@ router.delete('/:categoryId', auth, async (req, res) => {
     const { categoryId } = req.params;
     const removedCategory = await Category.findById(categoryId);
     if (removedCategory.userId.toString() === req.user._id) {
+      const operations = await Operation.deleteMany({categoryId})
       await removedCategory.deleteOne();
-      return res.send(null);
+      return res.send({
+        _id: 'noTransformData',
+        deletedOperations: operations.deletedCount
+      });
     } else {
       return res
         .status(401)

@@ -105,12 +105,12 @@ const TranslationsForm = () => {
   };
 
   const onSubmit = (data) => {
+    disAppearanceForm()
     let balanceTo = valueConverted;
     if (data.defaultState.fromCount === '0' || fromCurrency === toCurrency)
       balanceTo = data.defaultState.balanceFrom;
     const newData = { ...data.defaultState, balanceTo: balanceTo };
     dispatch(translationCreate(newData));
-    disAppearanceForm();
   };
   
   return (

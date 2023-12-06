@@ -7,7 +7,7 @@ import { useTables } from '../../hooks/useTable';
 
 const UserCardItem = ({ essence, type, content }) => {
   const { counts } = useTables();
-  const title = { categories: 'Категории:', counts: 'Счета:' };
+  const title = { categories: 'Категории', counts: 'Счета' };
 
   const getBadgeProps = (id) => {
     let iconSize;
@@ -36,7 +36,7 @@ const UserCardItem = ({ essence, type, content }) => {
         type ? (
           <>
             <div className="w-112px ws-nw">
-              <div className="mb-4">{title[type]}</div>
+              <div className="mb-4">{title[type]+':'}</div>
               <div className="">
                 Всего:{' '}
                 {essence ? Object.values(essence).length : 'Пока ничего нет'}

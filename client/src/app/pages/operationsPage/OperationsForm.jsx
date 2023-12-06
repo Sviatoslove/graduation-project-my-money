@@ -17,6 +17,8 @@ import { useForms } from '../../hooks/useForms';
 import Badge from '../../components/common/Badge';
 import { validatorConfigOperations } from '../../utils/validator';
 import { selectSuccessNetwork } from '../../store/usersSlice';
+import { SelectedField } from '../../components/common/form';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 let badge;
 
@@ -31,9 +33,12 @@ const OperationsForm = () => {
     successToast,
   } = useSettings();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const successNetwork = useSelector(selectSuccessNetwork());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
+
   const filteredCategories =
     categories &&
     Object.values(categories).filter(
@@ -48,6 +53,7 @@ const OperationsForm = () => {
         balance: 0,
         categoryId: '',
         content: '',
+        status: statusOperation,
         date: `${getDate().split('.').reverse().join('-')}T${
           hour < 10 ? '0' + hour : hour
         }:${minutes < 10 ? '0' + minutes : minutes}`,
@@ -93,64 +99,65 @@ const OperationsForm = () => {
       const countId = localStorageService.getMasterCount();
       const newOperation = {
         ...data.defaultState,
-        status: statusOperation,
         countId,
         userId: localStorageService.getUserId(),
       };
-      if (countId) dispatch(operationCreate({payload:newOperation}))
-      else dispatch(operationCreate({payload:newOperation, contentError: countId}));
+      if (countId) dispatch(operationCreate({ payload: newOperation }));
+      else
+        dispatch(
+          operationCreate({ payload: newOperation, contentError: countId })
+        );
     }
     disAppearanceForm();
   };
 
   return (
-    <>
-      {categoriesDataLoaded ? (
-        <div
-          className={
-            'top-60 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
-          }
+    <div
+      className={
+        'top-60 rounded-3 w-664px shadow-lg py-3 px-5 wrapper-form ' + show
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h3 className="text-center">
+          {currentEssence ? 'Редактирование операции' : 'Создание операции'}
+        </h3>
+        <TextField label="Сумма" {...register('balance')} />
+        <SelectedField
+          label="Выбери статус категории расходы/доходы"
+          options={[
+            { name: 'Расходы', _id: 'decrement' },
+            { name: 'Доходы', _id: 'increment' },
+          ]}
+          value={statusOperation}
+          {...register('status')}
+        />
+        <AvatarsField
+          label="Выбери категорию"
+          options={filteredCategories}
+          classesInputGroup={''}
+          count={16}
+          iconSize="30px"
+          {...register('categoryId')}
+        />
+        <TextField label="Комментарий" {...register('content')} />
+        <TextField label="Дата" type="datetime-local" {...register('date')} />
+        <Button
+          type="submit"
+          classes="w-100 mx-auto mt-4"
+          disabled={!!Object.keys(errors.fields).length}
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <h3 className="text-center">
-              {currentEssence ? 'Редактирование операции' : 'Создание операции'}
-            </h3>
-            <TextField label="Сумма" {...register('balance')} />
-            <AvatarsField
-              label="Выбери категорию"
-              options={filteredCategories}
-              classesInputGroup={''}
-              count={30}
-              iconSize="30px"
-              {...register('categoryId')}
-            />
-            <TextField label="Комментарий" {...register('content')} />
-            <TextField
-              label="Дата"
-              type="datetime-local"
-              {...register('date')}
-            />
-            <Button
-              type="submit"
-              classes="w-100 mx-auto mt-4"
-              disabled={!!Object.keys(errors.fields).length}
-            >
-              {currentEssence ? 'Обновить' : 'Создать'}
-            </Button>
+          {currentEssence ? 'Обновить' : 'Создать'}
+        </Button>
 
-            <Button
-              classes="w-100 mx-auto mt-2"
-              bgColor="warning"
-              onClick={disAppearanceForm}
-            >
-              Назад
-            </Button>
-          </form>
-        </div>
-      ) : (
-        <LoadingSpinners number={3} classesSpinner="spinner-grow-lg" />
-      )}
-    </>
+        <Button
+          classes="w-100 mx-auto mt-2"
+          bgColor="warning"
+          onClick={disAppearanceForm}
+        >
+          Назад
+        </Button>
+      </form>
+    </div>
   );
 };
 

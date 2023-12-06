@@ -3,7 +3,6 @@ import { useTables } from './useTable';
 
 const useAnalytics = () => {
   const { categories, filteredOperations } = useTables();
-
   const getTotalBalance = (array) =>
     array.reduce((acc, item) => (acc = acc + item.balance), 0);
 

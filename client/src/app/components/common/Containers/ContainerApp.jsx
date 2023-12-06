@@ -7,7 +7,7 @@ const ContainerApp = ({ children, classes }) => {
 
 ContainerApp.defaultProps = {
   classes:
-    "mw-1230 w-100 mx-auto mt-2 mh-90vh position-relative shadow-appShadow br-3",
+    "container mx-auto mt-2 mh-98vh position-relative shadow-appShadow br-3 px-0 pt-0 pb-3 bg-app d-flex flex-column",
 };
 
 ContainerApp.propTypes = {

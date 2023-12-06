@@ -14,9 +14,13 @@ import { useForms } from '../../hooks/useForms';
 import { validatorConfigCategories } from '../../utils/validator';
 import Badge from '../../components/common/Badge';
 import { selectSuccessNetwork } from '../../store/usersSlice';
+import { useLocation } from 'react-router-dom';
+import { set } from 'lodash';
+import { SelectedField } from '../../components/common/form';
 
 const CategoriesForm = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const {
     show,
     disAppearanceForm,
@@ -24,13 +28,14 @@ const CategoriesForm = () => {
     currentEssence,
     setSuccessToast,
     setSettingsToast,
-    successToast
+    successToast,
+    appearanceForm,
+    setTypeForm,
+    setCurrentEssence
   } = useSettings();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
-  const successNetwork = useSelector(
-    selectSuccessNetwork()
-  );
+  const successNetwork = useSelector(selectSuccessNetwork());
 
   const initialState = currentEssence['categories']
     ? currentEssence['categories']
@@ -38,6 +43,7 @@ const CategoriesForm = () => {
         name: '',
         content: '',
         icon: '',
+        status: statusOperation,
         iconColor: 'dark',
         textColor: 'light',
         bgColor: 'primary',
@@ -65,7 +71,7 @@ const CategoriesForm = () => {
       });
     }
   }, [successNetwork]);
-  
+
   const onSubmit = (data) => {
     const img = Object.values(categoriesIcons).find(
       (icon) => icon.icon === data.defaultState.icon
@@ -76,12 +82,19 @@ const CategoriesForm = () => {
       dispatch(
         categoriesCreate({
           ...data.defaultState,
-          status: statusOperation,
           dataType: 'categories',
           iconId: img._id,
           like: img.like,
         })
       );
+    }
+    if (location.pathname === '/' || location.pathname === '/charts') {
+      disAppearanceForm();
+      setTimeout(() => {
+        setCurrentEssence('');
+        setTypeForm('operations');
+        appearanceForm();
+      }, 501);
     }
     disAppearanceForm();
   };
@@ -102,7 +115,7 @@ const CategoriesForm = () => {
   return (
     <div
       className={
-        'rounded-3 w-700px mh-880px shadow-lg py-3 px-5 wrapper-form ' + show
+        'rounded-3 w-700px mh-790px shadow-lg py-3 px-5 wrapper-form ' + show
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,13 +126,22 @@ const CategoriesForm = () => {
         </h3>
         <TextField label="Название категории" {...register('name')} />
         <TextField label="Комментарий" {...register('content')} />
+        <SelectedField
+              label="Выбери статус категории расходы/доходы"
+              options={[
+                { name: 'Расходы', _id: 'decrement' },
+                { name: 'Доходы', _id: 'increment' },
+              ]}
+              value={statusOperation}
+              {...register('status')}
+            />
         <AvatarsField
           label="Выбери аватарку"
           {...register('icon')}
           {...avatarsFieldProps}
           options={categoriesIcons}
           count={30}
-          iconSize="30px"
+          iconSize="24px"
         />
         <AvatarsField
           label="Выбери цвет иконки"

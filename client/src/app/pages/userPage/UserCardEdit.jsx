@@ -42,7 +42,7 @@ const UserCardEdit = ({user}) => {
       setSuccessToast(successNetwork);
       setSettingsToast({
         badge:  <UserAvatar image={data.defaultState.avatar} height="56px" />,
-        typeForm: 'successNetwork',
+        type: 'successNetwork',
       });
     }
   }, [successNetwork]);

@@ -25,7 +25,7 @@ const SearchInput = ({ ...rest }) => {
     }
   };
   return (
-    <div className="input-group input-group-lg w-300px mb-1 align-items-center position-relative">
+    <div className="input-group input-group-lg w-300px mb-4 align-items-center position-relative">
       <label className={
           'search-label-custom position-absolute start-50 bottom-100 translate-middle w-maxc ' +
           show

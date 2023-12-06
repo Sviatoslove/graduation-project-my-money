@@ -52,7 +52,7 @@ Pagination.propTypes = {
   likesPage: PropTypes.string,
   countsLikes: PropTypes.array,
   itemsCount: PropTypes.number,
-  pageSize: PropTypes.number.isRequired,
+  pageSize: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   currentPage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onPageChange: PropTypes.func,
 

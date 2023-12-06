@@ -11,6 +11,7 @@ import {
 import Badge from '../../components/common/Badge';
 import { BtnsGroup } from '../../components/common/buttons';
 import localStorageService from '../../services/localStorage.service';
+import { trimStringLength } from '../../utils/trimStringLength';
 
 const CountCard = ({ count, onChange }) => {
   const dispatch = useDispatch();
@@ -27,22 +28,21 @@ const CountCard = ({ count, onChange }) => {
         <div className="position-absolute top-0 start-2 translate-end flex-column d-flex">
           {count.like && (
             <div className="mt-2 w-48px">
-            <i
-              className={
-                'like-for-card bi bi-heart-fill text-danger fs-1 mx-auto lh-0 w-content'
-              }
-            />
+              <i
+                className={
+                  'like-for-card bi bi-heart-fill text-danger fs-1 mx-auto lh-0 w-content'
+                }
+              />
             </div>
           )}
           {count._id === localStorageService.getMasterCount() && (
             <div className="">
-            <img
-            className='like-for-card'
-              src="https://img.icons8.com/plasticine/48/statue-of-liberty.png"
-              alt="logo"
-            />
-          </div>
-
+              <img
+                className="like-for-card"
+                src="https://img.icons8.com/plasticine/48/statue-of-liberty.png"
+                alt="logo"
+              />
+            </div>
           )}
         </div>
 
@@ -53,7 +53,7 @@ const CountCard = ({ count, onChange }) => {
             alt="icon"
             style={{ width: '100px' }}
           />
-          <h5 className="card-title ff-roboto ls-1">{count.name}</h5>
+          <h5 className="card-title ff-roboto ls-1">{trimStringLength(count.name, 12)}</h5>
           <hr />
         </div>
         <div className="card-body d-flex flex-column p-0 text-center">
@@ -65,11 +65,13 @@ const CountCard = ({ count, onChange }) => {
             ) : (
               'Loading...'
             )}
+            {count.content && (
+              <div className="card-text">
+                <p className="h6">Описание:</p>{' '}
+                <p className="ff-BS">{trimStringLength(count.content, 50)}</p>
+              </div>
+            )}
 
-            <div className="card-text">
-              <p className="h6">Описание:</p>{' '}
-              <p className="ff-BS">{count.content}</p>
-            </div>
             <p className="card-text">Создан: {displayDate(count.createdAt)}</p>
             <p className="card-text">
               Обновлён: {displayDate(count.updatedAt)}
@@ -80,7 +82,7 @@ const CountCard = ({ count, onChange }) => {
               <p className="fw-bold ls-2 fs-5">Баланс:</p>
               <div className="flex-grow-1 justify-content-center d-flex">
                 <p className="fw-bold ls-1 fs-4 align-items-center d-flex">
-                  {count.balance}{' '}
+                  {trimStringLength(count.balance, 10)}
                   <img
                     src={currency[count.currency]?.icon}
                     alt="img"
@@ -94,7 +96,7 @@ const CountCard = ({ count, onChange }) => {
         <BtnsGroup
           count={4}
           id={count._id}
-          dataType={['like', 'edit', 'remove', 'masterCount']}
+          dataType={['like', 'counts', 'remove', 'masterCount']}
           classes="btn-sm"
           func={(e) => onChange(e, count)}
           icon={[

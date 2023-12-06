@@ -69,14 +69,7 @@ const CountsForm = () => {
     icon = data.defaultState.icon;
     disAppearanceForm();
     if (currentEssence) {
-      dispatch(
-        countUpdate({
-          ...data.defaultState,
-          // color: countsData[data.defaultState.type].color,
-          // textColor: countsData[data.defaultState.type].textColor, ////&&&&&&&&&&&&&&&&&&&&7777777777777 delete
-          // typeName: countsData[data.defaultState.type].name,
-        })
-      );
+      dispatch(countUpdate(data.defaultState));
     } else {
       dispatch(
         countCreate({

@@ -50,6 +50,19 @@ const operationsSlice = createSlice({
       if (!Object.keys(state.entities).length) state.dataLoaded = false;
       state.isLoading = false;
     },
+    operationsRemovedAfterDeleteCategory: (state, action) => {
+      if (state.entities) {
+        const filteredOperations = Object.values(state.entities).filter(
+          ({ categoryId }) => categoryId !== action.payload
+        );
+        if (filteredOperations.length) {
+          state.entities = filteredOperations.reduce(
+            (acc, operation) => (acc = { ...acc, [operation._id]: operation }),
+            {}
+          );
+        } else state.entities = null;
+      }
+    },
     operationsDataRemoved: (state) => {
       state.entities = null;
       state.dataLoaded = false;
@@ -68,6 +81,7 @@ const {
   operationsUpdatedReceived,
   operationsRemovedReceived,
   operationsDataRemoved,
+  operationsRemovedAfterDeleteCategory,
 } = actions;
 
 export const operationCreate =
@@ -134,6 +148,11 @@ export const operationRemove = (payload) => async (dispatch) => {
     dispatch(operationsRequestedFailed());
   }
 };
+
+export const operationsFilterAfterRemovedCategory =
+  (payload) => async (dispatch) => {
+    dispatch(operationsRemovedAfterDeleteCategory(payload));
+  };
 
 export const operationsDestroyed = () => async (dispatch) => {
   dispatch(operationsDataRemoved());

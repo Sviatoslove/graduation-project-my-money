@@ -25,7 +25,7 @@ const TableBody = ({ columns, data }) => {
           <tr key={item._id}>
             {Object.keys(columns).map((column, id) => {
               return (
-                <td key={id + item._id}>
+                <td className='bg-transparent' key={id + item._id}>
                   {renderContent(item, column, idx)}
                 </td>
               );

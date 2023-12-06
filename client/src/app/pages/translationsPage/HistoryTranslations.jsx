@@ -17,6 +17,7 @@ import {
   selectCountsStatus,
 } from '../../store/countsSlice';
 import Badge from '../../components/common/Badge';
+import addIcon from '../../../assets/icons/patch-plus-fill.svg';
 import currency from '../../mock/currency';
 import { Button } from '../../components/common/buttons';
 import Table from '../../components/common/table/Table';
@@ -25,7 +26,11 @@ import Pagination from '../../components/common/pagination';
 import { useSettings } from '../../hooks/useSettings';
 import _ from 'lodash';
 import EmptyList from '../../components/common/EmptyList';
-import { useNavigate } from 'react-router-dom';
+import {
+  ContainerScale,
+  ContainerShow,
+} from '../../components/common/Containers';
+import FormLayout from '../../layouts/FormLayout';
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();
@@ -35,7 +40,6 @@ const HistoryTranslations = () => {
     sortBy,
     counts: countsObjects,
   } = useTables();
-  const navigate=useNavigate()
   const { essenceHandleToEdit } = useSettings();
   const countsDataLoaded = useSelector(selectCountsDataStatus());
   const countsLoaded = useSelector(selectCountsStatus());
@@ -43,13 +47,13 @@ const HistoryTranslations = () => {
   const translationsDataLoaded = useSelector(selectTranslationsDataLoaded());
   const translations = useSelector(selectTranslations());
   const translationsIsLoading = useSelector(selectTranslationsLoadedStatus());
-  const pageSize = 12;
+  const pageSize = 8;
 
   const counts = {
     0: {
       name: 'Пополнение',
-      type: '652e4f70498ed451c3f23b9f',
-      icon: 'https://img.icons8.com/clouds/100/cash-in-hand.png',
+      type: '65705891f6b8c00a9bfd1e9a',
+      icon: 'https://img.icons8.com/clouds/36/cash-in-hand.png',
     },
     ...countsObjects,
   };
@@ -60,26 +64,22 @@ const HistoryTranslations = () => {
     if (!countsLoaded) dispatch(loadCounts());
   }, []);
 
-  useEffect(()=> {
-    if(translations && !translations) {
-      navigate('/counts')
-    }
-
-    console.log('translations:', translations)
-  },[translations])
-
   if (translationsDataLoaded && countsData) {
     const count = Object?.values(translations)?.length;
 
     const columns = {
       number: {
         name: 'Номер',
-        component: (translation, idx) => (
-          <img
-            src={`https://img.icons8.com/arcade/56/${idx + 1}.png`}
-            alt={idx + 1}
-          />
-        ),
+        component: (translation, idx) => {
+          let num = idx + 1;
+          if (currentPage > 1) num = pageSize * (currentPage - 1) + num;
+          return (
+            <img
+              src={`https://img.icons8.com/arcade/56/${num}.png`}
+              alt={idx + 1}
+            />
+          );
+        },
       },
       date: {
         path: 'date',
@@ -213,28 +213,41 @@ const HistoryTranslations = () => {
       );
 
     return (
-      <Container classes="br-10 shadow-custom p-3">
-        <Container newClasses={'mt-10 w-98 mx-auto'}>
-          <Table columns={columns} data={translationsCrop} c />
-        </Container>
-        <Container newClasses={'mx-auto mt-auto mb-3'}>
-          <Pagination
-            itemsCount={count}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+      <Container classes="br-10 shadow-custom pt-3 pb-3">
+        <Container newClasses="container w-99 d-flex mx-auto bg-paper flex-column br-10 shadow-custom pb-3 mh-84vh">
+          <ContainerScale classes={'mt-10 w-98 mx-auto flex-grow-1'}>
+            <Table columns={columns} data={translationsCrop} />
+          </ContainerScale>
+          <ContainerScale classes={'d-flex justify-content-between'}>
+            <Pagination
+              itemsCount={count}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+            <Button
+              bgColor="primary"
+              classes="shadow-lg p-2 ms-auto"
+              dataType="translations"
+              onClick={essenceHandleToEdit}
+              imgSrc={addIcon}
+            />
+          </ContainerScale>
         </Container>
       </Container>
     );
   } else
     return (
-      <Container classes="br-10 shadow-custom p-3">
-        <EmptyList
-          title="свой первый перевод"
-          dataType="translationsAdd"
-          onClick={essenceHandleToEdit}
-        />
+      <Container classes="br-10 shadow-custom pt-3 pb-3">
+        <Container newClasses="container w-99 d-flex mx-auto bg-paper flex-column br-10 shadow-custom pb-3">
+          <EmptyList
+            title="свой первый перевод"
+            dataType="translations"
+            onClick={essenceHandleToEdit}
+            imgSrc="https://img.icons8.com/clouds/200/growing-money.png"
+            classes="mh-80vh"
+          />
+        </Container>
       </Container>
     );
 };

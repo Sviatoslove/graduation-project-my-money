@@ -5,6 +5,9 @@ import {
   formatDataForAvatarsFields,
   getFindActiveIndex,
 } from '../../../utils/formatData';
+import { useSettings } from '../../../hooks/useSettings';
+import addIcon from '../../../../assets/icons/patch-plus-fill.svg';
+import { useTables } from '../../../hooks/useTable';
 
 const AvatarsField = ({
   label,
@@ -21,6 +24,9 @@ const AvatarsField = ({
   iconSize,
   error,
 }) => {
+  const { typeForm, essenceHandleToEdit } = useSettings();
+  const buttonAddStatus = typeForm === 'operations';
+  const { categoriesIcons } = useTables();
   const formatOptions = formatDataForAvatarsFields(count, options);
   const [index, setIndex] = useState(
     getFindActiveIndex(value, formatOptions) || 0
@@ -57,47 +63,65 @@ const AvatarsField = ({
   };
 
   const drawingAvatars = (n) => {
-    return formatOptions[n].map((item) => {
-      const active = value === (item.imgSrc || item.icon) ? 'active' : '';
-      let settingsBtn = {
-        name: name,
-        key: item._id,
-        dataValue: item.imgSrc || item.icon || item.color,
-        onClick: handleClick,
-        outline: true,
-        classes: `avatar border-0 bg-transparent br-10 ${active}`,
-        zIndex: 0,
-        iconSize,
-        ...item,
-      };
-      if (item.dataType === 'iconsForCategories') {
-        const activeColor = value === item.color ? 'active' : '';
-        settingsBtn = {
-          ...settingsBtn,
+    if (formatOptions) {
+      return formatOptions[n]?.map((item) => {
+        const active = value === (item.imgSrc || item.icon) ? 'active' : '';
+        let settingsBtn = {
           name: name,
-          outline: item.color ? false : true,
-          bgColor: valueBgColor ? valueBgColor : item.color,
-          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor} px-2 py-0`,
-          textColor: valueTextColor,
-          iconColor: valueIconColor,
-          width: item.color ? '24px' : '',
-          height: item.color ? '24px' : '80px',
-          children: nameCategory && nameCategory.slice(0, 2),
+          key: item._id,
+          dataValue: item.imgSrc || item.icon || item.color,
+          onClick: handleClick,
+          outline: true,
+          classes: `avatar border-0 bg-transparent br-10 ${active}`,
+          zIndex: 0,
+          iconSize,
+          ...item,
         };
-      }
-      if (item.dataType === 'categories') {
-        const active = value === item._id ? 'active' : '';
-        settingsBtn = {
-          ...settingsBtn,
-          name: name,
-          dataValue: item._id,
-          classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center h-content`,
-          children: item.name.slice(0, 8),
-        };
-      }
+        if (item.dataType === 'iconsForCategories') {
+          const activeColor = value === item.color ? 'active' : '';
+          settingsBtn = {
+            ...settingsBtn,
+            name: name,
+            outline: item.color ? false : true,
+            bgColor: valueBgColor ? valueBgColor : item.color,
+            classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} ${activeColor} px-2 py-0`,
+            textColor: valueTextColor,
+            iconColor: valueIconColor,
+            width: item.color ? '16px' : '',
+            height: item.color ? '16px' : '60px',
+            children: nameCategory && nameCategory.slice(0, 2),
+          };
+        }
+        if (item.dataType === 'categories') {
+          const active = value === item._id ? 'active' : '';
+          settingsBtn = {
+            ...settingsBtn,
+            name: name,
+            dataValue: item._id,
+            classes: `avatar border-0 m-1 br-5 categories d-flex flex-column ${active} text-center h-content`,
+            children: item.name.slice(0, 8),
+          };
+        }
 
-      return <Button {...settingsBtn} />;
-    });
+        return <Button {...settingsBtn} />;
+      });
+    }
+    if (!formatOptions && buttonAddStatus) {
+      return (
+        <Button
+          bgColor="primary"
+          classes="shadow-lg p-2 w-content br-5"
+          dataType="categories"
+          onClick={(e) =>
+            essenceHandleToEdit(e, {
+              ['iconsForCategories']: categoriesIcons,
+            })
+          }
+          imgSrc={addIcon}
+          iconSize={'30px'}
+        />
+      );
+    }
   };
 
   return (
@@ -105,13 +129,30 @@ const AvatarsField = ({
       <label htmlFor={name}>{label}</label>
       <div
         className={
-          'input-group mt-2 justify-content-center ' + classesInputGroup
+          'input-group mt-2 align-content-center justify-content-center ' +
+          classesInputGroup
         }
       >
         {drawingAvatars(index)}
+        {formatOptions && buttonAddStatus && (
+          <div className="my-auto ">
+            <Button
+              bgColor="primary"
+              classes="shadow-lg p-2 w-content br-5 ms-2"
+              dataType="categories"
+              onClick={(e) =>
+                essenceHandleToEdit(e, {
+                  ['iconsForCategories']: categoriesIcons,
+                })
+              }
+              imgSrc={addIcon}
+              iconSize={'30px'}
+            />
+          </div>
+        )}
         {error && <div className="invalid-feedback p-2 d-block">{error}</div>}
       </div>
-      {formatOptions.length > 1 && (
+      {formatOptions && formatOptions.length > 1 && (
         <div className="text-center mt-2">
           <button
             className={

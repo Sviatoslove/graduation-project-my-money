@@ -6,7 +6,7 @@ const Container = ({ children, classes, newClasses }) => {
     <div
       className={
         !newClasses
-          ? "w-98 mh-i d-flex mx-auto mt-4 flex-column " +
+          ? "container w-98 d-flex mx-auto mt-3 flex-column " +
             classes
           : newClasses
       }

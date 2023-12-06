@@ -8,7 +8,6 @@ import {
   Container,
   ContainerCards,
   ContainerScale,
-  ContainerShow,
 } from '../../components/common/Containers';
 import { paginate } from '../../utils';
 import Pagination from '../../components/common/pagination';
@@ -16,7 +15,6 @@ import getCountLike from '../../utils/getCountLike';
 import Translations from '../translationsPage/Translations';
 import CountCard from './CountCard';
 import Button from '../../components/common/buttons/Button';
-import FormForCount from './FormForCount';
 import LoadingSpinners from '../../components/common/LoadingSpinners';
 import { useSettings } from '../../hooks/useSettings';
 import { useTables } from '../../hooks/useTable';
@@ -34,7 +32,7 @@ const CountsPage = () => {
 
   const countsIsLoading = useSelector(selectCountsLoadingStatus());
 
-  const pageSize = 6;
+  const pageSize = 3;
 
   useEffect(() => {
     const count = getCountLike(counts);
@@ -80,23 +78,11 @@ const CountsPage = () => {
     );
   }
   return (
-    <Container classes="shadow-custom br-10 p-3">
-      <ContainerShow type={'add'}>
-        <FormForCount />
-      </ContainerShow>
-      {!count && (
-        <EmptyList
-          title="свой первый счёт"
-          dataType="add"
-          onClick={essenceHandleToEdit}
-        />
-      )}
-
+    <>
       {count ? (
-        <>
+        <Container classes="shadow-custom br-10 p-3 bg-paper mh-87vh">
           <ContainerScale>
             <Translations onChange={essenceHandleToEdit} counts={counts} />
-
             <ContainerCards colsNumber={'3'} gap={'4'}>
               {countsCrop.map((count, idx) => (
                 <CountCard
@@ -108,7 +94,7 @@ const CountsPage = () => {
             </ContainerCards>
           </ContainerScale>
 
-          <ContainerScale classes={`mt-auto footer-group d-flex mb-4`}>
+          <ContainerScale classes={`footer-group d-flex mt-auto`}>
             <Pagination
               likesPage={likesPage}
               countsLikes={countsLikes}
@@ -119,7 +105,7 @@ const CountsPage = () => {
             />
 
             <div
-              className="btn-group mt-2 w-content ms-auto me-3"
+              className="btn-group mt-2 w-content ms-auto"
               role="group"
               aria-label="Button group"
             >
@@ -141,15 +127,22 @@ const CountsPage = () => {
               <Button
                 bgColor="primary"
                 classes="shadow-lg p-2"
-                dataType="add"
+                dataType='counts'
                 onClick={essenceHandleToEdit}
                 imgSrc={addIcon}
               />
             </div>
           </ContainerScale>
-        </>
-      ) : null}
-    </Container>
+        </Container>
+      ) : (
+        <EmptyList
+          title="свой первый счёт"
+          dataType='counts'
+          imgSrc='https://img.icons8.com/clouds/200/wallet.png'
+          onClick={essenceHandleToEdit}
+        />
+      )}
+    </>
   );
 };
 

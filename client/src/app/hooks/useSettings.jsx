@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { operationRemove } from '../store/operationsSlice';
 import { categoriesRemove, categoriesUpdate } from '../store/categoriesSlice';
 import { countRemove, countUpdate } from '../store/countsSlice';
@@ -16,6 +16,7 @@ import { translationRemove } from '../store/translationsSlice';
 import localStorageService from '../services/localStorage.service';
 import getDate from '../utils/getDate';
 import { displayDate } from '../utils';
+import Badge from '../components/common/Badge';
 
 const SettingsContext = React.createContext();
 
@@ -24,7 +25,6 @@ const useSettings = () => useContext(SettingsContext);
 const SettingsProvider = ({ children }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
   const { type } = useParams();
   const [formType, setFormType] = useState(
     type === 'register' ? type : 'login'
@@ -137,11 +137,12 @@ const SettingsProvider = ({ children }) => {
 
   const onChangeModal = (essence, idEssence) => {
     if (essence === 'counts') {
-      if(idEssence === user.masterCount) {
-        localStorageService.removeMasterCount()
-        dispatch(updateUser({payload:{...user, masterCount: ''}}))
+      if (idEssence === user.masterCount) {
+        localStorageService.removeMasterCount();
+        dispatch(updateUser({ payload: { ...user, masterCount: '' } }));
       }
-      dispatch(countRemove(idEssence))};
+      dispatch(countRemove(idEssence));
+    }
     if (essence === 'operations') dispatch(operationRemove(idEssence));
     if (essence === 'categories') dispatch(categoriesRemove(idEssence));
     if (essence === 'translations') dispatch(translationRemove(idEssence));
@@ -154,31 +155,38 @@ const SettingsProvider = ({ children }) => {
     const btnType = btn?.dataset.type;
     const essence = currentEssence?.dataType;
     const idEssence = btn?.id;
-    const titleModal = {
-      categories: 'категории',
-      counts: 'счёта',
-      operations: 'операции',
-      translations: 'перевода',
-    };
-    const contentModal = {
-      categories: `категорию: ${currentEssence?.name}`,
-      counts: `счёт ${currentEssence?.name} и все связанные с ним операции и переводы`,
-      operations: `операцию от ${getDate(currentEssence?.date)} числа`,
-      translations: `перевод от ${displayDate(currentEssence?.createdAt)}`,
-    };
     switch (btnType) {
-      case 'add':
+      case 'operations':
         setCurrentEssence(currentEssence);
         setTypeForm(btnType);
         appearanceForm();
         break;
-      case 'edit':
-        setCurrentEssence(currentEssence);
+      case 'categories': {
+        if (location.pathname === '/') {
+          disAppearanceForm();
+          setTimeout(() => {
+            setCurrentEssence(currentEssence);
+            setTypeForm(btnType);
+            appearanceForm();
+          }, 501);
+        } else {
+          setCurrentEssence(currentEssence);
+          setTypeForm(btnType);
+          appearanceForm();
+        }
+        break;
+      }
+      case 'translations':
         setTypeForm(btnType);
+        appearanceForm();
+        break;
+      case 'counts':
+        setTypeForm(btnType);
+        setCurrentEssence(currentEssence);
         appearanceForm();
         break;
       case 'masterCount':
-        if(idEssence !== user.masterCount) {
+        if (idEssence !== user.masterCount) {
           localStorageService.setMasterCount(idEssence);
           const newUser = { ...user, masterCount: idEssence };
           dispatch(
@@ -199,25 +207,67 @@ const SettingsProvider = ({ children }) => {
         if (essence === 'counts') dispatch(countUpdate(editedEssence));
         break;
       case 'remove':
+        const titleModal = {
+          categories: 'категории',
+          counts: 'счёта',
+          operations: 'операции',
+          translations: 'перевода',
+        };
+        const contentModal = {
+          categories: {
+            start: 'категорию: ',
+            name: currentEssence?.name,
+            color: currentEssence?.textColor,
+            badge: (
+              <Badge
+                color={currentEssence.bgColor}
+                iconColor={currentEssence.iconColor}
+                icon={currentEssence.icon}
+                classes='br-50 '
+                iconSize='fs-2 '
+              />
+            ),
+            end: ' и все связанные с ней операции?',
+          },
+          counts: {
+            start: 'счёт: ',
+            name: currentEssence?.name,
+            color: currentEssence?.color,
+            badge: (
+              <Badge
+                imgSrc={currentEssence.icon}
+                color={currentEssence.color}
+
+                iconSize='46px'
+                classes='br-50 '
+                imgClasses='m'
+              />
+            ),
+            end: ' и все связанные с ним операции и переводы?',
+          },
+          operations: {
+            start: 'операцию от ',
+            name: getDate(currentEssence?.date),
+            end: '?',
+          },
+          translations: {
+            start: 'перевод от ',
+            name: getDate(currentEssence?.date),
+            end: '?',
+          },
+        };
         setSettingsModal({
           showModal: true,
           titleModal: `Удаление ${titleModal[essence]}:`,
-          contentModal: `Вы уверены, что желаете удалить ${contentModal[essence]}?`,
+          contentStart: 'Вы уверены, что желаете удалить ',
+          contentModal: contentModal[essence],
           onChangeModal: () => onChangeModal(essence, idEssence),
           onClose: () => setSettingsModal({ showModal: false }),
         });
         break;
-      case 'translationsAdd':
-        if (location.pathname === '/counts/translations') {
-          navigate('/counts');
-          setTimeout(() => {
-            setTypeForm(btnType);
-            appearanceForm();
-          }, 0);
-        } else {
-          setTypeForm(btnType);
-          appearanceForm();
-        }
+      default:
+        setCurrentEssence(currentEssence);
+        appearanceForm();
         break;
     }
   };
@@ -252,6 +302,8 @@ const SettingsProvider = ({ children }) => {
         settingsModal,
         successToast,
         startClearFunc,
+        setTypeForm,
+        setStatusOperation,
       }}
     >
       {children}

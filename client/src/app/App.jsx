@@ -12,6 +12,7 @@ import BackBtn from './components/common/buttons/BackBtn';
 import { TablesProvider } from './hooks/useTable';
 import Toast from './components/common/Toast';
 import ModalWindow from './components/common/ModalWindow';
+import FormLayout from './layouts/FormLayout';
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn());
@@ -22,20 +23,14 @@ function App() {
   return (
     <AppLoader>
       <ContainerApp>
-        {!path && (
-          <BackBtn
-            classes={
-              'w-content shadow-custom position-absolute top-100px start-20px'
-            }
-            zIndex={2}
-          />
-        )}
+        {!path && <BackBtn />}
         <SettingsProvider>
           <TablesProvider>
             <Navbar />
             {elements}
-            <Toast/>
-            <ModalWindow/>
+            <FormLayout/>
+            <Toast />
+            <ModalWindow />
           </TablesProvider>
         </SettingsProvider>
       </ContainerApp>
