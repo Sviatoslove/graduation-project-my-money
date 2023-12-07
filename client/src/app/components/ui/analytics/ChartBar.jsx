@@ -24,7 +24,7 @@ import {
   getUniquenessEssence,
 } from '../../../utils/analyticsHelp';
 import { useSelector } from 'react-redux';
-import { selectOperationsLoadingStatus } from '../../../store/operationsSlice';
+import { selectOperationsLoading } from '../../../store/operationsSlice';
 import localStorageService from '../../../services/localStorage.service';
 import { useResize } from '../../../hooks/useResize';
 
@@ -50,7 +50,7 @@ const ChartBar = () => {
   const [filteredQuery, setFilteredQuery] = useState({});
   const [placeholderMonth, setPlaceholderMonth] = useState('');
   const [placeholderWeek, setPlaceholderWeek] = useState('Выберите неделю');
-  const operationsIsLoading = useSelector(selectOperationsLoadingStatus());
+  const operationsIsLoading = useSelector(selectOperationsLoading());
 
   const { register, data } = useForms({
     defaultState: initialState,

@@ -4,10 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TextField from '../common/form/TextField';
 import RadioField from '../common/form/RadioField';
 import CheckboxField from '../common/form/CheckboxField';
-import {
-  selectError,
-  signUp,
-} from '../../store/usersSlice';
+import { selectError, signUp } from '../../store/usersSlice';
 import { validatorConfigRegister } from '../../utils/validator';
 import { useForms } from '../../hooks/useForms';
 
@@ -21,12 +18,13 @@ const RegisterForm = () => {
         name: '',
         password: '',
         sex: 'male',
+        stayOn: false,
         license: false,
       },
       errors: validatorConfigRegister,
     },
     errorRegister
-  );;
+  );
 
   const onSubmit = (data, path) => {
     if (errors.isValid) return;
@@ -45,6 +43,9 @@ const RegisterForm = () => {
         ]}
         {...register('sex')}
       />
+      <CheckboxField {...register('stayOn')}>
+        Оставаться в системе
+      </CheckboxField>
       <CheckboxField {...register('license')}>
         Согласен с <a href="">лицензионным соглашением</a>
       </CheckboxField>

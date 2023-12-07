@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProgressCell = ({ value, name, color, icon, iconColor, iconSize }) => {
+const ProgressCell = ({ value, name, color }) => {
   return (
     <div
       className="progress progress-cell-percentage"
@@ -18,7 +18,7 @@ const ProgressCell = ({ value, name, color, icon, iconColor, iconSize }) => {
         {!name ? (
           <strong>У вас ещё не было расходов/доходов в этом месяце</strong>
         ) : (
-            <strong className="w-content mx-auto">{value>=2 ? ((value.includes('.') ? value.split('.')[0] : value) + '%') : ''}</strong>
+            <strong className={'w-content mx-auto' + (color === 'light' ? ' text-dark' : '')}>{value>=2 ? ((value.includes('.') ? value.split('.')[0] : value) + '%') : ''}</strong>
         )}
       </div>
     </div>
@@ -34,10 +34,7 @@ ProgressCell.defaultProps = {
 ProgressCell.propTypes = {
   value: PropTypes.string,
   name: PropTypes.string,
-  color: PropTypes.string,
-  icon: PropTypes.string,
-  iconColor: PropTypes.string,
-  iconSize: PropTypes.string,
+  color: PropTypes.string
 };
 
 export default ProgressCell;

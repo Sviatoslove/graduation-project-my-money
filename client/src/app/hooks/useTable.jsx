@@ -5,6 +5,7 @@ import {
   loadOperations,
   selectOperations,
   selectOperationsDataLoaded,
+  selectOperationsLoading,
 } from '../store/operationsSlice';
 import _ from 'lodash';
 import { paginate } from '../utils';
@@ -17,10 +18,14 @@ import {
   selectCategoriesDataloaded,
   loadСategoriesIcons,
   selectCategoriesIconsDataloaded,
-  selectCategoriesIcons
+  selectCategoriesIcons,
 } from '../store/categoriesSlice';
 import getDate from '../utils/getDate';
-import { loadCounts, selectCounts, selectCountsStatus } from '../store/countsSlice';
+import {
+  loadCounts,
+  selectCounts,
+  selectCountsStatus,
+} from '../store/countsSlice';
 import localStorageService from '../services/localStorage.service';
 
 const TablesContext = React.createContext();
@@ -33,8 +38,12 @@ const TablesProvider = ({ children }) => {
   let filteredCategories = [];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(localStorageService.getPageSize()||6);
-  const [masterCount, setMasterCount] = useState(localStorageService.getMasterCount()||'');
+  const [pageSize, setPageSize] = useState(
+    localStorageService.getPageSize() || 6
+  );
+  const [masterCount, setMasterCount] = useState(
+    localStorageService.getMasterCount() || ''
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState({ path: 'date', order: 'desc' });
   const [dataCategory, setCategoryData] = useState({
@@ -50,6 +59,7 @@ const TablesProvider = ({ children }) => {
   const countsDataLoaded = useSelector(selectCountsStatus());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const operations = useSelector(selectOperations());
+  const operationsIsLoading = useSelector(selectOperationsLoading());
   const categories = useSelector(selectCategories());
   const counts = useSelector(selectCounts());
 
@@ -62,7 +72,7 @@ const TablesProvider = ({ children }) => {
       if (!operationsDataLoaded) dispatch(loadOperations());
       if (!categoriesDataLoaded) dispatch(loadCategories());
       if (!countsDataLoaded) dispatch(loadCounts());
-    if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
+      if (!categoriesIconsDataLoaded) dispatch(loadСategoriesIcons());
     }
   }, [isLoggedIn]);
 
@@ -123,7 +133,6 @@ const TablesProvider = ({ children }) => {
               if (dataCategory.category === op.categoryId) return op;
             } else return op;
           })
-
       );
     }
   };
@@ -173,7 +182,9 @@ const TablesProvider = ({ children }) => {
         filteredOperations,
         clearFilter,
         categoriesIcons,
-        categoriesDataLoaded,setCategoryData
+        categoriesDataLoaded,
+        setCategoryData,
+        operationsIsLoading
       }}
     >
       {children}

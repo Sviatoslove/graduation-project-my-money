@@ -6,7 +6,6 @@ import Button from '../../components/common/buttons/Button';
 import {
   categoriesUpdate,
   categoriesCreate,
-  selectSuccessNetworkCategories,
 } from '../../store/categoriesSlice';
 import { useSettings } from '../../hooks/useSettings';
 import colorsIconsForCategories from '../../mock/colorIconsForCategories';
@@ -15,8 +14,8 @@ import { validatorConfigCategories } from '../../utils/validator';
 import Badge from '../../components/common/Badge';
 import { selectSuccessNetwork } from '../../store/usersSlice';
 import { useLocation } from 'react-router-dom';
-import { set } from 'lodash';
 import { SelectedField } from '../../components/common/form';
+import { getColorsForCategories } from '../../utils/getColorForCategories';
 
 const CategoriesForm = () => {
   const dispatch = useDispatch();
@@ -31,7 +30,8 @@ const CategoriesForm = () => {
     successToast,
     appearanceForm,
     setTypeForm,
-    setCurrentEssence
+    setCurrentEssence,
+    colors
   } = useSettings();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
@@ -44,9 +44,7 @@ const CategoriesForm = () => {
         content: '',
         icon: '',
         status: statusOperation,
-        iconColor: 'dark',
-        textColor: 'light',
-        bgColor: 'primary',
+        ...colors,
       };
   const { register, data, handleSubmit, errors } = useForms({
     defaultState: initialState,
@@ -77,7 +75,7 @@ const CategoriesForm = () => {
       (icon) => icon.icon === data.defaultState.icon
     );
     if (currentEssence['categories']) {
-      dispatch(categoriesUpdate(data.defaultState));
+      dispatch(categoriesUpdate({payload: data.defaultState}));
     } else {
       dispatch(
         categoriesCreate({
@@ -140,7 +138,7 @@ const CategoriesForm = () => {
           {...register('icon')}
           {...avatarsFieldProps}
           options={categoriesIcons}
-          count={30}
+          count={36}
           iconSize="24px"
         />
         <AvatarsField

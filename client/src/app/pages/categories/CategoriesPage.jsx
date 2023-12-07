@@ -74,7 +74,7 @@ const CategoriesPage = () => {
         {categoriesDataLoaded && countsCrop.length ? (
           <>
             <ContainerScale classes="mt-5">
-              <ContainerCards colsNumber="5" gap="4">
+              <ContainerCards colsNumber="5" gap="2">
                 {categoriesIcons ? (
                   countsCrop?.map((category) => (
                     <CategoryCard
@@ -88,7 +88,7 @@ const CategoriesPage = () => {
                 )}
               </ContainerCards>
             </ContainerScale>
-            <ContainerScale classes={'mt-auto footer-group d-flex mb-4'}>
+            <ContainerScale classes={'mt-auto footer-group d-flex mb-3'}>
               <Pagination
                 itemsCount={count}
                 pageSize={pageSize}
@@ -97,7 +97,7 @@ const CategoriesPage = () => {
               />
               <Button
                 bgColor="primary"
-                classes="shadow-lg ms-auto mt-2 me-3"
+                classes="shadow-lg ms-auto mt-2 me-3 p-2"
                 dataType="categories"
                 onClick={(e) =>
                   essenceHandleToEdit(e, {
@@ -105,7 +105,6 @@ const CategoriesPage = () => {
                   })
                 }
                 imgSrc={addIcon}
-                iconSize={'52px'}
               />
             </ContainerScale>
           </>

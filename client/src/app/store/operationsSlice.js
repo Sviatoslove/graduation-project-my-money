@@ -128,7 +128,7 @@ export const operationUpdate = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.update(payload);
     dispatch(operationsUpdatedReceived(content['operation']));
-    dispatch(countUpdate(content['count']));
+    dispatch(countUpdate({ payload: content['count'] }));
     dispatch(setSuccessNetwork('Операция успешно обновлена'));
   } catch (error) {
     dispatch(setError(error));
@@ -141,7 +141,7 @@ export const operationRemove = (payload) => async (dispatch) => {
   try {
     const { content } = await operationsService.remove(payload);
     dispatch(operationsRemovedReceived(payload));
-    dispatch(countUpdate(content));
+    dispatch(countUpdate({ payload: content }));
     dispatch(setSuccessNetwork(['Операция успешно удалена', 'remove']));
   } catch (error) {
     dispatch(setError(error));
@@ -159,7 +159,7 @@ export const operationsDestroyed = () => async (dispatch) => {
 };
 
 export const selectOperations = () => (state) => state.operations.entities;
-export const selectOperationsLoadingStatus = () => (state) =>
+export const selectOperationsLoading = () => (state) =>
   state.operations.isLoading;
 export const selectOperationsDataLoaded = () => (state) =>
   state.operations.dataLoaded;

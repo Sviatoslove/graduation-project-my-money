@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Container = ({ children, classes, newClasses }) => {
+const Container = ({ children, classes, newClasses, zIndex }) => {
   return (
     <div
       className={
@@ -10,6 +10,7 @@ const Container = ({ children, classes, newClasses }) => {
             classes
           : newClasses
       }
+      style={{zIndex:zIndex}}
     >
       {children}
     </div>
@@ -21,6 +22,7 @@ Container.defaultProps={
 }
 
 Container.propTypes = {
+  zIndex: PropTypes.number,
   newClasses: PropTypes.string,
   classes: PropTypes.string,
   children: PropTypes.oneOfType([

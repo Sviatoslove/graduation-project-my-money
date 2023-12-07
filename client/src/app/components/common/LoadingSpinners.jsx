@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { getArray } from "../../utils/formatData";
+import randomNum from "../../utils/getColorForCategories";
 
 const LoadingSpinners = ({
   number,
@@ -16,10 +17,6 @@ const LoadingSpinners = ({
     const blue = randomNum(0, 255);
     const alpha = randomNum(5, 10) / 10;
     return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-  }
-
-  function randomNum(min, max) {
-    return Math.round(min - 0.5 + Math.random() * (max - min + 1));
   }
 
   const spinners = getArray(number).reduce(

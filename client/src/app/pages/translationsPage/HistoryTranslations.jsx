@@ -28,9 +28,7 @@ import _ from 'lodash';
 import EmptyList from '../../components/common/EmptyList';
 import {
   ContainerScale,
-  ContainerShow,
 } from '../../components/common/Containers';
-import FormLayout from '../../layouts/FormLayout';
 
 const HistoryTranslations = () => {
   const dispatch = useDispatch();

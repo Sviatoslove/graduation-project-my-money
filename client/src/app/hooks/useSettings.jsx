@@ -15,8 +15,8 @@ import {
 import { translationRemove } from '../store/translationsSlice';
 import localStorageService from '../services/localStorage.service';
 import getDate from '../utils/getDate';
-import { displayDate } from '../utils';
 import Badge from '../components/common/Badge';
+import { getColorsForCategories } from '../utils/getColorForCategories';
 
 const SettingsContext = React.createContext();
 
@@ -40,10 +40,10 @@ const SettingsProvider = ({ children }) => {
   const [successToast, setSuccessToast] = useState(null);
   const [settingsToast, setSettingsToast] = useState(null);
   const [settingsModal, setSettingsModal] = useState({});
+  const [colors, setColors] = useState();
   const user = useSelector(selectUser());
   const errorGlobal = useSelector(selectError());
   const successNetwork = useSelector(selectSuccessNetwork());
-
   const startClearFunc = () => {
     switch (settingsToast?.type) {
       case 'successNetwork': {
@@ -174,6 +174,7 @@ const SettingsProvider = ({ children }) => {
           setTypeForm(btnType);
           appearanceForm();
         }
+        setColors(getColorsForCategories())
         break;
       }
       case 'translations':
@@ -203,8 +204,8 @@ const SettingsProvider = ({ children }) => {
           ...currentEssence,
           like: currentEssence.like ? !currentEssence.like : true,
         };
-        if (essence === 'categories') dispatch(categoriesUpdate(editedEssence));
-        if (essence === 'counts') dispatch(countUpdate(editedEssence));
+        if (essence === 'categories') dispatch(categoriesUpdate({payload:editedEssence, btnType }));
+        if (essence === 'counts') dispatch(countUpdate({payload:editedEssence, btnType }));
         break;
       case 'remove':
         const titleModal = {
@@ -304,6 +305,7 @@ const SettingsProvider = ({ children }) => {
         startClearFunc,
         setTypeForm,
         setStatusOperation,
+        colors
       }}
     >
       {children}

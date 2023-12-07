@@ -146,11 +146,11 @@ export const loadCounts = () => async (dispatch) => {
   }
 };
 
-export const countUpdate = (payload) => async (dispatch) => {
+export const countUpdate = ({payload, btnType}) => async (dispatch) => {
   try {
     const { content } = await countsService.update(payload);
     dispatch(countsUpdatedReceived(content));
-    dispatch(setSuccessNetwork('Счёт успешно обновлён'));
+    if(!btnType)dispatch(setSuccessNetwork('Счёт успешно обновлён'));
   } catch (error) {
     dispatch(setError(error));
     dispatch(countsRequestedFailed());

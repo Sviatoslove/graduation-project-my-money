@@ -115,11 +115,12 @@ export const logIn =
 export const signUp =
   ({ payload, path }) =>
   async (dispatch) => {
+    const { stayOn } = payload;
     const { navigate, redirect } = path;
     dispatch(authRequested());
     try {
       const data = await authService.register(payload);
-      localStorageService.setTokens(data);
+      localStorageService.setTokens({ ...data, stayOn });
       dispatch(authRequestSuccess({ userId: data.userId }));
       navigate(redirect);
     } catch (error) {

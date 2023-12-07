@@ -40,7 +40,7 @@ const CountsForm = () => {
     : {
         name: '',
         content: '',
-        type: '652e4f70498ed451c3f23b9b',
+        type: '65705891f6b8c00a9bfd1e96',
         currency: '67rdca3eeb7f6fgeed471198',
         icon: '',
       };
@@ -69,7 +69,7 @@ const CountsForm = () => {
     icon = data.defaultState.icon;
     disAppearanceForm();
     if (currentEssence) {
-      dispatch(countUpdate(data.defaultState));
+      dispatch(countUpdate({ payload: data.defaultState }));
     } else {
       dispatch(
         countCreate({

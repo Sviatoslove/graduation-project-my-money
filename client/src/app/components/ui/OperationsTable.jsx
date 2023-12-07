@@ -10,14 +10,13 @@ import {
 } from '../../store/categoriesSlice';
 import LoadingSpinners from '../common/LoadingSpinners';
 import { Button } from '../common/buttons';
-import { operationRemove } from '../../store/operationsSlice';
 import { useTables } from '../../hooks/useTable';
 import { useSettings } from '../../hooks/useSettings';
 import getDate from '../../utils/getDate';
 
 const OperationsTable = () => {
   const dispatch = useDispatch();
-  const { categories, operationCrop } = useTables();
+  const { categories, operationCrop, pageSize, currentPage } = useTables();
   const { essenceHandleToEdit } = useSettings();
 
   const categoriesIconsDataLoaded = useSelector(
@@ -43,7 +42,13 @@ const OperationsTable = () => {
   const columns = {
     number: {
       name: 'Номер',
-      component: (operation, idx) => <img src={`https://img.icons8.com/arcade/56/${idx + 1}.png`} alt={idx + 1}/> ,
+      component: (operation, idx) => {
+        let num = idx + 1;
+        if (currentPage > 1) num = +pageSize * (currentPage - 1) + num;
+        return (
+          <img src={`https://img.icons8.com/arcade/56/${num}.png`} alt={num} />
+        );
+      },
     },
     time: {
       path: 'date',
@@ -60,13 +65,13 @@ const OperationsTable = () => {
         categories[operation.categoryId] ? (
           <Button
             outline={true}
-            classes={'p-0 br-50 border-0'}
-            dataType={'edit'}
-            dataEssence={'operation'}
+            classes='p-0 br-50 border-0'
+            dataType='operations'
+            dataEssence='operation'
             onClick={(e) => essenceHandleToEdit(e, operation)}
           >
             <CategoryCard
-              table={'true'}
+              table='true'
               category={categorySettings(operation?.categoryId)}
               categoriesIcons={categoriesIcons}
             />

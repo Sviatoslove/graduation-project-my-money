@@ -165,6 +165,10 @@ $utilities: map-merge(
       class: mh,
       values: (
         i: inherit,
+        50vh: 50vh,
+        55vh: 55vh,
+        56vh: 56vh,
+        60vh: 60vh,
         75vh: 75vh,
         80vh: 80vh,
         84vh: 84vh,
@@ -332,6 +336,7 @@ $utilities: map-merge(
       property: top,
       class: top,
       values: (
+        8px: 8px,
         94px: 94px,
         100px: 100px,
         105px: 105px,
@@ -363,6 +368,7 @@ $utilities: map-merge(
       class: end,
       values: (
         30px: 30px,
+        15mpx: -15px,
         1: 1%,
         2: 2%,
         3: 3%,

@@ -8,6 +8,7 @@ const schema = new Schema(
     avatar: String,
     sex: { type: String, enum: ['male', 'female'] },
     masterCount:String, 
+    pageSizeOperations: Number
   },
   {
     timestamps: true,

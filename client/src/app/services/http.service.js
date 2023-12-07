@@ -1,8 +1,8 @@
-import axios from "axios";
-import { toast } from "react-toastify";
-import configFile from "../config.json";
-import localStorageService from "./localStorage.service";
-import authService from "./auth.service";
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import configFile from '../config.json';
+import localStorageService from './localStorage.service';
+import authService from './auth.service';
 
 const { isFireBase, apiEndpointFireBase, apiEndpointMongoDb } = configFile;
 
@@ -19,11 +19,12 @@ http.interceptors.request.use(
     const expiresDate = localStorageService.getExpiresKeyToken();
     const refreshToken = localStorageService.getRefreshToken();
     const isExpired = refreshToken && expiresDate < Date.now();
+    const stayOn = localStorageService.getStayOn() 
 
     if (configFile.isFireBase) {
       const containSlash = /\/$/gi.test(config.url);
       config.url =
-        (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
+        (containSlash ? config.url.slice(0, -1) : config.url) + '.json';
 
       if (isExpired) {
         const data = await authService.refresh();
@@ -39,9 +40,12 @@ http.interceptors.request.use(
 
       if (accessToken) config.params = { ...config.params, auth: accessToken };
     } else {
-      if (isExpired) {
+      if (isExpired && stayOn=== 'true') {
         const data = await authService.refresh();
-        localStorageService.setTokens(data);
+        localStorageService.setTokens({...data, stayOn});
+      } else if (isExpired && stayOn === 'false') {
+        localStorageService.removeAuthData();
+        window.location.reload()
       }
       const accessToken = localStorageService.getAccessToken();
       if (accessToken) {
@@ -54,15 +58,16 @@ http.interceptors.request.use(
     return config;
   },
   function (error) {
+    console.log('error:', error);
     return Promise.reject(error);
-  },
+  }
 );
 
 function transformData(data) {
   return data && !data._id
     ? Object.keys(data).reduce(
         (acc, key) => (acc = { ...acc, [data[key]._id]: data[key] }),
-        {},
+        {}
       )
     : data;
 }
@@ -79,10 +84,10 @@ http.interceptors.response.use(
       error.response.status < 500;
     if (!expectedErrors) {
       console.log(error);
-      toast.error("Something was wrong. Try later.");
+      toast.error('Something was wrong. Try later.');
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export const httpService = {

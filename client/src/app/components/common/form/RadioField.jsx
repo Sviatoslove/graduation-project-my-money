@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const RadioField = ({ options, name, onChange, value, label }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-1">
       <label className="d-block form-label">{label}</label>
       {options.map((option) => (
         <div

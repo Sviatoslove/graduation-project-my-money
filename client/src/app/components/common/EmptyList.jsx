@@ -27,7 +27,7 @@ const EmptyList = ({ title, classes, dataType, onClick, imgSrc }) => {
       </div>
       <Button
         bgColor="primary"
-        classes="shadow-lg p-2 ms-auto"
+        classes="shadow-lg p-2 ms-auto me-1 mb-2"
         imgSrc={addIcon}
         dataType={dataType}
         onClick={handleNavigate}

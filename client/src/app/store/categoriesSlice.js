@@ -95,11 +95,11 @@ export const loadCategories = () => async (dispatch) => {
   }
 };
 
-export const categoriesUpdate = (payload) => async (dispatch) => {
+export const categoriesUpdate = ({payload, btnType}) => async (dispatch) => {
   try {
     const { content } = await categoriesService.update(payload);
     dispatch(categoriesUpdatedReceived(content));
-    dispatch(setSuccessNetwork('Категория успешно обновлена'));
+    if(!btnType) dispatch(setSuccessNetwork('Категория успешно обновлена'))
   } catch (error) {
     dispatch(setError(error))
     dispatch(categoriesRequestedFailed())

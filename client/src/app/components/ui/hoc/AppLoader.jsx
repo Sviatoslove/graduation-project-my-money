@@ -16,8 +16,10 @@ const AppLoader = ({ children }) => {
   const usersLoadingStatus = useSelector(selectUserLoadingStatus());
   const user = useSelector(selectUser());
   const masterCount = user?.masterCount;
+  const pageSizeOperations = user?.pageSizeOperations;
 
   if (masterCount) localStorageService.setMasterCount(masterCount);
+  if (pageSizeOperations) localStorageService.setPageSize(pageSizeOperations);
 
   useEffect(() => {
     if (isLoggedIn) {
