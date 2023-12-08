@@ -2,14 +2,21 @@ import React from 'react';
 import TextField from './TextField';
 import { useTables } from '../../../hooks/useTable';
 import localStorageService from '../../../services/localStorage.service';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, updateUser } from '../../../store/usersSlice';
 
 const ChangeLengthList = () => {
   const { pageSize, setPageSize } = useTables();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser());
+
   const handleChange = ({ target }) => {
-    if (target.value < 5) target.value = 5;
-    if (target.value > 100) target.value = 100;
-    setPageSize(target.value);
-    localStorageService.setPageSize(target.value)
+    const pageSizeOperations = target.value;
+    if (pageSizeOperations < 5) pageSizeOperations = 5;
+    if (pageSizeOperations > 100) pageSizeOperations = 100;
+    setPageSize(pageSizeOperations);
+    localStorageService.setPageSize(pageSizeOperations);
+    dispatch(updateUser({ payload: { ...user, pageSizeOperations } }));
   };
   return (
     <TextField
@@ -18,7 +25,7 @@ const ChangeLengthList = () => {
       type="number"
       value={pageSize}
       onChange={handleChange}
-      labelClasses='mb-2'
+      labelClasses="mb-2"
       inputClasses="shadow-custom text-center"
     />
   );

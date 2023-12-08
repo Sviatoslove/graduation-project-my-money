@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSettings } from './useSettings';
+import { useFields } from './useFields';
 
-const useForms = (state, error, valueConverted) => {
+const useForms = ({ state, error, valueConverted, essence , fields}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [data, setData] = useState(state);
   const { setToast, startClearFunc, setStatusOperation } = useSettings();
   const errors = { fields: {}, isValid: false };
+
+  const { errorsForm } = useFields(essence, data.defaultState, fields);
 
   const register = (field) => ({
     value: data.defaultState[field],
@@ -18,12 +21,12 @@ const useForms = (state, error, valueConverted) => {
         setToast((state) => ({ ...state, show: 'hide' }));
         startClearFunc();
       }
-      if(field === 'status') {
-        setStatusOperation(target.value)
+      if (field === 'status') {
+        setStatusOperation(target.value);
         setData((state) => ({
           ...state,
-          defaultState: { ...state.defaultState, ['categoryId']: ''},
-        }))
+          defaultState: { ...state.defaultState, ['categoryId']: '' },
+        }));
       }
       return setData((state) => ({
         ...state,
@@ -88,12 +91,12 @@ const useForms = (state, error, valueConverted) => {
     e.preventDefault();
     const path = {
       navigate,
-      redirect: location.state ? location.state.from.pathname : '/',
+      redirect: location.state ? location.state.from?.pathname : '/',
     };
     onSubmit(data, path);
   };
 
-  return { register, data, handleSubmit, errors };
+  return { register, data, handleSubmit, errors, errorsForm };
 };
 
 export { useForms };

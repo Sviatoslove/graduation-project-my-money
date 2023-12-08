@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadUser, selectDataStatus, selectIsLoggedIn, selectUser } from '../../store/usersSlice';
+import {
+  loadUser,
+  selectDataStatus,
+  selectIsLoggedIn,
+  selectUser,
+} from '../../store/usersSlice';
 import UserAvatar from '../common/UserAvatar';
+import { useSettings } from '../../hooks/useSettings';
 
 const NavProfile = ({ classes }) => {
   const dispatch = useDispatch();
+  const { setTypeForm } = useSettings();
   const isLoggedIn = useSelector(selectIsLoggedIn());
   const dataStatus = useSelector(selectDataStatus());
   const [isOpen, setOpen] = useState(false);
@@ -18,7 +25,8 @@ const NavProfile = ({ classes }) => {
   const toggleMenu = () => {
     setOpen((prevState) => !prevState);
   };
-  if (!isLoggedIn) return <div className="ms-3 text-danger">Вы не авторизованы!</div>;
+  if (!isLoggedIn)
+    return <div className="ms-3 text-danger">Вы не авторизованы!</div>;
   if (!dataStatus) return 'Loading...';
   return (
     <div className={'dropdown ' + classes} onClick={toggleMenu}>
@@ -36,6 +44,7 @@ const NavProfile = ({ classes }) => {
         <Link
           to={`/user/${currentUser._id}`}
           className="dropdown-item rounded-3"
+          onClick={() => setTypeForm('userEdit')}
         >
           <i
             className="bi bi-person-square"
@@ -55,8 +64,8 @@ const NavProfile = ({ classes }) => {
   );
 };
 
-NavProfile.propTypes={
-  classes: PropTypes.string
-}
+NavProfile.propTypes = {
+  classes: PropTypes.string,
+};
 
 export default NavProfile;

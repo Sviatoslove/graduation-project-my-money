@@ -9,6 +9,7 @@ import TitleNavbar from './TitleNavbar';
 import routes from '../routes/routes';
 import { getTitleNavbar } from '../../utils';
 import RadioSwitch from '../common/form/RadioSwitch';
+import { Container } from '../common/Containers';
 
 const Navbar = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn());
@@ -39,29 +40,30 @@ const Navbar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <TitleNavbar name={getTitleNavbar(menu, location)} />
-          <RadioSwitch
-          />
-          {isLoggedIn ? (
-            <NavProfile classes="nav-profile" />
-          ) : (
-            <p className="navbar-brand text-light text-bold m-0 fw-bold">
-              My money application
-            </p>
-          )}
-          <div
-            className={'offcanvas offcanvas-start ' + show + ' text-bg-dark'}
-            tabIndex="0"
-            id="offcanvasNavbar"
-            aria-labelledby="offcanvasNavbarLabel"
-          >
-            {show === 'show' && <Menu onShow={handleShowMenu} menu={menu} />}
-          </div>
-          {show === 'show' && (
+          <Container newClasses='w-content d-flex'>
+            <RadioSwitch/>
+            {isLoggedIn ? (
+              <NavProfile classes="nav-profile" />
+            ) : (
+              <p className="navbar-brand text-light text-bold m-0 fw-bold">
+                My money application
+              </p>
+            )}
             <div
-              onClick={handleShowMenu}
-              className="offcanvas-backdrop fade show"
-            ></div>
-          )}
+              className={'offcanvas offcanvas-start ' + show + ' text-bg-dark'}
+              tabIndex="0"
+              id="offcanvasNavbar"
+              aria-labelledby="offcanvasNavbarLabel"
+            >
+              {show === 'show' && <Menu onShow={handleShowMenu} menu={menu} />}
+            </div>
+            {show === 'show' && (
+              <div
+                onClick={handleShowMenu}
+                className="offcanvas-backdrop fade show"
+              ></div>
+            )}
+          </Container>
         </div>
       </nav>
     </>

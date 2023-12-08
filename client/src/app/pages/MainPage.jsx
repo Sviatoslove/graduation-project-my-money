@@ -18,10 +18,11 @@ import EmptyList from '../components/common/EmptyList';
 import SearchForCategory from '../components/common/form/SearchForCategory';
 import ChangeLengthList from '../components/common/form/ChangeLengthList';
 import LoadingSpinners from '../components/common/LoadingSpinners';
+import { useScroll } from '../hooks/useScroll';
 
 const MainPage = () => {
   const { essenceHandleToEdit, statusOperation } = useSettings();
-
+  const { scroll, setScroll } = useScroll();
   const {
     operations,
     count,
@@ -117,7 +118,7 @@ const MainPage = () => {
             )}
           </Container>
           {!!operationCrop.length && (
-            <ContainerScale classes='mt-auto footer-group d-flex'>
+            <ContainerScale classes="mt-auto footer-group d-flex">
               <Pagination
                 itemsCount={count}
                 pageSize={pageSize}
@@ -130,6 +131,17 @@ const MainPage = () => {
                 dataType="operations"
                 onClick={essenceHandleToEdit}
                 imgSrc={addIcon}
+              />
+            </ContainerScale>
+          )}
+          {scroll > 50 && (
+            <ContainerScale classes="position-fixed end-0 top-80">
+              <Button
+                bgColor="success"
+                outline={true}
+                classes="w-content ms-auto me-3 border-0 br-50 shadow-success"
+                onClick={() => window.scrollBy(0, -scroll)}
+                imgSrc="https://img.icons8.com/clouds/100/up.png"
               />
             </ContainerScale>
           )}

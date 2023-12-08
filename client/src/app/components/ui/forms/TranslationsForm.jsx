@@ -4,22 +4,22 @@ import {
   CurrencyField,
   SelectedField,
   TextField,
-} from '../../components/common/form';
-import Button from '../../components/common/buttons/Button';
+} from '../../common/form';
+import Button from '../../common/buttons/Button';
 import {
   selectCounts,
-} from '../../store/countsSlice';
-import getDate from '../../utils/getDate';
-import currency from '../../mock/currency';
-import getExchangeRates from '../../utils/getExchangeRates';
+} from '../../../store/countsSlice';
+import getDate from '../../../utils/getDate';
+import currency from '../../../mock/currency';
+import getExchangeRates from '../../../utils/getExchangeRates';
 import {
   translationCreate,
-} from '../../store/translationsSlice';
-import LoadingBtn from '../../components/common/LoadingBtn';
-import { useSettings } from '../../hooks/useSettings';
-import { useForms } from '../../hooks/useForms';
-import { validatorConfigTranslations } from '../../utils/validator';
-import { selectSuccessNetwork } from '../../store/usersSlice';
+} from '../../../store/translationsSlice';
+import LoadingBtn from '../../common/LoadingBtn';
+import { useSettings } from '../../../hooks/useSettings';
+import { useForms } from '../../../hooks/useForms';
+import { validatorConfigTranslations } from '../../../utils/validator';
+import { selectSuccessNetwork } from '../../../store/usersSlice';
 
 const TranslationsForm = () => {
   const dispatch = useDispatch();
@@ -38,8 +38,8 @@ const TranslationsForm = () => {
     selectSuccessNetwork()
   );
 
-  const { register, data, handleSubmit, errors } = useForms(
-    {
+  const { register, data, handleSubmit, errors } = useForms({
+    state: {
       defaultState: {
         fromCount: '0',
         toCount: '',
@@ -51,9 +51,8 @@ const TranslationsForm = () => {
       },
       errors: validatorConfigTranslations,
     },
-    '',
     valueConverted
-  );
+  });
 
   const counts = {
     0: {
@@ -180,11 +179,6 @@ const TranslationsForm = () => {
           disabled={!data.defaultState.balanceFrom > 0}
           onClick={handleConverter}
         >
-          {pending ? (
-            <LoadingBtn label="Секундочку, уже скоро пересчитаю..." />
-          ) : (
-            'Конвертировать'
-          )}
         </Button>
         <TextField label="Дата" type="date" {...register('date')} />
         <Button

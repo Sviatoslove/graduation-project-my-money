@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TextField from '../../components/common/form/TextField';
-import AvatarsField from '../../components/common/form/AvatarsField';
-import Button from '../../components/common/buttons/Button';
+import TextField from '../../common/form/TextField';
+import AvatarsField from '../../common/form/AvatarsField';
+import Button from '../../common/buttons/Button';
 import {
   categoriesUpdate,
   categoriesCreate,
-} from '../../store/categoriesSlice';
-import { useSettings } from '../../hooks/useSettings';
-import colorsIconsForCategories from '../../mock/colorIconsForCategories';
-import { useForms } from '../../hooks/useForms';
-import { validatorConfigCategories } from '../../utils/validator';
-import Badge from '../../components/common/Badge';
-import { selectSuccessNetwork } from '../../store/usersSlice';
+} from '../../../store/categoriesSlice';
+import { useSettings } from '../../../hooks/useSettings';
+import colorsIconsForCategories from '../../../mock/colorIconsForCategories';
+import { useForms } from '../../../hooks/useForms';
+import { validatorConfigCategories } from '../../../utils/validator';
+import Badge from '../../common/Badge';
+import { selectSuccessNetwork } from '../../../store/usersSlice';
 import { useLocation } from 'react-router-dom';
-import { SelectedField } from '../../components/common/form';
-import { getColorsForCategories } from '../../utils/getColorForCategories';
+import { SelectedField } from '../../common/form';
 
 const CategoriesForm = () => {
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ const CategoriesForm = () => {
     appearanceForm,
     setTypeForm,
     setCurrentEssence,
-    colors
+    colors,
   } = useSettings();
 
   const categoriesIcons = currentEssence['iconsForCategories'];
@@ -46,9 +45,22 @@ const CategoriesForm = () => {
         status: statusOperation,
         ...colors,
       };
-  const { register, data, handleSubmit, errors } = useForms({
-    defaultState: initialState,
-    errors: validatorConfigCategories,
+
+  const { register, data, handleSubmit, errors, errorsForm } = useForms({
+    state: {
+      defaultState: initialState,
+      errors: validatorConfigCategories,
+    },
+    essence: currentEssence['categories'],
+    fields: [
+      'name',
+      'content',
+      'icon',
+      'status',
+      'iconColor',
+      'textColor',
+      'bgColor',
+    ],
   });
 
   useEffect(() => {
@@ -75,7 +87,7 @@ const CategoriesForm = () => {
       (icon) => icon.icon === data.defaultState.icon
     );
     if (currentEssence['categories']) {
-      dispatch(categoriesUpdate({payload: data.defaultState}));
+      dispatch(categoriesUpdate({ payload: data.defaultState }));
     } else {
       dispatch(
         categoriesCreate({
@@ -125,14 +137,14 @@ const CategoriesForm = () => {
         <TextField label="Название категории" {...register('name')} />
         <TextField label="Комментарий" {...register('content')} />
         <SelectedField
-              label="Выбери статус категории расходы/доходы"
-              options={[
-                { name: 'Расходы', _id: 'decrement' },
-                { name: 'Доходы', _id: 'increment' },
-              ]}
-              value={statusOperation}
-              {...register('status')}
-            />
+          label="Выбери статус категории расходы/доходы"
+          options={[
+            { name: 'Расходы', _id: 'decrement' },
+            { name: 'Доходы', _id: 'increment' },
+          ]}
+          value={statusOperation}
+          {...register('status')}
+        />
         <AvatarsField
           label="Выбери аватарку"
           {...register('icon')}
@@ -159,10 +171,15 @@ const CategoriesForm = () => {
           count={23}
           {...register('bgColor')}
         />
+        {!errors.isValid && errorsForm && (
+          <p className="text-danger text-center">
+            <strong>{errorsForm}</strong>
+          </p>
+        )}
         <Button
           type="submit"
           classes="w-100 mx-auto mt-4"
-          disabled={!!Object.keys(errors.fields).length}
+          disabled={!!Object.keys(errors.fields).length || errorsForm}
         >
           {!currentEssence['categories'] ? 'Создать' : 'Обновить'}
         </Button>

@@ -41,9 +41,11 @@ const SettingsProvider = ({ children }) => {
   const [settingsToast, setSettingsToast] = useState(null);
   const [settingsModal, setSettingsModal] = useState({});
   const [colors, setColors] = useState();
+
   const user = useSelector(selectUser());
   const errorGlobal = useSelector(selectError());
   const successNetwork = useSelector(selectSuccessNetwork());
+
   const startClearFunc = () => {
     switch (settingsToast?.type) {
       case 'successNetwork': {
@@ -174,7 +176,7 @@ const SettingsProvider = ({ children }) => {
           setTypeForm(btnType);
           appearanceForm();
         }
-        setColors(getColorsForCategories())
+        setColors(getColorsForCategories());
         break;
       }
       case 'translations':
@@ -204,8 +206,10 @@ const SettingsProvider = ({ children }) => {
           ...currentEssence,
           like: currentEssence.like ? !currentEssence.like : true,
         };
-        if (essence === 'categories') dispatch(categoriesUpdate({payload:editedEssence, btnType }));
-        if (essence === 'counts') dispatch(countUpdate({payload:editedEssence, btnType }));
+        if (essence === 'categories')
+          dispatch(categoriesUpdate({ payload: editedEssence, btnType }));
+        if (essence === 'counts')
+          dispatch(countUpdate({ payload: editedEssence, btnType }));
         break;
       case 'remove':
         const titleModal = {
@@ -224,8 +228,8 @@ const SettingsProvider = ({ children }) => {
                 color={currentEssence.bgColor}
                 iconColor={currentEssence.iconColor}
                 icon={currentEssence.icon}
-                classes='br-50 '
-                iconSize='fs-2 '
+                classes="br-50 "
+                iconSize="fs-2 "
               />
             ),
             end: ' и все связанные с ней операции?',
@@ -238,10 +242,9 @@ const SettingsProvider = ({ children }) => {
               <Badge
                 imgSrc={currentEssence.icon}
                 color={currentEssence.color}
-
-                iconSize='46px'
-                classes='br-50 '
-                imgClasses='m'
+                iconSize="46px"
+                classes="br-50 "
+                imgClasses="m"
               />
             ),
             end: ' и все связанные с ним операции и переводы?',
@@ -305,7 +308,7 @@ const SettingsProvider = ({ children }) => {
         startClearFunc,
         setTypeForm,
         setStatusOperation,
-        colors
+        colors,
       }}
     >
       {children}

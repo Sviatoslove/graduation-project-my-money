@@ -1,24 +1,24 @@
 import React, { useEffect } from 'react';
-import TextField from '../common/form/TextField';
-import CheckboxField from '../common/form/CheckboxField';
+import TextField from '../../common/form/TextField';
+import CheckboxField from '../../common/form/CheckboxField';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   logIn,
   selectError,
-} from '../../store/usersSlice';
-import { useForms } from '../../hooks/useForms';
-import { validatorConfigLogin } from '../../utils/validator';
+} from '../../../store/usersSlice';
+import { useForms } from '../../../hooks/useForms';
+import { validatorConfigLogin } from '../../../utils/validator';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const loginError = useSelector(selectError());
-  const { register, handleSubmit, errors } = useForms(
-    {
+  const { register, handleSubmit, errors } = useForms({
+    state: {
       defaultState: { email: '', password: '', stayOn: false },
       errors: validatorConfigLogin,
     },
-    loginError,
-  );
+    error: loginError,
+  });
 
   const onSubmit = (data, path) => {
     if (errors.isValid) return;

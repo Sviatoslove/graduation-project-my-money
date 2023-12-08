@@ -36,7 +36,7 @@ const CountCard = ({ count, onChange }) => {
             </div>
           )}
           {count._id === localStorageService.getMasterCount() && (
-            <div className="">
+            <div>
               <img
                 className="like-for-card"
                 src="https://img.icons8.com/plasticine/48/statue-of-liberty.png"

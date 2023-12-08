@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import TextField from '../common/form/TextField';
-import RadioField from '../common/form/RadioField';
-import CheckboxField from '../common/form/CheckboxField';
-import { selectError, signUp } from '../../store/usersSlice';
-import { validatorConfigRegister } from '../../utils/validator';
-import { useForms } from '../../hooks/useForms';
+import TextField from '../../common/form/TextField';
+import RadioField from '../../common/form/RadioField';
+import CheckboxField from '../../common/form/CheckboxField';
+import { selectError, signUp } from '../../../store/usersSlice';
+import { validatorConfigRegister } from '../../../utils/validator';
+import { useForms } from '../../../hooks/useForms';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const errorRegister = useSelector(selectError());
   const { register, handleSubmit, errors } = useForms(
-    {
+   { state: {
       defaultState: {
         email: '',
         name: '',
@@ -23,8 +23,8 @@ const RegisterForm = () => {
       },
       errors: validatorConfigRegister,
     },
-    errorRegister
-  );
+   error: errorRegister
+  });
 
   const onSubmit = (data, path) => {
     if (errors.isValid) return;

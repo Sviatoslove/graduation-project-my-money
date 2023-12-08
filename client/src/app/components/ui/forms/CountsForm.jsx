@@ -1,23 +1,23 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TextField from '../../components/common/form/TextField';
-import SelectedField from '../../components/common/form/SelectedField';
+import TextField from '../../common/form/TextField';
+import SelectedField from '../../common/form/SelectedField';
 import {
   countCreate,
   countUpdate,
   loadCountsData,
   selectCountsData,
   selectCountsDataStatus,
-} from '../../store/countsSlice';
-import AvatarsField from '../../components/common/form/AvatarsField';
-import currency from '../../mock/currency';
-import countsIconsMock from '../../mock/countsIcons';
-import Button from '../../components/common/buttons/Button';
-import { useSettings } from '../../hooks/useSettings';
-import { formatDataCountsIcons } from '../../utils/formatData';
-import { useForms } from '../../hooks/useForms';
-import { validatorConfigCounts } from '../../utils/validator';
-import { selectSuccessNetwork } from '../../store/usersSlice';
+} from '../../../store/countsSlice';
+import AvatarsField from '../../common/form/AvatarsField';
+import currency from '../../../mock/currency';
+import countsIconsMock from '../../../mock/countsIcons';
+import Button from '../../common/buttons/Button';
+import { useSettings } from '../../../hooks/useSettings';
+import { formatDataCountsIcons } from '../../../utils/formatData';
+import { useForms } from '../../../hooks/useForms';
+import { validatorConfigCounts } from '../../../utils/validator';
+import { selectSuccessNetwork } from '../../../store/usersSlice';
 
 let icon;
 
@@ -45,9 +45,12 @@ const CountsForm = () => {
         icon: '',
       };
 
-  const { register, data, handleSubmit, errors } = useForms({
-    defaultState: initialState,
-    errors: validatorConfigCounts,
+  const { register, data, handleSubmit, errors, errorsForm } = useForms({
+    state: {
+      defaultState: initialState,
+      errors: validatorConfigCounts,
+    },
+    essence: currentEssence,
   });
 
   useEffect(() => {
@@ -111,10 +114,15 @@ const CountsForm = () => {
               count={16}
               {...register('icon')}
             />
+            {!errors.isValid && errorsForm && (
+              <p className="text-danger text-center">
+                <strong>{errorsForm}</strong>
+              </p>
+            )}
             <Button
               type="submit"
               classes="w-100 mx-auto"
-              disabled={!!Object.keys(errors.fields).length}
+              disabled={!!Object.keys(errors.fields).length || errorsForm}
             >
               {!currentEssence ? 'Создать' : 'Обновить'}
             </Button>

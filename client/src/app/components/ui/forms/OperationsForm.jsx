@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TextField from '../../components/common/form/TextField';
-import AvatarsField from '../../components/common/form/AvatarsField';
-import Button from '../../components/common/buttons/Button';
+import TextField from '../../common/form/TextField';
+import AvatarsField from '../../common/form/AvatarsField';
+import Button from '../../common/buttons/Button';
 import {
   selectCategoriesDataloaded,
   loadCategories,
   selectCategories,
-} from '../../store/categoriesSlice';
-import { useSettings } from '../../hooks/useSettings';
-import LoadingSpinners from '../../components/common/LoadingSpinners';
-import getDate from '../../utils/getDate';
-import { operationCreate, operationUpdate } from '../../store/operationsSlice';
-import localStorageService from '../../services/localStorage.service';
-import { useForms } from '../../hooks/useForms';
-import Badge from '../../components/common/Badge';
-import { validatorConfigOperations } from '../../utils/validator';
-import { selectSuccessNetwork } from '../../store/usersSlice';
-import { SelectedField } from '../../components/common/form';
+} from '../../../store/categoriesSlice';
+import { useSettings } from '../../../hooks/useSettings';
+import LoadingSpinners from '../../common/LoadingSpinners';
+import getDate from '../../../utils/getDate';
+import {
+  operationCreate,
+  operationUpdate,
+} from '../../../store/operationsSlice';
+import localStorageService from '../../../services/localStorage.service';
+import { useForms } from '../../../hooks/useForms';
+import Badge from '../../common/Badge';
+import { validatorConfigOperations } from '../../../utils/validator';
+import { selectSuccessNetwork } from '../../../store/usersSlice';
+import { SelectedField } from '../../common/form';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 let badge;
@@ -33,8 +36,6 @@ const OperationsForm = () => {
     successToast,
   } = useSettings();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
   const successNetwork = useSelector(selectSuccessNetwork());
   const categoriesDataLoaded = useSelector(selectCategoriesDataloaded());
   const categories = useSelector(selectCategories());
@@ -59,9 +60,12 @@ const OperationsForm = () => {
         }:${minutes < 10 ? '0' + minutes : minutes}`,
         dataType: 'operations',
       };
-  const { register, data, handleSubmit, errors } = useForms({
-    defaultState: initialState,
-    errors: validatorConfigOperations,
+  const { register, data, handleSubmit, errors, errorsForm } = useForms({
+    state: {
+      defaultState: initialState,
+      errors: validatorConfigOperations,
+    },
+    essence: currentEssence,
   });
 
   useEffect(() => {
@@ -141,10 +145,15 @@ const OperationsForm = () => {
         />
         <TextField label="Комментарий" {...register('content')} />
         <TextField label="Дата" type="datetime-local" {...register('date')} />
+        {!errors.isValid &&errorsForm && (
+          <p className="text-danger text-center">
+            <strong>{errorsForm}</strong>
+          </p>
+        )}
         <Button
           type="submit"
-          classes="w-100 mx-auto mt-4"
-          disabled={!!Object.keys(errors.fields).length}
+          classes="w-100 mx-auto mt-2"
+          disabled={!!Object.keys(errors.fields).length || errorsForm}
         >
           {currentEssence ? 'Обновить' : 'Создать'}
         </Button>

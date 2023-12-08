@@ -145,13 +145,13 @@ export const loadUser = () => async (dispatch) => {
 
 export const updateUser = ({payload, type, iconCount}) => async (dispatch) => {
   let contentSuccessNetwork
-  if(type) contentSuccessNetwork='Главный счёт успешно обновлён'
-  else contentSuccessNetwork='Профиль успешно обновлён'
+  if(type === 'updateMasterCount') contentSuccessNetwork='Главный счёт успешно обновлён'
+  else if(type === 'updateUser') contentSuccessNetwork='Профиль успешно обновлён'
   dispatch(userUpdateRequested());
   try {
     const { content } = await userService.update(payload);
     dispatch(userUpdateSuccessed(content));
-    dispatch(savedSuccessNetwork([contentSuccessNetwork, type, iconCount]));
+    if(type)dispatch(savedSuccessNetwork([contentSuccessNetwork, type, iconCount]));
   } catch (error) {
     errorCatcher(error, dispatch, userUpdateFailed);
   }

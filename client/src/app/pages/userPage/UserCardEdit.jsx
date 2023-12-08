@@ -17,19 +17,21 @@ import { validatorConfigUser } from '../../utils/validator';
 import { useSettings } from '../../hooks/useSettings';
 import UserAvatar from '../../components/common/UserAvatar';
 
-const UserCardEdit = ({user}) => {
+const UserCardEdit = ({ user }) => {
   const dispatch = useDispatch();
-  const {
-    setSettingsToast,
-    setSuccessToast,
-    successToast
-  } = useSettings();
+  const { setSettingsToast, setSuccessToast, successToast } = useSettings();
   const [show, setShow] = useState('');
-  const { register, data, handleSubmit, errors } = useForms({defaultState: user, errors: validatorConfigUser});
+  const { register, data, handleSubmit, errors, errorsForm } = useForms({
+    state: {
+      defaultState: user,
+      errors: validatorConfigUser,
+    },
+    essence: user,
+    fields: ['name', 'email', 'avatar', 'sex']
+  });
   const successNetwork = useSelector(selectSuccessNetwork());
   const avatarsDataStatus = useSelector(selectAvatarsDataStatus());
   const avatars = useSelector(selectAvatars());
-
 
   useEffect(() => {
     if (!avatarsDataStatus) {
@@ -39,17 +41,17 @@ const UserCardEdit = ({user}) => {
 
   useEffect(() => {
     if (successNetwork && successToast === null) {
-      setSuccessToast(successNetwork);
+      setSuccessToast(successNetwork[0]);
       setSettingsToast({
-        badge:  <UserAvatar image={data.defaultState.avatar} height="56px" />,
+        badge: <UserAvatar image={data.defaultState.avatar} height="56px" />,
         type: 'successNetwork',
       });
     }
   }, [successNetwork]);
 
   const onSubmit = (data) => {
-    if (errors.isValid) return
-    dispatch(updateUser({payload: data.defaultState}));
+    if (errors.isValid) return;
+    dispatch(updateUser({ payload: data.defaultState, type: 'updateUser' }));
     setShow('');
   };
 
@@ -57,22 +59,25 @@ const UserCardEdit = ({user}) => {
     show ? setShow('') : setShow('show');
   };
 
-
   if (avatarsDataStatus) {
     return (
-      <div className={'d-flex align-items-center justify-content-around mx-auto rounded-3 border-0 user-edit ' + show}>
-
+      <div
+        className={
+          'd-flex align-items-center justify-content-around mx-auto rounded-3 border-0 user-edit ' +
+          show
+        }
+      >
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '520px' }}>
           <div className="d-flex justify-content-between">
             <TextField
               label="Имя"
               {...register('name')}
-              style={{width:'250px',zIndex:0}}
+              style={{ width: '250px', zIndex: 0 }}
             />
             <TextField
               label="Электронная почта"
               {...register('email')}
-              style={{width:'250px',zIndex:0}}
+              style={{ width: '250px', zIndex: 0 }}
             />
           </div>
           <AvatarsField
@@ -88,10 +93,18 @@ const UserCardEdit = ({user}) => {
             ]}
             {...register('sex')}
           />
+          {!errors.isValid && errorsForm && (
+            <p className="text-danger text-center">
+              <strong>{errorsForm}</strong>
+            </p>
+          )}
           <button
             type="submit"
             className="btn btn-primary w-100 mx-auto mb-3"
-            disabled={!!Object.keys(errors.fields).length}
+            disabled={
+              !!Object.keys(errors.fields).length ||
+              errorsForm
+            }
           >
             Обновить
           </button>
@@ -111,8 +124,8 @@ const UserCardEdit = ({user}) => {
   }
 };
 
-UserCardEdit.propTypes={
-  user: PropTypes.object
-}
+UserCardEdit.propTypes = {
+  user: PropTypes.object,
+};
 
 export default UserCardEdit;
